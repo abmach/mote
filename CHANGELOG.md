@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Documentation completeness pass: every documented item now has a working
+  live example and its code sample; all status variations are shown —
+  notes and toasts in all four statuses, spinner status variants,
+  status-tinted blockquote rule and summary marker, plus a live
+  token-cascade demo (a card re-themed by two inline variables).
 - `mote.components.css`: opt-in, CSS-only components — cards, badges, avatars,
   skeleton, spinner, sticky header, nav pills, breadcrumbs (semantic selector),
   popover tooltips/menus/toasts, exclusive `<details name>` accordions, and
@@ -28,6 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Accordion end-of-transition snap: content margins do not interpolate, so
+  the animated `details::details-content` height target differed from the
+  settled layout by exactly the content's bottom margin (16px jump on open).
+  The animated box is now kept flush (child margins zeroed inside the
+  `@supports` gate, spacing provided by padding, `display: flow-root`
+  containment), verified frame-by-frame.
 - Popovers no longer snap to the viewport's top-left corner: mote no longer
   overrides the native `margin: auto` centering.
 - Spinner no longer rides high next to text: baseline-lowered alignment.

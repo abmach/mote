@@ -81,6 +81,20 @@
     <strong>status classes</strong> add a third indirection on top, assigning
     <code>--mote-status</code> tokens that every note, badge and toast reads with an accent
     fallback. Override the chain anywhere; everything downstream follows.</p>
+  <p>Live proof — this card re-themes everything inside it with two inline tokens:</p>
+  <pre><code>&lt;div class="mote-card" style="--mote-accent: #4a7a5b"&gt;
+  &lt;h3&gt;Re-themed card&lt;/h3&gt;
+  &lt;p&gt;A &lt;a href="#"&gt;link&lt;/a&gt;, a &lt;button type="button"&gt;button&lt;/button&gt; and a
+    &lt;span class="mote-badge mote-success"&gt;badge&lt;/span&gt; — all from
+    two variables.&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+  <div class="mote-card" style="--mote-accent: #4a7a5b">
+    <h3 style="margin-block-start:0">Re-themed card</h3>
+    <p>A <a href="#theming">link</a>, a <button type="button" onclick="return false">button</button> and a
+      <span class="mote-badge mote-success">badge</span> — all from two variables.
+      The focus ring, hover states and soft tints re-derived automatically.</p>
+  </div>
   <pre><code>:root {
   --mote-accent: #4a7a5b;  /* your brand color */
   --mote-bg: #fffdf5;      /* your paper */
@@ -140,15 +154,41 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <small>small print</small>, H<sub>2</sub>O, x<sup>2</sup>, <abbr title="Cascading Style Sheets">CSS</abbr>,
     <mark>highlights</mark>, <del>removals</del>, <ins>insertions</ins>, <q>quotes</q>, inline
     <code>code</code>, and <kbd>Ctrl</kbd>+<kbd>K</kbd>.</p>
+  <pre><code>&lt;h1&gt;Heading 1&lt;/h1&gt;
+&lt;h2&gt;Heading 2&lt;/h2&gt;
+&lt;p&gt;Body text with &lt;strong&gt;strong&lt;/strong&gt;, &lt;em&gt;emphasis&lt;/em&gt;,
+  &lt;a href="#"&gt;links&lt;/a&gt;, &lt;small&gt;small print&lt;/small&gt;, H&lt;sub&gt;2&lt;/sub&gt;O,
+  x&lt;sup&gt;2&lt;/sup&gt;, &lt;abbr title="..."&gt;CSS&lt;/abbr&gt;, &lt;mark&gt;highlights&lt;/mark&gt;,
+  &lt;del&gt;removals&lt;/del&gt;, &lt;ins&gt;insertions&lt;/ins&gt;, &lt;q&gt;quotes&lt;/q&gt;,
+  inline &lt;code&gt;code&lt;/code&gt;, and &lt;kbd&gt;Ctrl&lt;/kbd&gt;+&lt;kbd&gt;K&lt;/kbd&gt;.&lt;/p&gt;
+</code></pre>
 
   <h3>Lists and block content</h3>
   <ul>
     <li>Unordered lists</li>
     <li>With <a href="#elements">links</a></li>
   </ul>
+  <pre><code>&lt;ul&gt;
+  &lt;li&gt;Unordered lists&lt;/li&gt;
+  &lt;li&gt;With &lt;a href="#"&gt;links&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
   <blockquote>
     A mote is the smallest thing that can carry style.
     <cite>— this library's only opinion</cite>
+  </blockquote>
+  <pre><code>&lt;blockquote&gt;
+  A mote is the smallest thing that can carry style.
+  &lt;cite&gt;— this library's only opinion&lt;/cite&gt;
+&lt;/blockquote&gt;
+
+&lt;!-- optional status class tints the rule --&gt;
+&lt;blockquote class="mote-info"&gt;
+  The same quote, with a dusty-blue rule.
+&lt;/blockquote&gt;
+</code></pre>
+  <blockquote class="mote-info">
+    The same quote, with a dusty-blue rule.
   </blockquote>
 
   <h3>Tables</h3>
@@ -160,6 +200,15 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       <tr><td><code>mote.components.css</code></td><td>Optional components</td></tr>
     </tbody>
   </table>
+  <pre><code>&lt;table&gt;
+  &lt;caption&gt;Deliverables&lt;/caption&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;File&lt;/th&gt;&lt;th&gt;Purpose&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;code&gt;mote.css&lt;/code&gt;&lt;/td&gt;&lt;td&gt;The whole library&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;code&gt;mote.components.css&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Optional components&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
 
   <h3>Forms</h3>
   <p>Labels, inputs, selects, checkboxes, radios and buttons inherit the cozy surface.
@@ -181,6 +230,24 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       <button type="reset">Reset</button>
     </p>
   </form>
+  <pre><code>&lt;form&gt;
+  &lt;p&gt;
+    &lt;label for="email"&gt;Email&lt;/label&gt;
+    &lt;input id="email" type="email" placeholder="ada@example.com" required&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label for="plan"&gt;Plan&lt;/label&gt;
+    &lt;select id="plan"&gt;&lt;option&gt;Free&lt;/option&gt;&lt;option selected&gt;Cozy&lt;/option&gt;&lt;/select&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label&gt;&lt;input type="checkbox" checked&gt; Send me gentle updates&lt;/label&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;button type="submit"&gt;Subscribe&lt;/button&gt;
+    &lt;button type="reset"&gt;Reset&lt;/button&gt;
+  &lt;/p&gt;
+&lt;/form&gt;
+</code></pre>
 
   <h3>Dialogs</h3>
   <p>Native <code>&lt;dialog&gt;</code> gets a soft surface, a dimmed blurred backdrop, and —
@@ -332,6 +399,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <div class="mote-skeleton" style="height:1rem;width:60%"></div>
   <div class="mote-skeleton" style="height:1rem;width:40%"></div>
   <p><span class="mote-spinner" role="status" aria-label="Loading"></span> Loading something…</p>
+  <p>Spinners read the status classes too — <code>default</code>,
+    <span class="mote-spinner mote-success" role="status"></span> success,
+    <span class="mote-spinner mote-warning" role="status"></span> warning,
+    <span class="mote-spinner mote-error" role="status"></span> error:</p>
+  <pre><code>&lt;span class="mote-spinner" role="status" aria-label="Loading"&gt;&lt;/span&gt;
+&lt;span class="mote-spinner mote-error" role="status" aria-label="Loading"&gt;&lt;/span&gt;
+</code></pre>
 
   <h3>Toasts</h3>
   <p>A styled <code>popover</code> pinned to the corner. Showing it takes one line — the
@@ -348,6 +422,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 </code></pre>
   <p><button type="button" id="toast-btn">Fire a live toast</button></p>
   <div popover class="mote-toast" id="docs-toast">Saved. Everything is fine.</div>
+  <p>Add a status class and the accent edge follows:</p>
+  <pre><code>&lt;div popover class="mote-toast mote-error" id="toast"&gt;
+  Something went softly wrong.
+&lt;/div&gt;
+</code></pre>
+  <p><button type="button" id="toast-btn-error">Fire an error toast</button></p>
+  <div popover class="mote-toast mote-error" id="docs-toast-error">Something went softly wrong.</div>
 
   <h3>Header and navigation</h3>
   <p>The sticky translucent header at the top of this page is two classes:</p>
@@ -407,6 +488,16 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <progress class="mote-error" value="35" max="100">35%</progress>
     <span class="mote-spinner mote-warning" role="status" aria-label="Loading"></span>
   </p>
+  <p>Summary markers follow the status as well:</p>
+  <pre><code>&lt;details class="mote-success" open&gt;
+  &lt;summary&gt;A summary with a moss-green marker&lt;/summary&gt;
+  &lt;p&gt;Content…&lt;/p&gt;
+&lt;/details&gt;
+</code></pre>
+  <details class="mote-success" open>
+    <summary>A summary with a moss-green marker</summary>
+    <p class="mote-muted" style="padding:0 1.2rem 0.9rem">Open, and gently marked.</p>
+  </details>
   <table>
     <thead><tr><th>Class</th><th>Purpose</th></tr></thead>
     <tbody>
@@ -416,7 +507,15 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
     </tbody>
   </table>
-  <div class="mote-note mote-info">Everything else on this page is classless.</div>
+  <pre><code>&lt;div class="mote-note mote-success"&gt;Saved. Everything is fine.&lt;/div&gt;
+&lt;div class="mote-note mote-info"&gt;Heads up — a gentle fact.&lt;/div&gt;
+&lt;div class="mote-note mote-warning"&gt;Careful now.&lt;/div&gt;
+&lt;div class="mote-note mote-error"&gt;Something went softly wrong.&lt;/div&gt;
+</code></pre>
+  <div class="mote-note mote-success">Saved. Everything is fine.</div>
+  <div class="mote-note mote-info">Heads up — a gentle fact.</div>
+  <div class="mote-note mote-warning">Careful now.</div>
+  <div class="mote-note mote-error">Something went softly wrong.</div>
 
   <h2 id="fonts">Fonts</h2>
   <p>mote declares font <em>stacks</em> only — it embeds nothing and requires nothing.
@@ -469,12 +568,16 @@ npm install @fontsource-variable/inter @fontsource/commit-mono
     document.getElementById('docs-dialog').showModal());
 
   // Toast demo
-  const toast = document.getElementById('docs-toast');
-  document.getElementById('toast-btn').addEventListener('click', () => {
-    toast.showPopover();
-    clearTimeout(toast._t);
-    toast._t = setTimeout(() => toast.matches(':popover-open') && toast.hidePopover(), 3000);
-  });
+  const fireToast = (btnId, toastId) => {
+    const toast = document.getElementById(toastId);
+    document.getElementById(btnId).addEventListener('click', () => {
+      toast.showPopover();
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toast.matches(':popover-open') && toast.hidePopover(), 3000);
+    });
+  };
+  fireToast('toast-btn', 'docs-toast');
+  fireToast('toast-btn-error', 'docs-toast-error');
 </script>
 </body>
 </html>

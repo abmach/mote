@@ -320,8 +320,8 @@ details[name][open] summary {
 }
 
 details[name] > :not(summary) {
-  margin-block: 0 1rem;
-  padding-inline: 1.2rem;
+  margin-block: 0;
+  padding: 0.15rem 1.2rem 0.9rem;
 }
 
 /* ---------------------------------------------------------------------------
@@ -337,7 +337,17 @@ details[name] > :not(summary) {
     interpolate-size: allow-keywords;
   }
 
+  /* Margins do not interpolate: a first/last child margin makes the
+     animated block-size target differ from the settled layout, which
+     snaps at the transition's end. Keep the animated box flush;
+     spacing comes from padding (which lives inside it) instead. */
+  details::details-content > :first-child { margin-block-start: 0; }
+  details::details-content > :last-child { margin-block-end: 0; }
+
   details::details-content {
+    /* flow-root contains arbitrary content margins (overflow: clip
+       does not create a BFC), keeping the animated box flush. */
+    display: flow-root;
     block-size: 0;
     overflow: clip;
     opacity: 0;
