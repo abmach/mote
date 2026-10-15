@@ -239,7 +239,7 @@ cite { font-style: normal; color: var(--mote-muted); }
 
 blockquote {
   padding: 0.2rem 0 0.2rem 1.2rem;
-  border-inline-start: 3px solid color-mix(in oklab, var(--mote-accent), transparent 45%);
+  border-inline-start: 3px solid color-mix(in oklab, var(--mote-status, var(--mote-accent)), transparent 45%);
   color: var(--mote-muted);
   font-style: italic;
 }
@@ -526,7 +526,7 @@ summary {
 }
 
 summary::marker {
-  color: var(--mote-accent);
+  color: var(--mote-status, var(--mote-accent));
 }
 
 dialog {
@@ -545,7 +545,7 @@ dialog::backdrop {
 
 progress, meter {
   height: 0.9rem;
-  accent-color: var(--mote-accent);
+  accent-color: var(--mote-status, var(--mote-accent));
 }
 
 /* Semantic feedback helpers (pure HTML, works with <p>, <div>, anything) */
@@ -567,13 +567,40 @@ progress, meter {
 /* Dimmed text: <small class="mote-muted"> */
 .mote-muted { color: var(--mote-muted); }
 
-/* Themed message surfaces (semantic colors, no inline styles) */
-.mote-note { padding: 0.8rem 1.1rem; border-radius: var(--mote-radius-sm); }
+/* ---------------------------------------------------------------------------
+ * 11. Status classes
+ *
+ * Statuses are pure token assignments — they set variables, never visual
+ * properties. Base classes (notes, badges, toasts) consume the tokens and
+ * fall back to the accent color when no status class is present.
+ *
+ *   <div class="mote-note mote-success">…</div>
+ *   <span class="mote-badge mote-error">404</span>
+ *
+ * Restyle a status once and every component follows; or set the variables
+ * inline: style="--mote-status: rebeccapurple".
+ * ------------------------------------------------------------------------- */
 
-.mote-note-success { background: var(--mote-success-soft); color: var(--mote-success); }
-.mote-note-warning { background: var(--mote-warning-soft); color: var(--mote-warning); }
-.mote-note-error   { background: var(--mote-error-soft);   color: var(--mote-error); }
-.mote-note-info    { background: var(--mote-info-soft);   color: var(--mote-info); }
+.mote-success { --mote-status: var(--mote-success); --mote-status-soft: var(--mote-success-soft); }
+.mote-warning { --mote-status: var(--mote-warning); --mote-status-soft: var(--mote-warning-soft); }
+.mote-error   { --mote-status: var(--mote-error);   --mote-status-soft: var(--mote-error-soft); }
+.mote-info    { --mote-status: var(--mote-info);    --mote-status-soft: var(--mote-info-soft); }
+
+/* .mote-muted does double duty: dimmed text where nothing consumes the
+   tokens, and a neutral status where something does. */
+.mote-muted {
+  color: var(--mote-muted);
+  --mote-status: var(--mote-muted);
+  --mote-status-soft: color-mix(in oklab, var(--mote-fg) 7%, transparent);
+}
+
+/* Themed message surfaces — base shape only; status via the token classes */
+.mote-note {
+  padding: 0.8rem 1.1rem;
+  border-radius: var(--mote-radius-sm);
+  color: var(--mote-status, var(--mote-accent-deep));
+  background: var(--mote-status-soft, var(--mote-accent-soft));
+}
 
 /* ---------------------------------------------------------------------------
  * 12. Motion preferences & print

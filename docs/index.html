@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mote.css — documentation</title>
+  <meta name="description" content="Live documentation for mote.css — a tiny, semantic, classless CSS layer for plain HTML.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
+  <link rel="stylesheet" href="../mote.css">
+  <link rel="stylesheet" href="../mote.components.css">
+</head>
+<body>
+
+<header class="mote-header">
+  <div class="mote-container" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:0.7rem;">
+    <a href="#top" style="font-weight:700;color:var(--mote-fg);text-decoration:none;">mote.css</a>
+    <nav class="mote-nav" aria-label="Sections">
+      <ul>
+        <li><a href="#get-started">Start</a></li>
+        <li><a href="#theming">Theming</a></li>
+        <li><a href="#elements">Elements</a></li>
+        <li><a href="#popovers">Popovers</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="https://github.com/abmach/mote">GitHub</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle" type="button">Theme: auto</button>
+  </div>
+</header>
+
+<main class="mote-container" id="top">
+  <h1>mote.css</h1>
+  <p class="mote-muted">The smallest thing that can carry style — a tiny, semantic, classless CSS
+    layer for plain HTML. Zero dependencies, zero build step, zero JavaScript.</p>
+
+  <h2 id="principles">Principles</h2>
+  <ul>
+    <li><strong>Semantic HTML is the API.</strong> Elements are styled by what they are;
+      classes exist only where the platform has no semantic carrier.</li>
+    <li><strong>The platform before the library.</strong> Dialogs, popovers, accordions and
+      validation use native features, quietly styled — mote never ships JavaScript to do
+      what the browser already does.</li>
+    <li><strong>Tokens all the way down.</strong> Every color, radius, shadow and status is a
+      variable; derived tones are computed, never hand-tuned twice.</li>
+    <li><strong>Weightless by default.</strong> One file for elements, an opt-in second file
+      for components — zero bytes of library JavaScript.</li>
+    <li><strong>Unobtrusive.</strong> Warm, soft, accessible; styling that never shouts.</li>
+  </ul>
+
+  <h2 id="get-started">Get started</h2>
+  <p>Drop one file in your page and write plain HTML. Everything is styled by
+    <strong>element</strong> — no utility classes, no framework, no build.</p>
+  <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="mote.css"&gt;
+    &lt;title&gt;That's it.&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello, cozy.&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  <p>Out of the box, mote falls back to your system fonts; two <code>link</code> tags give it
+    the intended look — see <a href="#fonts">Fonts</a>.</p>
+  <p>Optional components — cards, badges, popovers, accordions, spinners — live in a second
+    stylesheet. Include it only if you use them:</p>
+  <pre><code>&lt;link rel="stylesheet" href="mote.css"&gt;
+&lt;link rel="stylesheet" href="mote.components.css"&gt;</code></pre>
+  <p>This page is a live demo: it is styled by exactly those two files.</p>
+
+  <h2 id="theming">Theming</h2>
+  <p>Every color, radius, shadow and font flows from <code>--mote-*</code> custom properties.
+    Override a few tokens and the whole library re-themes — derived tones (focus rings, hover
+    deepening, tinted surfaces) are computed with <code>color-mix()</code>, so you never
+    hand-tune a second palette.</p>
+  <p>The cascade has three layers, each computed from the last: the <strong>base
+    palette</strong> feeds <strong>derived tones</strong> (soft tints, hover deepening,
+    focus rings — re-derived automatically whenever a base token changes), and
+    <strong>status classes</strong> add a third indirection on top, assigning
+    <code>--mote-status</code> tokens that every note, badge and toast reads with an accent
+    fallback. Override the chain anywhere; everything downstream follows.</p>
+  <pre><code>:root {
+  --mote-accent: #4a7a5b;  /* your brand color */
+  --mote-bg: #fffdf5;      /* your paper */
+  --mote-radius: 6px;      /* your edges */
+}</code></pre>
+  <table>
+    <caption>Core tokens — light and dark values</caption>
+    <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Used for</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-bg</code></td>
+        <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#faf9f7;border:1px solid var(--mote-border);"></span> <code>#faf9f7</code></td>
+        <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#1c1a17;border:1px solid var(--mote-border);"></span> <code>#1c1a17</code></td>
+        <td>Page background</td></tr>
+      <tr><td><code>--mote-surface</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#f1eee7;border:1px solid var(--mote-border);"></span> <code>#f1eee7</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#262320;border:1px solid var(--mote-border);"></span> <code>#262320</code></td><td>Code blocks, inputs, cards</td></tr>
+      <tr><td><code>--mote-fg</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#2b2924;"></span> <code>#2b2924</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#eae6de;"></span> <code>#eae6de</code></td><td>Body text</td></tr>
+      <tr><td><code>--mote-muted</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#716a60;"></span> <code>#716a60</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#a49c90;"></span> <code>#a49c90</code></td><td>Secondary text</td></tr>
+      <tr><td><code>--mote-border</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#e6e0d4;border:1px solid var(--mote-border-strong);"></span> <code>#e6e0d4</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#3b362f;border:1px solid var(--mote-border-strong);"></span> <code>#3b362f</code></td><td>Rules and edges</td></tr>
+      <tr><td><code>--mote-accent</code></td>
+        <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#6f5486;"></span> <code>#6f5486</code></td>
+        <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#b8a1ca;"></span> <code>#b8a1ca</code></td>
+        <td>Links, buttons, focus, markers</td></tr>
+      <tr><td><code>--mote-success</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#4e7d51;"></span> <code>#4e7d51</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#8ab88c;"></span> <code>#8ab88c</code></td><td>Positive semantics</td></tr>
+      <tr><td><code>--mote-warning</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#8a6819;"></span> <code>#8a6819</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#d4b465;"></span> <code>#d4b465</code></td><td>Cautious semantics</td></tr>
+      <tr><td><code>--mote-error</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#b34d4d;"></span> <code>#b34d4d</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#d98a8a;"></span> <code>#d98a8a</code></td><td>Destructive semantics</td></tr>
+      <tr><td><code>--mote-info</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#527097;"></span> <code>#527097</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#96b1d1;"></span> <code>#96b1d1</code></td><td>Neutral semantics</td></tr>
+      <tr><td><code>--mote-font</code></td><td colspan="2"><code>"Inter", system-ui, …</code></td><td>Content typeface</td></tr>
+      <tr><td><code>--mote-font-mono</code></td><td colspan="2"><code>"Commit Mono", ui-monospace, …</code></td><td>Code typeface</td></tr>
+      <tr><td><code>--mote-radius</code></td><td colspan="2"><code>10px</code></td><td>Corner softness (also <code>-sm</code>, <code>-lg</code>)</td></tr>
+      <tr><td><code>--mote-shadow</code></td><td colspan="2">warm diffuse</td><td>Elevation (also <code>-sm</code>)</td></tr>
+      <tr><td><code>--mote-transition</code></td><td colspan="2"><code>150ms ease</code></td><td>Hover/focus timing</td></tr>
+    </tbody>
+  </table>
+  <p>The accent is deliberately plum: it is the one hue family that collides with none of the
+    four semantic colors, so a link never looks like a status.</p>
+
+  <h3 id="dark-mode">Dark mode</h3>
+  <p>mote follows the user's system preference automatically. To force a theme, set an
+    attribute on <code>&lt;html&gt;</code>:</p>
+  <pre><code>&lt;html data-theme="dark"&gt;  &lt;!-- or "light" --&gt;
+</code></pre>
+  <p>The toggle on this page is five lines of JavaScript — no library involvement:</p>
+  <pre><code>const root = document.documentElement;
+document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
+  root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+});
+</code></pre>
+
+  <h2 id="elements">Elements</h2>
+  <p>Everything below is plain semantic HTML — no classes, no attributes beyond semantics.
+    Open the <a href="../demo.html">element gallery</a> for the complete set rendered on one page.</p>
+
+  <h3>Typography</h3>
+  <h1>Heading 1</h1>
+  <h2>Heading 2</h2>
+  <h3>Heading 3</h3>
+  <p>Body text with <strong>strong</strong>, <em>emphasis</em>, <a href="#elements">links</a>,
+    <small>small print</small>, H<sub>2</sub>O, x<sup>2</sup>, <abbr title="Cascading Style Sheets">CSS</abbr>,
+    <mark>highlights</mark>, <del>removals</del>, <ins>insertions</ins>, <q>quotes</q>, inline
+    <code>code</code>, and <kbd>Ctrl</kbd>+<kbd>K</kbd>.</p>
+
+  <h3>Lists and block content</h3>
+  <ul>
+    <li>Unordered lists</li>
+    <li>With <a href="#elements">links</a></li>
+  </ul>
+  <blockquote>
+    A mote is the smallest thing that can carry style.
+    <cite>— this library's only opinion</cite>
+  </blockquote>
+
+  <h3>Tables</h3>
+  <table>
+    <caption>Deliverables</caption>
+    <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>mote.css</code></td><td>The whole library</td></tr>
+      <tr><td><code>mote.components.css</code></td><td>Optional components</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Forms</h3>
+  <p>Labels, inputs, selects, checkboxes, radios and buttons inherit the cozy surface.
+    Invalid fields show a brick border once the user interacts with them (<code>:user-invalid</code>).</p>
+  <form onsubmit="event.preventDefault()">
+    <p>
+      <label for="d-email">Email</label>
+      <input id="d-email" type="email" placeholder="ada@example.com" required>
+    </p>
+    <p>
+      <label for="d-plan">Plan</label>
+      <select id="d-plan"><option>Free</option><option selected>Cozy</option></select>
+    </p>
+    <p>
+      <label><input type="checkbox" checked> Send me gentle updates</label>
+    </p>
+    <p>
+      <button type="submit">Subscribe</button>
+      <button type="reset">Reset</button>
+    </p>
+  </form>
+
+  <h3>Dialogs</h3>
+  <p>Native <code>&lt;dialog&gt;</code> gets a soft surface, a dimmed blurred backdrop, and —
+    with the components file — a gentle entrance animation. Opening a <em>modal</em> takes one
+    line of JavaScript:</p>
+  <pre><code>&lt;dialog id="example"&gt;
+  &lt;h3&gt;Modal title&lt;/h3&gt;
+  &lt;p&gt;Content…&lt;/p&gt;
+  &lt;form method="dialog"&gt;&lt;button&gt;Close&lt;/button&gt;&lt;/form&gt;
+&lt;/dialog&gt;
+
+&lt;script&gt;
+  document.querySelector('#open-btn').onclick = () =&gt;
+    document.querySelector('#example').showModal();
+&lt;/script&gt;
+</code></pre>
+  <p>
+    <button type="button" id="open-dialog">Open a live modal</button>
+  </p>
+  <dialog id="docs-dialog">
+    <h3>A cozy modal</h3>
+    <p>Backdrop dim, gentle fade, native Esc-to-close. The <code>form method="dialog"</code>
+      button closes it declaratively.</p>
+    <form method="dialog"><button>Close</button></form>
+  </dialog>
+
+  <h2 id="details">Details and accordions</h2>
+  <p>Single <code>&lt;details&gt;</code> elements are soft cards. Give a group of siblings the
+    same <code>name</code> and the browser turns them into an <strong>exclusive accordion</strong> —
+    one open at a time, no JavaScript. Try it:</p>
+  <pre><code>&lt;details name="faq"&gt;
+  &lt;summary&gt;Does it need a build step?&lt;/summary&gt;
+  &lt;p&gt;No.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details name="faq"&gt;
+  &lt;summary&gt;Does it need classes?&lt;/summary&gt;
+  &lt;p&gt;No.&lt;/p&gt;
+&lt;/details&gt;
+</code></pre>
+  <details name="faq">
+    <summary>Does it need a build step?</summary>
+    <p>No. It is a single CSS file.</p>
+  </details>
+  <details name="faq">
+    <summary>Does it need classes?</summary>
+    <p>Not for elements. The optional components file adds a handful where no semantic
+      element exists.</p>
+  </details>
+  <details name="faq">
+    <summary>Does it need JavaScript?</summary>
+    <p>No. Tooltips, menus and accordions ride on native platform features.</p>
+  </details>
+
+  <p>In Chromium engines, opening and closing also animates smoothly — a
+    <code>details</code> pseudo-element nicety provided by the components file. Everywhere
+    else the toggle is instant.</p>
+
+  <h2 id="popovers">Popovers: tooltips and menus</h2>
+  <p>The native <code>popover</code> attribute gives you top-layer, light-dismiss,
+    Esc-to-close surfaces — styled by mote, wired by the browser. A
+    <code>popovertarget</code> button toggles one with <strong>zero JavaScript</strong>:</p>
+  <pre><code>&lt;button popovertarget="tip"&gt;What is a mote?&lt;/button&gt;
+&lt;div popover class="mote-tooltip" id="tip"&gt;
+  A speck of dust, especially one drifting in a sunbeam.
+&lt;/div&gt;
+
+&lt;button popovertarget="menu"&gt;Options&lt;/button&gt;
+&lt;menu popover id="menu" role="menu"&gt;
+  &lt;li&gt;&lt;button role="menuitem"&gt;Rename&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button role="menuitem"&gt;Duplicate&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button role="menuitem"&gt;Archive&lt;/button&gt;&lt;/li&gt;
+&lt;/menu&gt;
+</code></pre>
+  <p>
+    <button popovertarget="docs-tip" type="button" style="anchor-name: --docs-tip-a">What is a mote?</button>
+  </p>
+  <div popover class="mote-tooltip" id="docs-tip" style="position-anchor: --docs-tip-a">
+    A speck of dust, especially one drifting in a sunbeam.
+  </div>
+  <p>
+    <button popovertarget="docs-menu" type="button" style="anchor-name: --docs-menu-a">Options</button>
+  </p>
+  <menu popover id="docs-menu" role="menu" style="position-anchor: --docs-menu-a">
+    <li><button role="menuitem">Rename</button></li>
+    <li><button role="menuitem">Duplicate</button></li>
+    <li><button role="menuitem">Archive</button></li>
+  </menu>
+
+  <p>By default, the browser opens popovers centered in the viewport. To place one next to
+    its trigger instead, use CSS anchor positioning (Chrome 125+, Safari 26+): give the
+    trigger an <code>anchor-name</code> and the popover a matching
+    <code>position-anchor</code> — mote then positions it right below the trigger and flips
+    it when it would overflow the viewport. Engines without support keep the centered
+    fallback:</p>
+  <pre><code>&lt;button popovertarget="menu" style="anchor-name: --menu-a"&gt;Options&lt;/button&gt;
+&lt;menu popover id="menu" style="position-anchor: --menu-a" role="menu"&gt;
+  &lt;li&gt;&lt;button role="menuitem"&gt;Rename&lt;/button&gt;&lt;/li&gt;
+&lt;/menu&gt;
+</code></pre>
+  <p>The live examples above are anchored — in Chromium and Safari they open next to their
+    buttons; in Firefox they open centered.</p>
+
+  <h2 id="components">Components</h2>
+  <p>From <code>mote.components.css</code> — opt-in, CSS-only, built on the platform.</p>
+
+  <h3>Cards</h3>
+  <pre><code>&lt;article class="mote-card"&gt;
+  &lt;h3&gt;Card title&lt;/h3&gt;
+  &lt;p&gt;A soft surface for grouped content.&lt;/p&gt;
+&lt;/article&gt;
+</code></pre>
+  <div class="mote-card">
+    <h3 style="margin-block-start:0">Card title</h3>
+    <p>A soft surface for grouped content — a border, a whisper of shadow, and nothing else
+      deciding your layout.</p>
+  </div>
+
+  <h3>Badges</h3>
+  <pre><code>&lt;span class="mote-badge"&gt;accent&lt;/span&gt;
+&lt;span class="mote-badge mote-success"&gt;success&lt;/span&gt;
+&lt;span class="mote-badge mote-warning"&gt;warning&lt;/span&gt;
+&lt;span class="mote-badge mote-error"&gt;error&lt;/span&gt;
+&lt;span class="mote-badge mote-info"&gt;info&lt;/span&gt;
+&lt;span class="mote-badge mote-muted"&gt;muted&lt;/span&gt;
+</code></pre>
+  <p>
+    <span class="mote-badge">accent</span>
+    <span class="mote-badge mote-success">success</span>
+    <span class="mote-badge mote-warning">warning</span>
+    <span class="mote-badge mote-error">error</span>
+    <span class="mote-badge mote-info">info</span>
+    <span class="mote-badge mote-muted">muted</span>
+  </p>
+
+  <h3>Avatars</h3>
+  <pre><code>&lt;img class="mote-avatar" src="ada.png" alt="Ada Lovelace"&gt;
+</code></pre>
+  <p>
+    <img class="mote-avatar" alt="A warm gradient placeholder avatar"
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cdefs%3E%3CradialGradient id='g' cx='30%25' cy='70%25' r='90%25'%3E%3Cstop offset='0%25' stop-color='%23f2e9d8'/%3E%3Cstop offset='100%25' stop-color='%23cbbcd8'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='80' height='80' fill='url(%23g)'/%3E%3C/svg%3E">
+  </p>
+
+  <h3>Skeletons and spinners</h3>
+  <pre><code>&lt;div class="mote-skeleton" style="height:1rem;width:60%"&gt;&lt;/div&gt;
+&lt;div class="mote-skeleton" style="height:1rem;width:40%"&gt;&lt;/div&gt;
+
+&lt;span class="mote-spinner" role="status" aria-label="Loading"&gt;&lt;/span&gt;
+</code></pre>
+  <div class="mote-skeleton" style="height:1rem;width:60%"></div>
+  <div class="mote-skeleton" style="height:1rem;width:40%"></div>
+  <p><span class="mote-spinner" role="status" aria-label="Loading"></span> Loading something…</p>
+
+  <h3>Toasts</h3>
+  <p>A styled <code>popover</code> pinned to the corner. Showing it takes one line — the
+    browser handles stacking, Esc, and light-dismiss:</p>
+  <pre><code>&lt;div popover class="mote-toast" id="toast"&gt;
+  Saved. Everything is fine.
+&lt;/div&gt;
+
+&lt;script&gt;
+  const t = document.querySelector('#toast');
+  t.showPopover();
+  setTimeout(() =&gt; t.hidePopover(), 3000);
+&lt;/script&gt;
+</code></pre>
+  <p><button type="button" id="toast-btn">Fire a live toast</button></p>
+  <div popover class="mote-toast" id="docs-toast">Saved. Everything is fine.</div>
+
+  <h3>Header and navigation</h3>
+  <p>The sticky translucent header at the top of this page is two classes:</p>
+  <pre><code>&lt;header class="mote-header"&gt;
+  &lt;nav class="mote-nav"&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="/" aria-current="page"&gt;Home&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+</code></pre>
+  <p>Breadcrumbs need no class at all — mote styles the semantic pattern:</p>
+  <pre><code>&lt;nav aria-label="breadcrumb"&gt;
+  &lt;ol&gt;
+    &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span aria-current="page"&gt;Theming&lt;/span&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+</code></pre>
+  <nav aria-label="breadcrumb">
+    <ol>
+      <li><a href="#top">Docs</a></li>
+      <li><span aria-current="page">Components</span></li>
+    </ol>
+  </nav>
+
+  <h2 id="helpers">Helpers</h2>
+  <p>Three tiny escape hatches for what semantics cannot express:</p>
+  <h3>Status classes</h3>
+  <p>Statuses are pure token assignments. <code>mote-success</code>, <code>mote-warning</code>,
+    <code>mote-error</code>, <code>mote-info</code> and <code>mote-muted</code> set the
+    <code>--mote-status</code> and <code>--mote-status-soft</code> variables and nothing else —
+    components consume the tokens and fall back to the accent color when no status is present:</p>
+  <pre><code>/* the status contract */
+.mote-success {
+  --mote-status: var(--mote-success);
+  --mote-status-soft: var(--mote-success-soft);
+}
+
+/* base components only read the tokens */
+.mote-badge {
+  color: var(--mote-status, var(--mote-accent-deep));
+  background: var(--mote-status-soft, var(--mote-accent-soft));
+}
+</code></pre>
+  <p>No specificity to fight: restyle a status once and every note, badge and toast follows.
+    Or set the variable inline — <code>style="--mote-status: rebeccapurple"</code> — on any
+    status-consuming element.</p>
+  <p>More than badges read the tokens — blockquote rules, progress and meter bars, spinners
+    and summary markers pick them up too:</p>
+  <blockquote class="mote-info">
+    A blockquote with a dusty-blue rule.
+  </blockquote>
+  <p>
+    <progress class="mote-error" value="35" max="100">35%</progress>
+    <span class="mote-spinner mote-warning" role="status" aria-label="Loading"></span>
+  </p>
+  <table>
+    <thead><tr><th>Class</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>.mote-container</code></td><td>Centered page wrapper: <code>width: min(100% - 3rem, 70rem)</code></td></tr>
+      <tr><td><code>.mote-muted</code></td><td>Dimmed secondary text</td></tr>
+      <tr><td><code>.mote-note</code> + status class</td><td>Tinted message surfaces</td></tr>
+      <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
+    </tbody>
+  </table>
+  <div class="mote-note mote-info">Everything else on this page is classless.</div>
+
+  <h2 id="fonts">Fonts</h2>
+  <p>mote declares font <em>stacks</em> only — it embeds nothing and requires nothing.
+    Out of the box it falls back to your system fonts. For the full experience, add Inter and
+    Commit Mono (both free, SIL OFL):</p>
+  <pre><code>&lt;!-- CDN --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css"&gt;
+
+&lt;!-- or self-host --&gt;
+npm install @fontsource-variable/inter @fontsource/commit-mono
+</code></pre>
+
+  <h2 id="support">Browser support</h2>
+  <p>Modern evergreen browsers. The core needs <code>color-mix()</code>: Chrome/Edge 111+,
+    Firefox 113+, Safari 16.2+. Component niceties ride on Baseline 2024 platform features and
+    degrade gracefully:</p>
+  <table>
+    <thead><tr><th>Feature</th><th>Used for</th><th>Fallback</th></tr></thead>
+    <tbody>
+      <tr><td><code>popover</code></td><td>Tooltips, menus, toasts</td><td>Supported everywhere since 2024</td></tr>
+      <tr><td><code>details name</code></td><td>Exclusive accordions</td><td>Unsupported: groups stay independent</td></tr>
+      <tr><td><code>@starting-style</code>, <code>allow-discrete</code></td><td>Open/close animations</td><td>Instant open/close</td></tr>
+      <tr><td><code>:user-invalid</code></td><td>Form validation styling</td><td>No live feedback border</td></tr>
+      <tr><td>CSS anchor positioning</td><td>Popovers next to their trigger</td><td>Viewport-centered popover</td></tr>
+      <tr><td><code>details::details-content</code> + <code>interpolate-size</code></td><td>Accordion open/close animation</td><td>Instant toggle</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+  <p class="mote-muted">mote.css · MIT · <a href="https://github.com/abmach/mote">GitHub</a> ·
+    styled by two CSS files and zero lines of library JavaScript.</p>
+</main>
+
+<script>
+  // Theme toggle: auto -> light -> dark -> auto
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  const states = ['', 'light', 'dark'];
+  let i = 0;
+  btn.addEventListener('click', () => {
+    i = (i + 1) % states.length;
+    root.dataset.theme = states[i];
+    btn.textContent = 'Theme: ' + (states[i] || 'auto');
+  });
+
+  // Modal demo
+  document.getElementById('open-dialog').addEventListener('click', () =>
+    document.getElementById('docs-dialog').showModal());
+
+  // Toast demo
+  const toast = document.getElementById('docs-toast');
+  document.getElementById('toast-btn').addEventListener('click', () => {
+    toast.showPopover();
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.matches(':popover-open') && toast.hidePopover(), 3000);
+  });
+</script>
+</body>
+</html>

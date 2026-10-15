@@ -1,0 +1,361 @@
+/*!
+ * mote.components.css — opt-in components for mote.css.
+ * https://github.com/abmach/mote
+ *
+ * Requires mote.css loaded first (provides the --mote-* tokens).
+ * Everything here is CSS-only and rides on native platform features:
+ * popovers, dialogs, exclusive <details> groups. No JavaScript required.
+ *
+ * MIT License.
+ */
+
+/* ---------------------------------------------------------------------------
+ * 1. Cards
+ * ------------------------------------------------------------------------- */
+
+.mote-card {
+  padding: 1.25rem 1.5rem;
+  border: var(--mote-border-width) solid var(--mote-border);
+  border-radius: var(--mote-radius-lg);
+  background: color-mix(in oklab, var(--mote-surface) 55%, var(--mote-bg));
+  box-shadow: var(--mote-shadow-sm);
+}
+
+.mote-card > :first-child {
+  margin-block-start: 0;
+}
+
+.mote-card > :last-child {
+  margin-block-end: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * 2. Badges — .mote-badge + a status class from mote.css (optional)
+ *
+ *    <span class="mote-badge">accent</span>
+ *    <span class="mote-badge mote-success">success</span>
+ * ------------------------------------------------------------------------- */
+
+.mote-badge {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.8;
+  background: var(--mote-status-soft, var(--mote-accent-soft));
+  color: var(--mote-status, var(--mote-accent-deep));
+  user-select: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * 3. Avatars
+ * ------------------------------------------------------------------------- */
+
+.mote-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  object-fit: cover;
+  border: var(--mote-border-width) solid var(--mote-border);
+  box-shadow: var(--mote-shadow-sm);
+}
+
+/* ---------------------------------------------------------------------------
+ * 4. Skeleton loading placeholder
+ * ------------------------------------------------------------------------- */
+
+.mote-skeleton {
+  border-radius: var(--mote-radius-sm);
+  background:
+    linear-gradient(
+      100deg,
+      color-mix(in oklab, var(--mote-fg) 5%, transparent) 40%,
+      color-mix(in oklab, var(--mote-fg) 9%, transparent) 50%,
+      color-mix(in oklab, var(--mote-fg) 5%, transparent) 60%
+    );
+  background-size: 200% 100%;
+  animation: mote-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes mote-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ---------------------------------------------------------------------------
+ * 5. Spinner
+ * ------------------------------------------------------------------------- */
+
+.mote-spinner {
+  display: inline-block;
+  vertical-align: -0.25em;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid color-mix(in oklab, var(--mote-status, var(--mote-accent)), transparent 65%);
+  border-block-start-color: var(--mote-status, var(--mote-accent));
+  border-radius: 999px;
+  animation: mote-spin 0.7s linear infinite;
+}
+
+@keyframes mote-spin {
+  to { rotate: 1turn; }
+}
+
+/* ---------------------------------------------------------------------------
+ * 6. Site header and nav
+ * ------------------------------------------------------------------------- */
+
+.mote-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in oklab, var(--mote-bg) 82%, transparent);
+  backdrop-filter: blur(10px);
+  border-block-end: var(--mote-border-width) solid var(--mote-border);
+}
+
+.mote-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.mote-nav a {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  color: var(--mote-fg);
+  text-decoration: none;
+  transition: background var(--mote-transition), color var(--mote-transition);
+}
+
+.mote-nav a:hover {
+  background: var(--mote-accent-soft);
+  color: var(--mote-accent-deep);
+}
+
+.mote-nav a[aria-current="page"] {
+  background: var(--mote-accent);
+  color: var(--mote-on-accent);
+}
+
+/* ---------------------------------------------------------------------------
+ * 7. Breadcrumbs — semantic selector, no class needed
+ * ------------------------------------------------------------------------- */
+
+nav[aria-label="breadcrumb"] ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9em;
+  list-style: none;
+  color: var(--mote-muted);
+}
+
+nav[aria-label="breadcrumb"] li + li::before {
+  content: "/";
+  margin-inline-end: 0.5rem;
+  color: var(--mote-border-strong);
+}
+
+nav[aria-label="breadcrumb"] [aria-current="page"] {
+  color: var(--mote-fg);
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------------------
+ * 8. Popover surfaces — tooltips, menus, toasts
+ *
+ * Any element with the `popover` attribute gets the mote surface.
+ * Toggle it with a `popovertarget` button — zero JavaScript.
+ * ------------------------------------------------------------------------- */
+
+[popover] {
+  padding: 0.8rem 1rem;
+  border: var(--mote-border-width) solid var(--mote-border);
+  border-radius: var(--mote-radius);
+  background: var(--mote-bg);
+  color: var(--mote-fg);
+  box-shadow: var(--mote-shadow);
+}
+
+/* Anchored popovers (Chrome 125+, Safari 26+): by default the browser
+   centers popovers in the viewport. To place one next to its trigger,
+   give the trigger an anchor name and the popover a matching
+   position-anchor (unique names per pair) — mote positions it below
+   the trigger and flips it when it would overflow the viewport.
+
+     <button popovertarget="menu" style="anchor-name: --menu-a">Options</button>
+     <menu popover id="menu" style="position-anchor: --menu-a">…</menu>
+
+   Engines without support keep the centered fallback. */
+@supports (anchor-name: --mote-a) {
+  [popover][style*="position-anchor"] {
+    position-area: block-end;
+    justify-self: anchor-center;
+    position-try-fallbacks: flip-block, flip-inline;
+    margin: 0.45rem;
+  }
+}
+
+/* Menus: <menu popover> + buttons — semantic, no classes */
+menu[popover] {
+  min-width: 11rem;
+  padding: 0.35rem;
+}
+
+menu[popover] li {
+  margin: 0;
+  list-style: none;
+}
+
+menu[popover] :is(button, [role="menuitem"]) {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: var(--mote-radius-sm);
+  background: none;
+  color: var(--mote-fg);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+menu[popover] :is(button, [role="menuitem"]):hover,
+menu[popover] :is(button, [role="menuitem"]):focus-visible {
+  background: var(--mote-accent-soft);
+  color: var(--mote-accent-deep);
+}
+
+/* Tooltips: add .mote-tooltip to the popover element */
+[popover].mote-tooltip {
+  max-width: 18rem;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85em;
+  border-radius: var(--mote-radius-sm);
+  box-shadow: var(--mote-shadow-sm);
+}
+
+/* Toasts: popover + .mote-toast + optional status class, shown with el.showPopover() */
+[popover].mote-toast {
+  position: fixed;
+  inset: auto 1.25rem 1.25rem auto;
+  max-width: 22rem;
+  font-size: 0.9em;
+  border-block-start-width: 3px;
+  border-block-start-color: var(--mote-status, var(--mote-accent));
+}
+
+/* ---------------------------------------------------------------------------
+ * 9. Open/close animations for popovers and dialogs
+ * (transition-behavior + @starting-style — Baseline 2024, degrades to
+ * instant open/close on older browsers)
+ * ------------------------------------------------------------------------- */
+
+[popover],
+dialog[open] {
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    display 180ms allow-discrete,
+    overlay 180ms allow-discrete;
+}
+
+[popover]:popover-open,
+dialog[open] {
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  [popover]:popover-open,
+  dialog[open] {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+dialog::backdrop {
+  opacity: 1;
+  transition: opacity 180ms allow-discrete;
+}
+
+@starting-style {
+  dialog::backdrop {
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * 10. Exclusive accordions — <details name="group">
+ * Siblings sharing a name auto-close each other; one open at a time.
+ * ------------------------------------------------------------------------- */
+
+details[name] {
+  padding: 0;
+  border: none;
+  border-block-end: var(--mote-border-width) solid var(--mote-border);
+  border-radius: 0;
+  background: none;
+}
+
+details[name]:last-of-type {
+  border-block-end: none;
+}
+
+details[name] summary {
+  padding: 0.9rem 1.2rem;
+  transition: color var(--mote-transition);
+}
+
+details[name][open] summary {
+  color: var(--mote-accent-deep);
+}
+
+details[name] > :not(summary) {
+  margin-block: 0 1rem;
+  padding-inline: 1.2rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * 11. Accordion open/close animation
+ *
+ * Chromium's ::details-content pseudo-element + interpolate-size allow
+ * height to animate to `auto`. Gated on support — other engines keep
+ * the instant toggle.
+ * ------------------------------------------------------------------------- */
+
+@supports selector(details::details-content) and (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  details::details-content {
+    block-size: 0;
+    overflow: clip;
+    opacity: 0;
+    transition:
+      block-size 260ms ease,
+      opacity 260ms ease,
+      content-visibility 260ms allow-discrete;
+  }
+
+  details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
+  @starting-style {
+    details[open]::details-content {
+      block-size: 0;
+      opacity: 0;
+    }
+  }
+}

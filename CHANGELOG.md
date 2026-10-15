@@ -7,8 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Consider Inter's `ss02` (disambiguation) + `zero` (dotted zero) OpenType features
-  for contexts where `0`/`O` and `1`/`l` confusion matters.
+### Added
+
+- `mote.components.css`: opt-in, CSS-only components — cards, badges, avatars,
+  skeleton, spinner, sticky header, nav pills, breadcrumbs (semantic selector),
+  popover tooltips/menus/toasts, exclusive `<details name>` accordions, and
+  popover/dialog entrance animations via `@starting-style` + `allow-discrete`.
+- Status classes (`mote-success`, `mote-warning`, `mote-error`, `mote-info`,
+  `mote-muted`) as pure `--mote-status` / `--mote-status-soft` token assignments,
+  consumed by notes, badges and toasts with accent fallback — one override re-skins
+  every status surface; inline `--mote-status` works too.
+- Live documentation page at `docs/index.html`.
+- Anchored popover placement via CSS anchor positioning (Chrome 125+,
+  Safari 26+): inline `anchor-name` + `position-anchor` places a popover
+  below its trigger with viewport flip; centered fallback elsewhere.
+- Accordion open/close animation in Chromium via `details::details-content`
+  + `interpolate-size` (gated on support; instant toggle elsewhere).
+- Status-token consumption extended to blockquote rules, `progress`/`meter`,
+  spinners and `summary` markers.
+
+### Fixed
+
+- Popovers no longer snap to the viewport's top-left corner: mote no longer
+  overrides the native `margin: auto` centering.
+- Spinner no longer rides high next to text: baseline-lowered alignment.
+
+### Changed
+
+- `.mote-note-*` and `.mote-badge-*` compound status classes replaced by the
+  shared status classes (`.mote-note mote-success` instead of
+  `.mote-note mote-note-success`).
 
 ## [0.1.0] - 2026-10-15
 

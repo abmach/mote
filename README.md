@@ -19,15 +19,14 @@ A mote of styling for plain HTML: **zero dependencies, zero build step, zero cla
 </html>
 ```
 
-## Why mote
+## Principles
 
-- **Classless & semantic** — styles elements by tag, not by utility soup. Your HTML stays clean and portable.
-- **One variable-driven token system** — every color, radius, shadow and font flows from `--mote-*` custom properties. Re-theme the whole library in a handful of lines, no rebuild, no preprocessor.
-- **Zero dependencies** — `mote.css` is a single ~15 KB file. No JavaScript, no framework tie-ins, no `@font-face` payloads.
-- **Framework-agnostic** — it's just CSS. Use it with plain HTML, Svelte, Vue, React, HTMX, PHP, your CMS, anything.
-- **Light & dark, automatically** — warm-paper light and warm-charcoal dark themes, honoring `prefers-color-scheme`, with manual overrides.
-- **Accessible by default** — every token pair passes WCAG AA contrast or better; visible focus rings; reduced-motion respected.
-- **Modern CSS, honestly used** — `color-mix()` for derived tones (graceful degradation), `:focus-visible`, `accent-color`, native `dialog`, `:user-invalid`.
+- **Semantic HTML is the API.** mote styles elements by what they *are* — headings, forms, `dialog`, `menu` — not by the classes they wear. Classes exist only where the platform has no semantic carrier (a "card" is not a semantic concept).
+- **The platform before the library.** Interactive components ride on native features: `popover`, `dialog`, `<details name>`, `:user-invalid`. Where the browser can do it, mote never ships JavaScript to do it worse.
+- **Tokens all the way down.** Every color, radius, shadow, font and status is a `--mote-*` custom property, and derived tones are computed with `color-mix()`. Status classes set tokens and nothing else — one override re-skins every note, badge and toast. Re-theme by overriding variables, never by fighting selectors.
+- **Weightless by default.** `mote.css` styles your elements; `mote.components.css` is opt-in and CSS-only. You ship zero bytes of library JavaScript, ever.
+- **Framework-agnostic.** It's just CSS — plain HTML, Svelte, Vue, React, HTMX, PHP, your CMS, anything.
+- **Cozy, and unobtrusive about it.** Warm neutrals, soft edges, generous rhythm — styling that never shouts. Automatic light/dark, AA+ contrast, visible focus, reduced-motion respected.
 
 ## Install
 
@@ -54,6 +53,16 @@ Everything is a variable. Override the ones you care about:
   --mote-radius: 6px;       /* your edges */
 }
 ```
+
+### The token cascade
+
+Values flow in layers, each computed from the last — retune a base token and everything downstream re-derives automatically:
+
+1. **Base palette** — the raw tokens: `--mote-bg`, `--mote-fg`, `--mote-accent`, the four semantics, fonts, radii, shadows. Light values live in `:root`; dark values swap in via `prefers-color-scheme` or `data-theme`.
+2. **Derived tones** — computed from the base with `color-mix()`: `--mote-accent-deep` (hover deepening), `--mote-accent-soft`, the four `--mote-*-soft` tints, `--mote-focus-ring`, `--mote-border-strong`. They can never go stale — change `--mote-accent` and every tint, ring and hover shade follows.
+3. **Status indirection** — status classes assign `--mote-status` / `--mote-status-soft` and nothing else. Components read them with accent fallbacks: `color: var(--mote-status, var(--mote-accent-deep))`.
+
+The consequence: theming is a handful of variable overrides, and an inline tweak (`style="--mote-status: …"`) slots into the same chain at any level.
 
 ### Token reference
 
@@ -104,26 +113,47 @@ Or self-host with `npm install @fontsource-variable/inter @fontsource/commit-mon
 
 ## Opt-in helpers
 
-mote is classless, but three tiny helpers cover the gaps semantics can't:
+mote is classless by design; these are the only escape hatches, plus status classes that every status-consuming component reads:
 
 | Class | Purpose |
 |---|---|
 | `.mote-container` | Centered page wrapper: `width: min(100% - 3rem, 70rem)` |
-| `.mote-muted` | Dimmed secondary text |
-| `.mote-note` + `.mote-note-{success,warning,error,info}` | Tinted message surfaces |
+| `.mote-muted` | Dimmed secondary text (also a neutral status) |
+| `.mote-note` + status class | Tinted message surfaces |
+| `.mote-success` · `.mote-warning` · `.mote-error` · `.mote-info` | Pure status tokens: they only set `--mote-status` / `--mote-status-soft`, so one override re-skins every note, badge and toast |
+
+## Components
+
+`mote.components.css` is the optional second file: opt-in components, **CSS-only**, riding on native platform features — popovers, dialogs, exclusive `<details>` groups. No JavaScript anywhere.
+
+| Component | Hook |
+|---|---|
+| Cards | `.mote-card` |
+| Badges | `.mote-badge` + optional status class |
+| Avatars | `.mote-avatar` |
+| Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |
+| Sticky site header / nav pills | `.mote-header`, `.mote-nav` |
+| Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
+| Tooltips | `[popover].mote-tooltip` + `popovertarget` button |
+| Menus | `menu[popover]` + `popovertarget` button |
+| Toasts | `[popover].mote-toast` + status class |
+| Exclusive accordions | `<details name="group">` — the browser closes siblings |
+| Dialog & popover entrance animations | automatic when the file is loaded |
+
+Full live documentation with copyable markup for everything above: **[docs/index.html](docs/index.html)**.
 
 ## Browser support
 
 Modern evergreen browsers (uses `color-mix()`, `:focus-visible`, `accent-color`, `:user-invalid`):
 Chrome/Edge 111+, Firefox 113+, Safari 16.2+. `color-mix()`-dependent niceties degrade gracefully on older browsers.
 
+The components file additionally uses Baseline 2024 platform features — `popover`, `<details name>`,
+`@starting-style`, `allow-discrete` — each degrading gracefully: accordions stay independent,
+animations become instant, on older engines.
+
 ## Demo
 
-Open [`demo.html`](demo.html) for a gallery of every styled element — typography, inline text, lists, code, tables, all form controls, `details`, `dialog`, `progress`/`meter`, and both themes.
-
-## Contributing
-
-The project lives at [github.com/abmach/mote](https://github.com/abmach/mote) — issues and pull requests welcome there. Keep contributions in the spirit of the project: small, semantic, zero dependencies.
+Open [`docs/index.html`](docs/index.html) for the full live documentation, or [`demo.html`](demo.html) for a quick gallery of every styled element.
 
 ## License
 
