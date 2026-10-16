@@ -1,24 +1,34 @@
-# Publishes the package to npm when a version tag (v*) is pushed.
+# Stages the package to npm when a version tag (v*) is pushed.
 #
-# Staging — do ONE of these before the first `git push --tags`:
+# This workflow only STAGES — a maintainer must then review and approve
+# the staged package with 2FA before it goes live:
+#
+#   npm stage list                    # find the stage id
+#   npm stage view    <stage-id>
+#   npm stage approve <stage-id>     # 2FA → published
+#
+# …or click Approve in npmjs.com → Staged Packages.
+#
+# Staging setup — do ONE of these before the first `git push --tags`:
 #
 #   A. Trusted publishing (recommended, no secrets):
-#      On npmjs.com → your package settings, connect the repository
+#      On npmjs.com → package settings, connect this repository
 #      (owner: abmach, repo: mote, workflow: publish.yml).
-#      The `id-token: write` permission below lets npm publish via OIDC.
+#      The `id-token: write` permission below lets npm stage via OIDC.
 #
-#   B. Classic token:
-#      Add an NPM_TOKEN secret to the repository settings.
-#      The `NODE_AUTH_TOKEN` env below picks it up automatically.
+#   B. Stage-only token:
+#      Create a granular access token of type "Read and write (stage only)"
+#      on npmjs.com and add it as the NPM_TOKEN secret. Such tokens can
+#      stage but never publish directly — approval is always human.
 
-name: Publish to npm
+name: Stage release to npm
 
 on:
   push:
     tags: ["v*"]
 
 jobs:
-  publish:
+  stage:
     runs-on: ubuntu-latest
     permissions:
       id-token: write  # npm trusted publishing (OIDC)
@@ -40,6 +50,12 @@ jobs:
             exit 1
           fi
 
-      - run: npm publish --provenance --access public
+      - name: Stage to npm
+        run: npm stage publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Approval reminder
+        run: |
+          echo "::notice::Staged ${GITHUB_REF_NAME}. A maintainer must now approve it:"
+          echo "::notice::npm stage list && npm stage approve <stage-id>  (2FA required)"
