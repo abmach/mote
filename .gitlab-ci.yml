@@ -1,0 +1,60 @@
+# Stages the package to npm when a version tag (v*) is pushed to GitLab.
+#
+# This pipeline only STAGES — a maintainer must then review and approve
+# the staged package with 2FA before it goes live:
+#
+#   npm stage list                    # find the stage id
+#   npm stage view    <stage-id>
+#   npm stage approve <stage-id>     # 2FA → published
+#
+# …or click Approve in npmjs.com → Staged Packages.
+#
+# One-time setup, npmjs.com → package settings → Trusted publishing:
+#
+#   Provider:     GitLab CI/CD
+#   Namespace:    abmach
+#   Project:      mote
+#   CI file:      .gitlab-ci.yml
+#   Allowed:      stage publish (keep direct publish off)
+#
+# No tokens anywhere: the pipeline authenticates via OIDC (id_tokens).
+# Note npm's expiry rule: a newly created trusted-publisher config must
+# complete its first successful stage within 2 days, or it expires.
+
+stages:
+  - publish
+
+stage-npm:
+  stage: publish
+  image: node:24
+  id_tokens:
+    NPM_ID_TOKEN:
+      aud: "npm:registry.npmjs.org"
+    SIGSTORE_ID_TOKEN:
+      aud: sigstore
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v/'
+  script:
+    # npm CLI 11.15+ required for staged publishing
+    - npm install -g npm@11
+    # Graceful skip: pre-release tags (no package.json yet)
+    - |
+      if [ ! -f package.json ]; then
+        echo "No package.json at tag $CI_COMMIT_TAG — skipping (pre-release tag)."
+        exit 0
+      fi
+    # Sanity gate: the tag must match package.json
+    - PKG="v$(node -p "require('./package.json').version")"
+    - |
+      if [ "$PKG" != "$CI_COMMIT_TAG" ]; then
+        echo "Tag $CI_COMMIT_TAG does not match package.json version $PKG" >&2
+        exit 1
+      fi
+    # Graceful skip: already on the registry (re-pushed / retroactive tags)
+    - |
+      if npm view "mote.css@${CI_COMMIT_TAG#v}" version >/dev/null 2>&1; then
+        echo "$CI_COMMIT_TAG is already on the registry — skipping staging."
+        exit 0
+      fi
+    - npm stage publish --access public
+    - echo "Staged $CI_COMMIT_TAG — a maintainer must now approve it: npm stage list && npm stage approve <stage-id> (2FA)."
