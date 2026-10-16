@@ -57,4 +57,4 @@ stage-npm:
         exit 0
       fi
     - npm stage publish --access public
-    - echo "Staged $CI_COMMIT_TAG — a maintainer must now approve it: npm stage list && npm stage approve <stage-id> (2FA)."
+    - 'echo "Staged $CI_COMMIT_TAG — a maintainer must now approve it: npm stage list && npm stage approve <stage-id> (2FA)."'
