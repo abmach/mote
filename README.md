@@ -4,6 +4,8 @@
 
 A mote of styling for plain HTML: **zero dependencies, zero build step, zero classes required**. Write semantic HTML, drop in one file, and it looks like a place you'd want to stay a while — modern, warm, unobtrusive. Inspired by the quiet excellence of [oat](https://github.com/knadh/oat), with its own cozy voice.
 
+Source on [GitLab](https://gitlab.com/abmach/mote) · mirrored on [GitHub](https://github.com/abmach/mote).
+
 ```html
 <!DOCTYPE html>
 <html lang="en">

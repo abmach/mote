@@ -5,6 +5,23 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-10-16
+
+### Fixed
+
+- README: correct minified CDN URL — jsDelivr publishes the minified variant
+  of a dotted filename as `mote.min.css`, not `mote.css.min.css` (verified live).
+
+### Changed
+
+- Release CI moved to GitLab CI (`.gitlab-ci.yml`): tag-triggered `npm stage
+  publish` with OIDC trusted publishing — no tokens anywhere; a maintainer
+  still approves every release with 2FA. The GitHub mirror is distribution-only.
+- Publishes now carry npm provenance attestations (the source repository is
+  public).
+- Package metadata points to the canonical GitLab source; GitHub remains the
+  distribution mirror.
+
 ## [0.2.0] - 2026-10-15
 
 ### Added
@@ -69,8 +86,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[0.2.0]: https://github.com/abmach/mote/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/abmach/mote/releases/tag/v0.1.0
+[0.2.1]: https://gitlab.com/abmach/mote/compare/v0.2.0...v0.2.1
+[0.2.0]: https://gitlab.com/abmach/mote/compare/v0.1.0...v0.2.0
+[0.1.0]: https://gitlab.com/abmach/mote/-/tags/v0.1.0
 
 ---
 
