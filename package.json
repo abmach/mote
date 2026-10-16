@@ -1,0 +1,30 @@
+{
+  "name": "mote.css",
+  "version": "0.2.0",
+  "description": "A mote of styling for plain HTML — tiny, semantic, classless CSS with zero dependencies and no build step.",
+  "style": "mote.css",
+  "files": [
+    "mote.css",
+    "mote.components.css",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "css",
+    "classless",
+    "semantic",
+    "framework-agnostic",
+    "dark-mode",
+    "custom-properties",
+    "design-system",
+    "cozy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abmach/mote.git"
+  },
+  "author": "Arthur Biazon Machado",
+  "license": "MIT",
+  "homepage": "https://github.com/abmach/mote#readme"
+}

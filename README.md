@@ -30,17 +30,25 @@ A mote of styling for plain HTML: **zero dependencies, zero build step, zero cla
 
 ## Install
 
-**Download** [`mote.css`](mote.css) and link it:
+**CDN** — jsDelivr, serving the npm package, with auto-minified variants:
 
 ```html
-<link rel="stylesheet" href="mote.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.css.min.css">
+
+<!-- optional components file -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.components.css">
 ```
 
-**npm** (when published):
+Use `mote.css@0` to track the latest 0.x release. CDN URLs go live once the package is published.
+
+**npm**:
 
 ```sh
 npm install mote.css
 ```
+
+**Download**: [`mote.css`](mote.css) and [`mote.components.css`](mote.components.css) — link them directly.
 
 ## Theming
 

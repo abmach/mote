@@ -1,0 +1,45 @@
+# Publishes the package to npm when a version tag (v*) is pushed.
+#
+# Staging — do ONE of these before the first `git push --tags`:
+#
+#   A. Trusted publishing (recommended, no secrets):
+#      On npmjs.com → your package settings, connect the repository
+#      (owner: abmach, repo: mote, workflow: publish.yml).
+#      The `id-token: write` permission below lets npm publish via OIDC.
+#
+#   B. Classic token:
+#      Add an NPM_TOKEN secret to the repository settings.
+#      The `NODE_AUTH_TOKEN` env below picks it up automatically.
+
+name: Publish to npm
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # npm trusted publishing (OIDC)
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Sanity gate: the tag must match package.json
+      - name: Check tag matches package version
+        run: |
+          PKG="v$(node -p "require('./package.json').version")"
+          if [ "$PKG" != "${GITHUB_REF_NAME}" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version $PKG" >&2
+            exit 1
+          fi
+
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
