@@ -34,7 +34,8 @@ A mote of styling for plain HTML: **zero dependencies, zero build step, zero cla
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.css.min.css">
+<!-- minified variant (dotted filenames minify to <name>.min.css) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.min.css">
 
 <!-- optional components file -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.components.css">
