@@ -56,5 +56,7 @@ stage-npm:
         echo "$CI_COMMIT_TAG is already on the registry — skipping staging."
         exit 0
       fi
-    - npm stage publish --access public
+    # --provenance: accepted by stage publish; whether the attestation
+    # survives the approve step gets proven at the next release.
+    - npm stage publish --provenance --access public
     - 'echo "Staged $CI_COMMIT_TAG — a maintainer must now approve it: npm stage list && npm stage approve <stage-id> (2FA)."'
