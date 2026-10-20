@@ -22,6 +22,7 @@
         <li><a href="#theming">Theming</a></li>
         <li><a href="#elements">Elements</a></li>
         <li><a href="#popovers">Popovers</a></li>
+        <li><a href="#layout">Layout</a></li>
         <li><a href="#components">Components</a></li>
         <li><a href="https://github.com/abmach/mote">GitHub</a></li>
       </ul>
@@ -187,25 +188,27 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   The same quote, with a dusty-blue rule.
 &lt;/blockquote&gt;
 </code></pre>
-  <blockquote class="mote-info">
-    The same quote, with a dusty-blue rule.
-  </blockquote>
+  <blockquote class="mote-success">A moss-green rule.</blockquote>
+  <blockquote class="mote-warning">A honey rule.</blockquote>
+  <blockquote class="mote-error">A brick rule.</blockquote>
+  <blockquote class="mote-info">A dusty-blue rule.</blockquote>
+  <blockquote class="mote-muted">A neutral rule.</blockquote>
 
   <h3>Tables</h3>
   <table>
     <caption>Deliverables</caption>
     <thead><tr><th>File</th><th>Purpose</th></tr></thead>
     <tbody>
-      <tr><td><code>mote.css</code></td><td>The whole library</td></tr>
-      <tr><td><code>mote.components.css</code></td><td>Optional components</td></tr>
+      <tr><td><code>mote.css</code></td><td>Core: semantic element styles</td></tr>
+      <tr><td><code>mote.components.css</code></td><td>Optional components and layout</td></tr>
     </tbody>
   </table>
   <pre><code>&lt;table&gt;
   &lt;caption&gt;Deliverables&lt;/caption&gt;
   &lt;thead&gt;&lt;tr&gt;&lt;th&gt;File&lt;/th&gt;&lt;th&gt;Purpose&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
   &lt;tbody&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;code&gt;mote.css&lt;/code&gt;&lt;/td&gt;&lt;td&gt;The whole library&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;code&gt;mote.components.css&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Optional components&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;code&gt;mote.css&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Core: semantic element styles&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;code&gt;mote.components.css&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Optional components and layout&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
 </code></pre>
@@ -248,6 +251,31 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   &lt;/p&gt;
 &lt;/form&gt;
 </code></pre>
+
+  <h3>Progress and meter</h3>
+  <p>Progress bars and meters take the accent by default and follow the status
+    classes — every variant:</p>
+  <pre><code>&lt;progress value="70" max="100"&gt;70%&lt;/progress&gt;
+&lt;progress class="mote-success" value="70" max="100"&gt;70%&lt;/progress&gt;
+&lt;meter class="mote-error" value="0.6" min="0" max="1"&gt;&lt;/meter&gt;
+</code></pre>
+  <p><progress value="70" max="100">70%</progress> accent (plain)</p>
+  <p><progress class="mote-success" value="70" max="100">70%</progress> success</p>
+  <p><progress class="mote-warning" value="70" max="100">70%</progress> warning</p>
+  <p><progress class="mote-error" value="70" max="100">70%</progress> error</p>
+  <p><progress class="mote-info" value="70" max="100">70%</progress> info</p>
+  <p><progress class="mote-muted" value="70" max="100">70%</progress> muted</p>
+  <p>
+    <meter value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> accent
+    <meter class="mote-success" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> success
+    <meter class="mote-warning" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> warning
+    <meter class="mote-error" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> error
+    <meter class="mote-info" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> info
+    <meter class="mote-muted" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> muted
+  </p>
+  <p>Meters keep their native zone coloring (green/yellow/red from
+    <code>low</code>/<code>high</code>/<code>optimum</code>) in some engines; the
+    status class tints the gauge wherever the engine honors it.</p>
 
   <h3>Dialogs</h3>
   <p>Native <code>&lt;dialog&gt;</code> gets a soft surface, a dimmed blurred backdrop, and —
@@ -305,6 +333,21 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <code>details</code> pseudo-element nicety provided by the components file. Everywhere
     else the toggle is instant.</p>
 
+  <p>Summary markers read the status classes too — moss, honey, brick, dusty-blue
+    or neutral markers, from one class on the details element:</p>
+  <pre><code>&lt;details class="mote-success"&gt;
+  &lt;summary&gt;A summary with a moss-green marker&lt;/summary&gt;
+  &lt;p&gt;Content…&lt;/p&gt;
+&lt;/details&gt;
+</code></pre>
+  <div>
+    <details class="mote-success"><summary>success marker</summary></details>
+    <details class="mote-warning"><summary>warning marker</summary></details>
+    <details class="mote-error"><summary>error marker</summary></details>
+    <details class="mote-info"><summary>info marker</summary></details>
+    <details class="mote-muted"><summary>muted marker</summary></details>
+  </div>
+
   <h2 id="popovers">Popovers: tooltips and menus</h2>
   <p>The native <code>popover</code> attribute gives you top-layer, light-dismiss,
     Esc-to-close surfaces — styled by mote, wired by the browser. A
@@ -349,6 +392,124 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 </code></pre>
   <p>The live examples above are anchored — in Chromium and Safari they open next to their
     buttons; in Firefox they open centered.</p>
+
+  <h2 id="layout">Layout</h2>
+  <p>Layout pieces from <code>mote.components.css</code> — default modern CSS,
+    no JavaScript, no column utilities, no breakpoints. The document shell below
+    is the whole story: header, nav, aside and footer flex from plain landmarks,
+    and the sticky translucent header on this very page is the same pattern.</p>
+
+  <h3>Simple page</h3>
+  <p>Most pages need nothing more than a sticky header and a centered column —
+    exactly the layout of the page you are reading. No classes at all: a header
+    that is a direct child of <code>&lt;body&gt;</code> is the site bar, and its nav
+    the pill row:</p>
+  <pre><code>&lt;body&gt;
+  &lt;header&gt;
+    &lt;nav&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+  &lt;main class="mote-container"&gt;
+    &lt;h1&gt;Page title&lt;/h1&gt;
+    &lt;p&gt;Content…&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+</code></pre>
+  <p>The one class left is <code>.mote-container</code> — centering stays opt-in
+    because full-bleed pages are equally valid. If your shell is wrapped in a
+    <code>&lt;div&gt;</code> (some frameworks do), <code>.mote-header</code> and
+    <code>.mote-nav</code> bring the same styles to headers the landmark
+    selector cannot see.</p>
+  <p>A footer after <code>main</code> follows normal flow — fine for long pages.
+    If you want it pinned to the viewport bottom even when content is short,
+    use the document shell below.</p>
+
+  <h3>Document layout</h3>
+  <p>One class on <code>&lt;body&gt;</code> turns the landmarks you already write into the
+    layout: <code>header</code> and <code>footer</code> span the page, a <code>nav</code>
+    becomes a sticky left rail, an <code>aside</code> a right rail, and <code>main</code>
+    takes the middle. Everything collapses to a single column under 50rem. No classes
+    on the landmarks themselves:</p>
+  <pre><code>&lt;body class="mote-doc"&gt;
+  &lt;header&gt;Site header&lt;/header&gt;
+  &lt;nav&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="#"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#"&gt;Blog&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;main&gt;
+    &lt;p&gt;Your content.&lt;/p&gt;
+  &lt;/main&gt;
+  &lt;aside&gt;Contextual notes&lt;/aside&gt;
+  &lt;footer&gt;© mote&lt;/footer&gt;
+&lt;/body&gt;
+</code></pre>
+  <p>Live example — the same structure inside a wrapper:</p>
+  <div class="mote-doc" style="border:1px solid var(--mote-border);border-radius:var(--mote-radius);padding:0.8rem;gap:0.8rem">
+    <header style="padding:0.4rem 0.8rem;background:var(--mote-accent-soft);border-radius:var(--mote-radius-sm)">Site header</header>
+    <nav style="padding:0.4rem 0.8rem;background:var(--mote-surface);border-radius:var(--mote-radius-sm)">
+      <ul style="padding:0;margin:0;list-style:none">
+        <li><a href="#layout">Docs</a></li>
+        <li><a href="#layout">Blog</a></li>
+      </ul>
+    </nav>
+    <main style="padding:0.4rem 0.8rem">Your content — this column flexes.</main>
+    <aside class="mote-muted" style="padding:0.4rem 0.8rem;background:var(--mote-surface);border-radius:var(--mote-radius-sm)">Contextual notes</aside>
+    <footer class="mote-muted" style="padding:0.4rem 0.8rem">© mote</footer>
+  </div>
+
+  <h3>Header and navigation</h3>
+  <p>Direct children of <code>&lt;body&gt;</code> get these styles from landmarks
+    alone. The classes exist for one case landmarks cannot express — a shell
+    wrapped in a <code>&lt;div&gt;</code>, where <code>body &gt; header</code> cannot
+    reach it:</p>
+  <pre><code>&lt;header class="mote-header"&gt;
+  &lt;nav class="mote-nav"&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="/" aria-current="page"&gt;Home&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+</code></pre>
+  <p>Breadcrumbs need no class at all — mote styles the semantic pattern:</p>
+  <pre><code>&lt;nav aria-label="breadcrumb"&gt;
+  &lt;ol&gt;
+    &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span aria-current="page"&gt;Layout&lt;/span&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+</code></pre>
+  <nav aria-label="breadcrumb">
+    <ol>
+      <li><a href="#top">Home</a></li>
+      <li><a href="#top">Docs</a></li>
+      <li><span aria-current="page">Layout</span></li>
+    </ol>
+  </nav>
+
+
+  <h3>Card grids</h3>
+  <p>One class; columns are computed from the container — as many 16rem cards as fit.
+    <code>auto-fill</code> made column-count utilities obsolete:</p>
+  <pre><code>&lt;div class="mote-grid"&gt;
+  &lt;article class="mote-card"&gt;…&lt;/article&gt;
+  &lt;article class="mote-card"&gt;…&lt;/article&gt;
+  &lt;article class="mote-card"&gt;…&lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+  <div class="mote-grid">
+    <article class="mote-card"><h3 style="margin-block-start:0">One</h3><p>As many as fit.</p></article>
+    <article class="mote-card"><h3 style="margin-block-start:0">Two</h3><p>Resize the window.</p></article>
+    <article class="mote-card"><h3 style="margin-block-start:0">Three</h3><p>No breakpoints.</p></article>
+    <article class="mote-card"><h3 style="margin-block-start:0">Four</h3><p>No utilities.</p></article>
+  </div>
 
   <h2 id="components">Components</h2>
   <p>From <code>mote.components.css</code> — opt-in, CSS-only, built on the platform.</p>
@@ -399,10 +560,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <div class="mote-skeleton" style="height:1rem;width:60%"></div>
   <div class="mote-skeleton" style="height:1rem;width:40%"></div>
   <p><span class="mote-spinner" role="status" aria-label="Loading"></span> Loading something…</p>
-  <p>Spinners read the status classes too — <code>default</code>,
+  <p>Spinners read the status classes too —
+    <span class="mote-spinner" role="status"></span> default,
     <span class="mote-spinner mote-success" role="status"></span> success,
     <span class="mote-spinner mote-warning" role="status"></span> warning,
-    <span class="mote-spinner mote-error" role="status"></span> error:</p>
+    <span class="mote-spinner mote-error" role="status"></span> error,
+    <span class="mote-spinner mote-info" role="status"></span> info,
+    <span class="mote-spinner mote-muted" role="status"></span> muted:</p>
   <pre><code>&lt;span class="mote-spinner" role="status" aria-label="Loading"&gt;&lt;/span&gt;
 &lt;span class="mote-spinner mote-error" role="status" aria-label="Loading"&gt;&lt;/span&gt;
 </code></pre>
@@ -420,45 +584,31 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   setTimeout(() =&gt; t.hidePopover(), 3000);
 &lt;/script&gt;
 </code></pre>
-  <p><button type="button" id="toast-btn">Fire a live toast</button></p>
-  <div popover class="mote-toast" id="docs-toast">Saved. Everything is fine.</div>
+  <p>Toast edges follow every status class — fire each one:</p>
+  <p>
+    <button type="button" id="toast-btn">Accent</button>
+    <button type="button" id="toast-btn-success">Success</button>
+    <button type="button" id="toast-btn-warning">Warning</button>
+    <button type="button" id="toast-btn-error">Error</button>
+    <button type="button" id="toast-btn-info">Info</button>
+    <button type="button" id="toast-btn-muted">Muted</button>
+  </p>
+  <div popover class="mote-toast" id="docs-toast">Plain toast, accent edge.</div>
+  <div popover class="mote-toast mote-success" id="docs-toast-success">Saved. Everything is fine.</div>
+  <div popover class="mote-toast mote-warning" id="docs-toast-warning">Careful now, the honey jar is open.</div>
   <p>Add a status class and the accent edge follows:</p>
   <pre><code>&lt;div popover class="mote-toast mote-error" id="toast"&gt;
+&lt;div popover class="mote-toast mote-muted" id="toast-m"&gt;Copied to clipboard.&lt;/div&gt;
   Something went softly wrong.
 &lt;/div&gt;
 </code></pre>
-  <p><button type="button" id="toast-btn-error">Fire an error toast</button></p>
   <div popover class="mote-toast mote-error" id="docs-toast-error">Something went softly wrong.</div>
-
-  <h3>Header and navigation</h3>
-  <p>The sticky translucent header at the top of this page is two classes:</p>
-  <pre><code>&lt;header class="mote-header"&gt;
-  &lt;nav class="mote-nav"&gt;
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href="/" aria-current="page"&gt;Home&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/nav&gt;
-&lt;/header&gt;
-</code></pre>
-  <p>Breadcrumbs need no class at all — mote styles the semantic pattern:</p>
-  <pre><code>&lt;nav aria-label="breadcrumb"&gt;
-  &lt;ol&gt;
-    &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;span aria-current="page"&gt;Theming&lt;/span&gt;&lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/nav&gt;
-</code></pre>
-  <nav aria-label="breadcrumb">
-    <ol>
-      <li><a href="#top">Docs</a></li>
-      <li><span aria-current="page">Components</span></li>
-    </ol>
-  </nav>
+  <div popover class="mote-toast mote-info" id="docs-toast-info">Heads up — a gentle, dusty-blue fact.</div>
+  <div popover class="mote-toast mote-muted" id="docs-toast-muted">Copied to clipboard.</div>
 
   <h2 id="helpers">Helpers</h2>
-  <p>Three tiny escape hatches for what semantics cannot express:</p>
+  <p>Escape hatches for what semantics cannot express — the helpers, plus the
+    status classes every status-consuming component reads:</p>
   <h3>Status classes</h3>
   <p>Statuses are pure token assignments. <code>mote-success</code>, <code>mote-warning</code>,
     <code>mote-error</code>, <code>mote-info</code> and <code>mote-muted</code> set the
@@ -479,25 +629,21 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>No specificity to fight: restyle a status once and every note, badge and toast follows.
     Or set the variable inline — <code>style="--mote-status: rebeccapurple"</code> — on any
     status-consuming element.</p>
-  <p>More than badges read the tokens — blockquote rules, progress and meter bars, spinners
-    and summary markers pick them up too:</p>
-  <blockquote class="mote-info">
-    A blockquote with a dusty-blue rule.
-  </blockquote>
-  <p>
-    <progress class="mote-error" value="35" max="100">35%</progress>
-    <span class="mote-spinner mote-warning" role="status" aria-label="Loading"></span>
-  </p>
-  <p>Summary markers follow the status as well:</p>
-  <pre><code>&lt;details class="mote-success" open&gt;
-  &lt;summary&gt;A summary with a moss-green marker&lt;/summary&gt;
-  &lt;p&gt;Content…&lt;/p&gt;
-&lt;/details&gt;
-</code></pre>
-  <details class="mote-success" open>
-    <summary>A summary with a moss-green marker</summary>
-    <p class="mote-muted" style="padding:0 1.2rem 0.9rem">Open, and gently marked.</p>
-  </details>
+  <p>More than badges read the tokens. Each consumer now shows every variant
+    exactly once, in its own section — follow the map:</p>
+  <table>
+    <thead><tr><th>Consumer</th><th>Variants shown at</th></tr></thead>
+    <tbody>
+      <tr><td>Notes</td><td><a href="#helpers">Helpers — notes</a></td></tr>
+      <tr><td>Badges</td><td><a href="#components">Components — Badges</a></td></tr>
+      <tr><td>Toasts</td><td><a href="#components">Components — Toasts</a></td></tr>
+      <tr><td>Spinners</td><td><a href="#components">Components — Skeletons and spinners</a></td></tr>
+      <tr><td>Blockquote rules</td><td><a href="#elements">Elements — Lists and block content</a></td></tr>
+      <tr><td>Progress and meter</td><td><a href="#elements">Elements — Progress and meter</a></td></tr>
+      <tr><td>Summary markers</td><td><a href="#details">Details and accordions</a></td></tr>
+    </tbody>
+  </table>
+
   <table>
     <thead><tr><th>Class</th><th>Purpose</th></tr></thead>
     <tbody>
@@ -507,15 +653,19 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
     </tbody>
   </table>
-  <pre><code>&lt;div class="mote-note mote-success"&gt;Saved. Everything is fine.&lt;/div&gt;
+  <pre><code>&lt;div class="mote-note"&gt;Plain, accent tint&lt;/div&gt;
+&lt;div class="mote-note mote-success"&gt;Saved. Everything is fine.&lt;/div&gt;
 &lt;div class="mote-note mote-info"&gt;Heads up — a gentle fact.&lt;/div&gt;
 &lt;div class="mote-note mote-warning"&gt;Careful now.&lt;/div&gt;
 &lt;div class="mote-note mote-error"&gt;Something went softly wrong.&lt;/div&gt;
+&lt;div class="mote-note mote-muted"&gt;A neutral fact, quietly stated.&lt;/div&gt;
 </code></pre>
+  <div class="mote-note">Plain, accent tint — the default note.</div>
   <div class="mote-note mote-success">Saved. Everything is fine.</div>
   <div class="mote-note mote-info">Heads up — a gentle fact.</div>
   <div class="mote-note mote-warning">Careful now.</div>
   <div class="mote-note mote-error">Something went softly wrong.</div>
+  <div class="mote-note mote-muted">A neutral fact, quietly stated.</div>
 
   <h2 id="fonts">Fonts</h2>
   <p>mote declares font <em>stacks</em> only — it embeds nothing and requires nothing.
@@ -579,7 +729,11 @@ npm install @fontsource-variable/inter @fontsource/commit-mono
     });
   };
   fireToast('toast-btn', 'docs-toast');
+  fireToast('toast-btn-success', 'docs-toast-success');
+  fireToast('toast-btn-warning', 'docs-toast-warning');
   fireToast('toast-btn-error', 'docs-toast-error');
+  fireToast('toast-btn-info', 'docs-toast-info');
+  fireToast('toast-btn-muted', 'docs-toast-muted');
 </script>
 </body>
 </html>

@@ -139,12 +139,14 @@ mote is classless by design; these are the only escape hatches, plus status clas
 
 | Component | Hook |
 |---|---|
+| Document layout (landmark grid) | `.mote-doc` on `<body>` — `:has()` reads your `header`/`nav`/`main`/`aside`/`footer` |
+| Sticky site header / nav pills | `body > header` — classless; `.mote-header`/`.mote-nav` only for shells wrapped in a `<div>` |
+| Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
+| Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
 | Cards | `.mote-card` |
 | Badges | `.mote-badge` + optional status class |
 | Avatars | `.mote-avatar` |
 | Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |
-| Sticky site header / nav pills | `.mote-header`, `.mote-nav` |
-| Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Tooltips | `[popover].mote-tooltip` + `popovertarget` button |
 | Menus | `menu[popover]` + `popovertarget` button |
 | Toasts | `[popover].mote-toast` + status class |

@@ -1,6 +1,6 @@
 {
   "name": "mote.css",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A mote of styling for plain HTML — tiny, semantic, classless CSS with zero dependencies and no build step.",
   "style": "mote.css",
   "files": [

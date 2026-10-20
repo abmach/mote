@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.2.1 · MIT
+ * v0.3.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -105,9 +105,15 @@
 
 /* ---------------------------------------------------------------------------
  * 6. Site header and nav
+ *
+ * The page shell is styled classlessly: a header that is a direct
+ * child of <body> is the site bar, its nav the pill row. The classes
+ * exist for the one case landmarks cannot express — a shell wrapped
+ * in a <div> (common with frameworks), where body > header cannot
+ * see it. All selectors keep :where() specificity so overrides win.
  * ------------------------------------------------------------------------- */
 
-.mote-header {
+:where(body > header, .mote-header) {
   position: sticky;
   top: 0;
   z-index: 10;
@@ -116,7 +122,7 @@
   border-block-end: var(--mote-border-width) solid var(--mote-border);
 }
 
-.mote-nav ul {
+:where(body > header nav, body > nav, .mote-nav) ul {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
@@ -125,7 +131,7 @@
   list-style: none;
 }
 
-.mote-nav a {
+:where(body > header nav, body > nav, .mote-nav) a {
   display: inline-block;
   padding: 0.35rem 0.8rem;
   border-radius: 999px;
@@ -134,12 +140,12 @@
   transition: background var(--mote-transition), color var(--mote-transition);
 }
 
-.mote-nav a:hover {
+:where(body > header nav, body > nav, .mote-nav) a:hover {
   background: var(--mote-accent-soft);
   color: var(--mote-accent-deep);
 }
 
-.mote-nav a[aria-current="page"] {
+:where(body > header nav, body > nav, .mote-nav) a[aria-current="page"] {
   background: var(--mote-accent);
   color: var(--mote-on-accent);
 }
@@ -369,4 +375,100 @@ details[name] > :not(summary) {
       opacity: 0;
     }
   }
+}
+
+/* ---------------------------------------------------------------------------
+ * 12. Layout — document shell and card grids
+ *
+ * The document layout is opted in with a single class on <body> (or any
+ * wrapper): .mote-doc. The landmarks you already write — header, nav,
+ * main, aside, footer — become the layout; no classes on the landmarks.
+ * A nav becomes a left rail, an aside a right rail, and everything
+ * collapses to a single column under 50rem.
+ *
+ * All :has() guards sit in :where(), so the rules carry zero specificity
+ * weight — your own styles on the same landmarks always win.
+ * ------------------------------------------------------------------------- */
+
+.mote-doc {
+  display: grid;
+  column-gap: 1.5rem;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+}
+
+/* On <body>, the middle row stretches the page so the footer pins to
+   the viewport bottom even when content is short. :where() keeps this
+   at base specificity; wrappers (demo boxes, embeds) stay natural-size. */
+:where(body).mote-doc {
+  min-height: 100svh;
+}
+
+.mote-doc > header { grid-row: 1; grid-column: 1 / -1; }
+.mote-doc > footer { grid-row: 3; grid-column: 1 / -1; }
+
+.mote-doc > main { grid-row: 2; grid-column: 1; }
+
+/* nav = left rail */
+.mote-doc > nav {
+  grid-row: 2;
+  grid-column: 1;
+  align-self: start;
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100svh - 2rem);
+  overflow: auto;
+}
+
+.mote-doc:where(:has(> nav)) {
+  grid-template-columns: minmax(12rem, 16rem) 1fr;
+}
+
+.mote-doc:where(:has(> nav)) > main {
+  grid-column: 2;
+}
+
+/* aside = right rail (or the main column when there is no nav) */
+.mote-doc > aside {
+  grid-row: 2;
+  grid-column: 2;
+  align-self: start;
+}
+
+.mote-doc:where(:has(> nav)) > aside {
+  grid-column: 3;
+}
+
+.mote-doc:where(:has(> aside)) {
+  grid-template-columns: 1fr minmax(10rem, 14rem);
+}
+
+.mote-doc:where(:has(> nav)):where(:has(> aside)) {
+  grid-template-columns: minmax(12rem, 16rem) 1fr minmax(10rem, 14rem);
+}
+
+@media (width < 50rem) {
+  .mote-doc:where(:has(> nav)),
+  .mote-doc:where(:has(> aside)),
+  .mote-doc:where(:has(> nav)):where(:has(> aside)) {
+    grid-template-columns: 1fr;
+  }
+
+  .mote-doc > :is(nav, aside, main) {
+    grid-column: 1 / -1;
+  }
+
+  .mote-doc > nav {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+/* Card grids: one class, no breakpoints, no column utilities.
+   Columns are computed from the container: as many as fit in 16rem. */
+.mote-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
 }
