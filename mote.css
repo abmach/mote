@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.3.0 · MIT
+ * v0.4.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -84,6 +84,10 @@
     --mote-error: #d98a8a;
     --mote-info: #96b1d1;
 
+    /* "Deep" is the emphasis direction per theme: darker on light
+       surfaces, brighter on dark ones. Never darken in dark mode. */
+    --mote-accent-deep: color-mix(in oklab, var(--mote-accent), white 14%);
+
     --mote-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.3);
     --mote-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
     --mote-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23a49c90' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -104,6 +108,8 @@
   --mote-warning: #d4b465;
   --mote-error: #d98a8a;
   --mote-info: #96b1d1;
+
+  --mote-accent-deep: color-mix(in oklab, var(--mote-accent), white 14%);
 
   --mote-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.3);
   --mote-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
@@ -243,6 +249,10 @@ blockquote {
   border-inline-start: 3px solid color-mix(in oklab, var(--mote-status, var(--mote-accent)), transparent 45%);
   color: var(--mote-muted);
   font-style: italic;
+}
+
+blockquote :where(code, samp, kbd, var) {
+  font-style: normal;
 }
 
 blockquote > cite {
@@ -403,7 +413,7 @@ input, select, textarea {
   background: var(--mote-surface);
   border: var(--mote-border-width) solid var(--mote-border);
   border-radius: var(--mote-radius-sm);
-  transition: border-color var(--mote-transition), box-shadow var(--mote-transition);
+  transition: border-color var(--mote-transition);
 }
 
 input:hover, select:hover, textarea:hover {
@@ -428,6 +438,13 @@ select {
   background-position: right 0.8rem center;
 }
 
+/* Multi-selects are listboxes, not dropdowns: restore native chrome */
+select[multiple] {
+  appearance: auto;
+  padding: 0.5rem;
+  background-image: none;
+}
+
 [type="checkbox"], [type="radio"] {
   width: 1em;
   height: 1em;
@@ -447,6 +464,14 @@ select {
   border-style: dashed;
 }
 
+/* Range inputs are sliders, not text fields: strip text chrome */
+[type="range"] {
+  padding: 0;
+  border: none;
+  background: none;
+  accent-color: var(--mote-status, var(--mote-accent));
+}
+
 ::placeholder {
   color: var(--mote-muted);
   opacity: 0.8;
@@ -457,7 +482,7 @@ select {
   cursor: not-allowed;
 }
 
-:user-invalid {
+:is(input, select, textarea):user-invalid {
   border-color: var(--mote-error);
 }
 
@@ -471,7 +496,7 @@ button, [type="button"], [type="submit"], [type="reset"] {
   border-radius: var(--mote-radius-sm);
   cursor: pointer;
   transition: background var(--mote-transition), border-color var(--mote-transition),
-    box-shadow var(--mote-transition), transform var(--mote-transition);
+    transform var(--mote-transition);
 }
 
 button:hover, [type="button"]:hover, [type="submit"]:hover, [type="reset"]:hover {
@@ -537,6 +562,7 @@ dialog {
   background: var(--mote-bg);
   color: var(--mote-fg);
   box-shadow: var(--mote-shadow);
+  max-width: min(90vw, 44rem);
 }
 
 dialog::backdrop {
@@ -550,8 +576,8 @@ progress, meter {
 }
 
 /* Semantic feedback helpers (pure HTML, works with <p>, <div>, anything) */
-[role="alert"] { color: var(--mote-error); }
-[role="status"] { color: var(--mote-info); }
+[role="alert"] { color: var(--mote-status, var(--mote-error)); }
+[role="status"] { color: var(--mote-status, var(--mote-info)); }
 
 /* ---------------------------------------------------------------------------
  * 11. Opt-in helpers
@@ -569,7 +595,7 @@ progress, meter {
 .mote-muted { color: var(--mote-muted); }
 
 /* ---------------------------------------------------------------------------
- * 11. Status classes
+ * 12. Status classes
  *
  * Statuses are pure token assignments — they set variables, never visual
  * properties. Base classes (notes, badges, toasts) consume the tokens and
@@ -597,6 +623,7 @@ progress, meter {
 
 /* Themed message surfaces — base shape only; status via the token classes */
 .mote-note {
+  margin-block: 1rem;
   padding: 0.8rem 1.1rem;
   border-radius: var(--mote-radius-sm);
   color: var(--mote-status, var(--mote-accent-deep));
@@ -604,7 +631,7 @@ progress, meter {
 }
 
 /* ---------------------------------------------------------------------------
- * 12. Motion preferences & print
+ * 13. Motion preferences & print
  * ------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -617,6 +644,26 @@ progress, meter {
 }
 
 @media print {
+  /* Force the light palette on paper — dark fills (zebra, notes,
+     open details) must not print as near-black bands. Placed last:
+     source order ties the dark token blocks' specificity. */
+  :root,
+  :root[data-theme="dark"],
+  :root:not([data-theme="light"]) {
+    color-scheme: light;
+    --mote-bg: #faf9f7;
+    --mote-surface: #f1eee7;
+    --mote-fg: #2b2924;
+    --mote-muted: #716a60;
+    --mote-border: #e6e0d4;
+    --mote-accent: #6f5486;
+    --mote-accent-deep: color-mix(in oklab, var(--mote-accent), black 14%);
+    --mote-success: #4e7d51;
+    --mote-warning: #8a6819;
+    --mote-error: #b34d4d;
+    --mote-info: #527097;
+  }
+
   body {
     background: #fff;
     color: #000;

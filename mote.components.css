@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.3.0 · MIT
+ * v0.4.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -22,11 +22,11 @@
   box-shadow: var(--mote-shadow-sm);
 }
 
-.mote-card > :first-child {
+:where(.mote-card) > :first-child {
   margin-block-start: 0;
 }
 
-.mote-card > :last-child {
+:where(.mote-card) > :last-child {
   margin-block-end: 0;
 }
 
@@ -43,7 +43,7 @@
   border-radius: 999px;
   font-size: 0.8em;
   font-weight: 500;
-  line-height: 1.8;
+  line-height: 1.4;
   background: var(--mote-status-soft, var(--mote-accent-soft));
   color: var(--mote-status, var(--mote-accent-deep));
   user-select: none;
@@ -54,8 +54,8 @@
  * ------------------------------------------------------------------------- */
 
 .mote-avatar {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: var(--mote-avatar, 2.5rem);
+  height: var(--mote-avatar, 2.5rem);
   border-radius: 999px;
   object-fit: cover;
   border: var(--mote-border-width) solid var(--mote-border);
@@ -67,6 +67,8 @@
  * ------------------------------------------------------------------------- */
 
 .mote-skeleton {
+  display: inline-block;
+  min-height: 1em;
   border-radius: var(--mote-radius-sm);
   background:
     linear-gradient(
@@ -122,7 +124,7 @@
   border-block-end: var(--mote-border-width) solid var(--mote-border);
 }
 
-:where(body > header nav, body > nav, .mote-nav) ul {
+:where(body > header nav, .mote-nav) ul {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
@@ -131,7 +133,7 @@
   list-style: none;
 }
 
-:where(body > header nav, body > nav, .mote-nav) a {
+:where(body > header nav, .mote-nav) a {
   display: inline-block;
   padding: 0.35rem 0.8rem;
   border-radius: 999px;
@@ -140,12 +142,12 @@
   transition: background var(--mote-transition), color var(--mote-transition);
 }
 
-:where(body > header nav, body > nav, .mote-nav) a:hover {
+:where(body > header nav, .mote-nav) a:hover {
   background: var(--mote-accent-soft);
   color: var(--mote-accent-deep);
 }
 
-:where(body > header nav, body > nav, .mote-nav) a[aria-current="page"] {
+:where(body > header nav, .mote-nav) a[aria-current="page"] {
   background: var(--mote-accent);
   color: var(--mote-on-accent);
 }
@@ -267,7 +269,9 @@ menu[popover] :is(button, [role="menuitem"]):focus-visible {
  * ------------------------------------------------------------------------- */
 
 [popover],
-dialog[open] {
+dialog {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
   transition:
     opacity 180ms ease,
     transform 180ms ease,
@@ -328,7 +332,11 @@ details[name][open] summary {
 
 details[name] > :not(summary) {
   margin-block: 0;
-  padding: 0.15rem 1.2rem 0.9rem;
+  padding: 0.15rem 1.2rem 0;
+}
+
+details[name] > :not(summary):last-child {
+  padding-block-end: 0.9rem;
 }
 
 /* ---------------------------------------------------------------------------
@@ -397,31 +405,71 @@ details[name] > :not(summary) {
   grid-template-columns: 1fr;
 }
 
-/* On <body>, the middle row stretches the page so the footer pins to
-   the viewport bottom even when content is short. :where() keeps this
+/* On <body>, the middle row stretches the page so the footer pins to the
+   viewport bottom even when content is short. :where() keeps this
    at base specificity; wrappers (demo boxes, embeds) stay natural-size. */
 :where(body).mote-doc {
   min-height: 100svh;
+  padding-inline: 1.5rem;
+}
+
+/* Anchored content must clear the sticky shell header. Applies only
+   when the header actually exists. */
+html:where(:has(body > header)) {
+  scroll-padding-block-start: 5rem;
 }
 
 .mote-doc > header { grid-row: 1; grid-column: 1 / -1; }
 .mote-doc > footer { grid-row: 3; grid-column: 1 / -1; }
 
-.mote-doc > main { grid-row: 2; grid-column: 1; }
+.mote-doc > main { grid-row: 2; grid-column: 1; min-width: 0; }
 
 /* nav = left rail */
 .mote-doc > nav {
   grid-row: 2;
   grid-column: 1;
+  min-width: 0;
   align-self: start;
   position: sticky;
-  top: 1rem;
+  top: var(--mote-rail-top, 1rem);
   max-height: calc(100svh - 2rem);
   overflow: auto;
 }
 
+/* Rail links: a quiet vertical list, not the horizontal pill row.
+   --mote-rail-top should clear the shell header: 1rem by default;
+   set it on :root when a sticky body > header is taller, e.g.
+   --mote-rail-top: 4.75rem. */
+.mote-doc > nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.mote-doc > nav a {
+  display: block;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--mote-radius-sm);
+  text-decoration: none;
+  color: var(--mote-fg);
+  transition: background var(--mote-transition), color var(--mote-transition);
+}
+
+.mote-doc > nav a:hover {
+  background: var(--mote-accent-soft);
+  color: var(--mote-accent-deep);
+}
+
+.mote-doc > nav a[aria-current="page"] {
+  background: var(--mote-accent);
+  color: var(--mote-on-accent);
+}
+
 .mote-doc:where(:has(> nav)) {
-  grid-template-columns: minmax(12rem, 16rem) 1fr;
+  grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
 }
 
 .mote-doc:where(:has(> nav)) > main {
@@ -432,6 +480,7 @@ details[name] > :not(summary) {
 .mote-doc > aside {
   grid-row: 2;
   grid-column: 2;
+  min-width: 0;
   align-self: start;
 }
 
@@ -440,11 +489,11 @@ details[name] > :not(summary) {
 }
 
 .mote-doc:where(:has(> aside)) {
-  grid-template-columns: 1fr minmax(10rem, 14rem);
+  grid-template-columns: minmax(0, 1fr) minmax(10rem, 14rem);
 }
 
 .mote-doc:where(:has(> nav)):where(:has(> aside)) {
-  grid-template-columns: minmax(12rem, 16rem) 1fr minmax(10rem, 14rem);
+  grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr) minmax(10rem, 14rem);
 }
 
 @media (width < 50rem) {
@@ -456,6 +505,7 @@ details[name] > :not(summary) {
 
   .mote-doc > :is(nav, aside, main) {
     grid-column: 1 / -1;
+    grid-row: auto;
   }
 
   .mote-doc > nav {

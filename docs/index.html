@@ -195,6 +195,12 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <blockquote class="mote-muted">A neutral rule.</blockquote>
 
   <h3>Tables</h3>
+  <p>Tables wider than the viewport stay inside a scrollable wrapper — mote
+    never scrolls your page sideways:</p>
+  <pre><code>&lt;div style="overflow-x:auto"&gt;
+  &lt;table&gt;…&lt;/table&gt;
+&lt;/div&gt;
+</code></pre>
   <table>
     <caption>Deliverables</caption>
     <thead><tr><th>File</th><th>Purpose</th></tr></thead>
@@ -216,6 +222,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <h3>Forms</h3>
   <p>Labels, inputs, selects, checkboxes, radios and buttons inherit the cozy surface.
     Invalid fields show a brick border once the user interacts with them (<code>:user-invalid</code>).</p>
+  <p>Fields keep their intrinsic width — for stacked forms, add
+    <code>input, select, textarea { width: 100% }</code> in your page styles;
+    inline forms are equally valid, so mote does not decide for you.</p>
   <form onsubmit="event.preventDefault()">
     <p>
       <label for="d-email">Email</label>
@@ -332,6 +341,11 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>In Chromium engines, opening and closing also animates smoothly — a
     <code>details</code> pseudo-element nicety provided by the components file. Everywhere
     else the toggle is instant.</p>
+  <p>Printing note: the browser enforces one open panel per exclusive group, so
+    printing "everything open" needs a <code>beforeprint</code> listener that
+    removes the <code>name</code> attribute (and restores it after). The print
+    stylesheet already forces the light palette, so dark-mode users get paper
+    colors, not ink floods.</p>
 
   <p>Summary markers read the status classes too — moss, honey, brick, dusty-blue
     or neutral markers, from one class on the details element:</p>
@@ -434,6 +448,15 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     becomes a sticky left rail, an <code>aside</code> a right rail, and <code>main</code>
     takes the middle. Everything collapses to a single column under 50rem. No classes
     on the landmarks themselves:</p>
+  <p>On <code>&lt;body&gt;</code> the shell includes page gutters, a pinned footer and
+    content tracks that absorb wide content (<code>minmax(0, 1fr)</code>) — a wide
+    table scrolls inside <code>main</code>, never the page. The nav rail is a
+    quiet vertical list by default. When you also use the sticky site header,
+    lift the rail and anchored content past it with one variable:</p>
+  <pre><code>:root {
+  --mote-rail-top: 4.75rem;  /* clear the sticky header */
+}
+</code></pre>
   <pre><code>&lt;body class="mote-doc"&gt;
   &lt;header&gt;Site header&lt;/header&gt;
   &lt;nav&gt;
@@ -574,7 +597,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <h3>Toasts</h3>
   <p>A styled <code>popover</code> pinned to the corner. Showing it takes one line — the
     browser handles stacking, Esc, and light-dismiss:</p>
-  <pre><code>&lt;div popover class="mote-toast" id="toast"&gt;
+  <p>Use <code>popover="manual"</code> for toasts — auto popovers light-dismiss on any
+    body click, which surprises notification text — and show one at a time, since
+    multiple toasts pin to the same corner:</p>
+  <pre><code>&lt;div popover="manual" class="mote-toast" id="toast"&gt;
   Saved. Everything is fine.
 &lt;/div&gt;
 
@@ -593,18 +619,18 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <button type="button" id="toast-btn-info">Info</button>
     <button type="button" id="toast-btn-muted">Muted</button>
   </p>
-  <div popover class="mote-toast" id="docs-toast">Plain toast, accent edge.</div>
-  <div popover class="mote-toast mote-success" id="docs-toast-success">Saved. Everything is fine.</div>
-  <div popover class="mote-toast mote-warning" id="docs-toast-warning">Careful now, the honey jar is open.</div>
+  <div popover="manual" class="mote-toast" id="docs-toast">Plain toast, accent edge.</div>
+  <div popover="manual" class="mote-toast mote-success" id="docs-toast-success">Saved. Everything is fine.</div>
+  <div popover="manual" class="mote-toast mote-warning" id="docs-toast-warning">Careful now, the honey jar is open.</div>
   <p>Add a status class and the accent edge follows:</p>
-  <pre><code>&lt;div popover class="mote-toast mote-error" id="toast"&gt;
-&lt;div popover class="mote-toast mote-muted" id="toast-m"&gt;Copied to clipboard.&lt;/div&gt;
+  <pre><code>&lt;div popover="manual" class="mote-toast mote-error" id="toast"&gt;
   Something went softly wrong.
 &lt;/div&gt;
+&lt;div popover="manual" class="mote-toast mote-muted" id="toast-m"&gt;Copied to clipboard.&lt;/div&gt;
 </code></pre>
-  <div popover class="mote-toast mote-error" id="docs-toast-error">Something went softly wrong.</div>
-  <div popover class="mote-toast mote-info" id="docs-toast-info">Heads up — a gentle, dusty-blue fact.</div>
-  <div popover class="mote-toast mote-muted" id="docs-toast-muted">Copied to clipboard.</div>
+  <div popover="manual" class="mote-toast mote-error" id="docs-toast-error">Something went softly wrong.</div>
+  <div popover="manual" class="mote-toast mote-info" id="docs-toast-info">Heads up — a gentle, dusty-blue fact.</div>
+  <div popover="manual" class="mote-toast mote-muted" id="docs-toast-muted">Copied to clipboard.</div>
 
   <h2 id="helpers">Helpers</h2>
   <p>Escape hatches for what semantics cannot express — the helpers, plus the

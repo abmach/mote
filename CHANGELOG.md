@@ -5,6 +5,57 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-10-20
+
+### Fixed
+
+Layout shell (`mote.components.css`), from the ten-app evaluation:
+- `.mote-doc` mobile: nav/main/aside overlapped in one grid cell — the
+  collapse media query now resets `grid-row: auto`.
+- `.mote-doc` blowout on wide content: content tracks are `minmax(0, 1fr)`
+  (+ `min-width: 0` on items); a wide table scrolls inside `main`, never the page.
+- Rail nav no longer renders as the horizontal pill row: pill styles scoped
+  to `body > header nav`; rails get a quiet vertical list with
+  `aria-current` states.
+ Sticky rails and anchored content clear the site header via
+  `--mote-rail-top` (token) and automatic `scroll-padding` when
+  `body > header` exists. `body.mote-doc` gains page gutters.
+
+Core (`mote.css`):
+- `:user-invalid` kept its error border through hover and focus
+  (`:is(input, select, textarea):user-invalid`, placed to win the cascade) —
+  previously the field the user must fix showed the accent focus border.
+- `--mote-accent-deep` now brightens in dark mode (`color-mix(accent,
+  white 14%)`); dark hovers, badges and notes no longer dim.
+- `input[type="range"]` stripped of text-input chrome; `select[multiple]`
+  restored to native listbox appearance.
+- `[role="status"]` / `[role="alert"]` read `--mote-status` (semantic
+  colors as fallback) instead of hard-coding.
+- `.mote-note` gains block margin; `.mote-badge` line-height tamed in
+  headings; `blockquote` code no longer italic; `.mote-card` first/last-child
+  rules moved into `:where()` so page classes win; dialogs get
+  `max-width: min(90vw, 44rem)`; `.mote-avatar` sized by
+  `--mote-avatar` token; `.mote-skeleton` gets intrinsic size.
+- Print: the light palette is forced on paper — dark fills (zebra, notes,
+  open details) no longer print as near-black bands.
+- Focus rings no longer fade in (box-shadow removed from transitions).
+
+Components:
+- Popovers and dialogs now animate on exit, not just entrance
+  (closed-state deltas for the `allow-discrete` transitions).
+- `details[name]` content padding fixed for multiple children
+  (was padding every child; now only the last).
+- Toasts documented with `popover="manual"` (auto popovers light-dismiss);
+  samples corrected.
+
+### Changed
+
+- README and docs CDN snippets use `mote.css@0` (range pin) so they never go
+  stale; exact-version pinning documented for reproducible builds.
+- Docs: wide-table wrapper recipe, form-width guidance, document-shell
+  real-page notes (gutters, rail-top token), print caveats for exclusive
+  accordions, toast stacking guidance; section numbering fixed.
+
 ## [0.3.0] - 2026-10-19
 
 ### Added
@@ -114,6 +165,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Element gallery demo page (`demo.html`).
 
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
+[0.4.0]: https://gitlab.com/abmach/mote/compare/v0.3.0...v0.4.0
 [0.2.1]: https://gitlab.com/abmach/mote/compare/v0.2.0...v0.2.1
 [0.2.0]: https://gitlab.com/abmach/mote/compare/v0.1.0...v0.2.0
 [0.1.0]: https://gitlab.com/abmach/mote/-/tags/v0.1.0

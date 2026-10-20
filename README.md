@@ -35,15 +35,16 @@ Source on [GitLab](https://gitlab.com/abmach/mote) · mirrored on [GitHub](https
 **CDN** — jsDelivr, serving the npm package, with auto-minified variants:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0/mote.css">
 <!-- minified variant (dotted filenames minify to <name>.min.css) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0/mote.min.css">
 
 <!-- optional components file -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0.2.0/mote.components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0/mote.components.css">
 ```
 
-Use `mote.css@0` to track the latest 0.x release. CDN URLs go live once the package is published.
+`@0` tracks the latest 0.x release, so these snippets never go stale. Pin an exact
+version (`mote.css@0.3.0`) for reproducible production builds.
 
 **npm**:
 
