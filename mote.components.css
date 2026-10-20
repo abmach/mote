@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.4.0 · MIT
+ * v0.5.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -15,6 +15,8 @@
  * ------------------------------------------------------------------------- */
 
 .mote-card {
+  display: flex;
+  flex-direction: column;
   padding: 1.25rem 1.5rem;
   border: var(--mote-border-width) solid var(--mote-border);
   border-radius: var(--mote-radius-lg);
@@ -176,6 +178,43 @@ nav[aria-label="breadcrumb"] li + li::before {
 nav[aria-label="breadcrumb"] [aria-current="page"] {
   color: var(--mote-fg);
   font-weight: 500;
+}
+
+/* Pagination — semantic selector, no class (mirrors breadcrumbs) */
+nav[aria-label="pagination"] ul {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+nav[aria-label="pagination"] a {
+  display: inline-block;
+  min-width: 2.2rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--mote-radius-sm);
+  text-align: center;
+  text-decoration: none;
+  color: var(--mote-fg);
+  transition: background var(--mote-transition), color var(--mote-transition);
+}
+
+nav[aria-label="pagination"] a:hover {
+  background: var(--mote-accent-soft);
+  color: var(--mote-accent-deep);
+}
+
+nav[aria-label="pagination"] [aria-current="page"] {
+  background: var(--mote-accent);
+  color: var(--mote-on-accent);
+}
+
+/* Page footer: the quiet sibling of the site header */
+:where(body > footer, .mote-footer) {
+  margin-block-start: 3rem;
+  padding-block: 1.5rem;
+  border-block-start: var(--mote-border-width) solid var(--mote-border);
 }
 
 /* ---------------------------------------------------------------------------
@@ -520,5 +559,7 @@ html:where(:has(body > header)) {
 .mote-grid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+  /* Density is a variable, not a class API: --mote-grid-min: 22rem
+     gives 3-wide pricing; 26rem gives 2-column content. */
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--mote-grid-min, 16rem), 100%), 1fr));
 }

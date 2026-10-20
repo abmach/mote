@@ -225,6 +225,29 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>Fields keep their intrinsic width — for stacked forms, add
     <code>input, select, textarea { width: 100% }</code> in your page styles;
     inline forms are equally valid, so mote does not decide for you.</p>
+
+  <h3>Buttons and statuses</h3>
+  <p>All button styles — solid and ghost — are <strong>gated</strong>: the
+    status class must sit on the button itself. A themed section — an error
+    note, a toast, a page-level <code>body class="mote-error"</code> — never
+    recolors the actions inside it. Statuses theme content; they never theme
+    actions. The intent of an action is declared at the action site:</p>
+  <pre><code>&lt;button&gt;Neutral action&lt;/button&gt;
+&lt;button class="mote-error"&gt;Delete forever&lt;/button&gt;
+&lt;button class="mote-ghost"&gt;Quiet action&lt;/button&gt;
+&lt;button class="mote-ghost mote-success"&gt;Confirm quietly&lt;/button&gt;
+</code></pre>
+  <p>
+    <button type="button">Neutral</button>
+    <button type="button" class="mote-error">Delete forever</button>
+    <button type="button" class="mote-ghost">Quiet</button>
+    <button type="button" class="mote-ghost mote-success">Confirm quietly</button>
+  </p>
+  <p>Ghost buttons follow the same law. Inside a themed section, a ghost stays
+    accent-tinted; to make it match the section's status, put the status class
+    on it explicitly — <code>class="mote-ghost mote-error"</code> for a quiet
+    destructive, <code>class="mote-ghost mote-success"</code> for a quiet confirm.
+    Ghosts work on buttons and anchors alike.</p>
   <form onsubmit="event.preventDefault()">
     <p>
       <label for="d-email">Email</label>
@@ -567,11 +590,16 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   </p>
 
   <h3>Avatars</h3>
-  <pre><code>&lt;img class="mote-avatar" src="ada.png" alt="Ada Lovelace"&gt;
+  <pre><code>&lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Ada" alt="Ada Lovelace"&gt;
+&lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Grace" alt="Grace Hopper"&gt;
+&lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Alan" alt="Alan Turing"&gt;
 </code></pre>
   <p>
-    <img class="mote-avatar" alt="A warm gradient placeholder avatar"
-      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cdefs%3E%3CradialGradient id='g' cx='30%25' cy='70%25' r='90%25'%3E%3Cstop offset='0%25' stop-color='%23f2e9d8'/%3E%3Cstop offset='100%25' stop-color='%23cbbcd8'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='80' height='80' fill='url(%23g)'/%3E%3C/svg%3E">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Ada" alt="Ada Lovelace avatar">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Grace" alt="Grace Hopper avatar">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Alan" alt="Alan Turing avatar">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Radia" alt="Radia Perlman avatar">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Katherine" alt="Katherine Johnson avatar">
   </p>
 
   <h3>Skeletons and spinners</h3>
@@ -640,6 +668,16 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <code>mote-error</code>, <code>mote-info</code> and <code>mote-muted</code> set the
     <code>--mote-status</code> and <code>--mote-status-soft</code> variables and nothing else —
     components consume the tokens and fall back to the accent color when no status is present:</p>
+  <p>Two more classes control <em>inheritance</em> — status tokens cascade, so
+    a badge inside <code>.mote-error</code> inherits the brick tint.
+    <code>.mote-default</code> forces the accent down the tree ("keep this
+    plum regardless of context"); <code>.mote-reset</code> clears the inherited
+    status so each element's own classes decide:</p>
+  <pre><code>&lt;span class="mote-badge mote-default"&gt;forced plum&lt;/span&gt;
+&lt;div class="mote-reset"&gt;
+  &lt;span class="mote-badge"&gt;fell back to accent&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
   <pre><code>/* the status contract */
 .mote-success {
   --mote-status: var(--mote-success);

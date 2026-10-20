@@ -142,6 +142,14 @@ mote is classless by design; these are the only escape hatches, plus status clas
 |---|---|
 | Document layout (landmark grid) | `.mote-doc` on `<body>` — `:has()` reads your `header`/`nav`/`main`/`aside`/`footer` |
 | Sticky site header / nav pills | `body > header` — classless; `.mote-header`/`.mote-nav` only for shells wrapped in a `<div>` |
+| Semantic buttons (gated) | `class="mote-success"` etc. on the button itself — themed sections never recolor actions |
+| Ghost buttons | `.mote-ghost` — transparent fill; status tints from the button's own class (gated like solids) |
+| Display text | `.mote-display` — opt-in hero/error-code scale via `--mote-display` |
+| Content rows | `.mote-row` + `.mote-push` — flex row, right-align helper |
+| Pagination | `nav[aria-label="pagination"]` — semantic, no class |
+| Footer baseline | `body > footer` — classless top-border + padding |
+| Screen-reader helper | `.mote-sr-only` (doubles as a skip link when focused) |
+| Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
 | Cards | `.mote-card` |

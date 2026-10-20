@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.4.0 · MIT
+ * v0.5.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -44,6 +44,8 @@
     "Liberation Mono", monospace;
   --mote-line-height: 1.65;
   --mote-tracking: -0.011em;
+  /* Display scale — opt-in, for heroes and error pages; body scale untouched */
+  --mote-display: clamp(2.75rem, 1.5rem + 4vw, 5rem);
 
   /* Shape & depth */
   --mote-radius: 10px;
@@ -500,8 +502,49 @@ button, [type="button"], [type="submit"], [type="reset"] {
 }
 
 button:hover, [type="button"]:hover, [type="submit"]:hover, [type="reset"]:hover {
-  background: var(--mote-accent-deep);
+  /* Theme-aware deepening: fg is dark in light themes, light in dark ones. */
+  background: color-mix(in oklab, var(--mote-accent), var(--mote-fg) 14%);
   box-shadow: var(--mote-shadow-sm);
+}
+
+/* Semantic solids are gated: the status class must sit on the button
+   itself, so a themed section (body.mote-error, a note, a toast) never
+   recolors the actions inside it. The token read below is therefore
+   the button's own, never an inherited one. */
+:is(button, [type="button"], [type="submit"], [type="reset"]):where(.mote-success, .mote-warning, .mote-error, .mote-info, .mote-muted):where(:not(.mote-ghost)) {
+  background: var(--mote-status);
+  color: var(--mote-on-status, var(--mote-bg));
+}
+
+:is(button, [type="button"], [type="submit"], [type="reset"]):where(.mote-success, .mote-warning, .mote-error, .mote-info, .mote-muted):where(:not(.mote-ghost)):hover {
+  background: color-mix(in oklab, var(--mote-status), var(--mote-fg) 14%);
+}
+
+/* Ghost buttons: quiet, transparent fill, accent-tinted. Like solids,
+   status colors come from the button's own class, never from context. */
+.mote-ghost {
+  background: none;
+  border: var(--mote-border-width) solid color-mix(in oklab, var(--mote-accent), transparent 55%);
+  color: var(--mote-accent-deep);
+}
+
+.mote-ghost:hover {
+  background: var(--mote-accent-soft);
+  color: var(--mote-accent-deep);
+  box-shadow: none;
+}
+
+/* Gated ghost+status: the status class on the element itself tints the
+   border and text (same gating as the solid buttons). Works on buttons
+   and anchors alike — .mote-ghost is element-agnostic. */
+.mote-ghost:where(.mote-success, .mote-warning, .mote-error, .mote-info, .mote-muted) {
+  border-color: color-mix(in oklab, var(--mote-status), transparent 55%);
+  color: var(--mote-status);
+}
+
+.mote-ghost:where(.mote-success, .mote-warning, .mote-error, .mote-info, .mote-muted):hover {
+  background: var(--mote-status-soft);
+  color: var(--mote-status);
 }
 
 button:active, [type="button"]:active, [type="submit"]:active, [type="reset"]:active {
@@ -594,6 +637,47 @@ progress, meter {
 /* Dimmed text: <small class="mote-muted"> */
 .mote-muted { color: var(--mote-muted); }
 
+/* Row of things: headers, footers, toolbars, chip lists.
+   .mote-push on a child right-aligns it (and everything after). */
+.mote-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.mote-push { margin-inline-start: auto; }
+
+/* Visually hidden, screen-reader available */
+.mote-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link: sr-only until focused, then a fixed pill */
+.mote-sr-only:focus-visible {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  clip-path: none;
+  z-index: 20;
+  background: var(--mote-accent);
+  color: var(--mote-on-accent);
+  border-radius: var(--mote-radius-sm);
+  text-decoration: none;
+}
+
 /* ---------------------------------------------------------------------------
  * 12. Status classes
  *
@@ -608,10 +692,10 @@ progress, meter {
  * inline: style="--mote-status: rebeccapurple".
  * ------------------------------------------------------------------------- */
 
-.mote-success { --mote-status: var(--mote-success); --mote-status-soft: var(--mote-success-soft); }
-.mote-warning { --mote-status: var(--mote-warning); --mote-status-soft: var(--mote-warning-soft); }
-.mote-error   { --mote-status: var(--mote-error);   --mote-status-soft: var(--mote-error-soft); }
-.mote-info    { --mote-status: var(--mote-info);    --mote-status-soft: var(--mote-info-soft); }
+.mote-success { --mote-status: var(--mote-success); --mote-status-soft: var(--mote-success-soft); --mote-on-status: var(--mote-bg); }
+.mote-warning { --mote-status: var(--mote-warning); --mote-status-soft: var(--mote-warning-soft); --mote-on-status: var(--mote-bg); }
+.mote-error   { --mote-status: var(--mote-error);   --mote-status-soft: var(--mote-error-soft);   --mote-on-status: var(--mote-bg); }
+.mote-info    { --mote-status: var(--mote-info);    --mote-status-soft: var(--mote-info-soft);    --mote-on-status: var(--mote-bg); }
 
 /* .mote-muted does double duty: dimmed text where nothing consumes the
    tokens, and a neutral status where something does. */
@@ -619,6 +703,25 @@ progress, meter {
   color: var(--mote-muted);
   --mote-status: var(--mote-muted);
   --mote-status-soft: color-mix(in oklab, var(--mote-fg) 7%, transparent);
+  --mote-on-status: var(--mote-bg);
+}
+
+/* .mote-default: the accent as an explicit status — "keep this (and its
+   descendants) plum" inside a themed section. Unlike the semantics, this
+   IS meant to be applied contextually. */
+.mote-default {
+  --mote-status: var(--mote-accent);
+  --mote-status-soft: var(--mote-accent-soft);
+}
+
+/* .mote-reset: clear an inherited status for a subtree — consumers inside
+   fall back to their own defaults; their own classes re-apply locally.
+   Where .mote-default forces the accent down the tree, .mote-reset
+   removes the theme and lets each element speak for itself. */
+.mote-reset {
+  --mote-status: initial;
+  --mote-status-soft: initial;
+  --mote-on-status: initial;
 }
 
 /* Themed message surfaces — base shape only; status via the token classes */
@@ -628,6 +731,15 @@ progress, meter {
   border-radius: var(--mote-radius-sm);
   color: var(--mote-status, var(--mote-accent-deep));
   background: var(--mote-status-soft, var(--mote-accent-soft));
+}
+
+/* Display text: opt-in hero / error-code scale. Widen per use with
+   style="--mote-display: clamp(6rem, 24vw, 12rem)". */
+.mote-display {
+  font-size: var(--mote-display);
+  line-height: 1.1;
+  letter-spacing: var(--mote-tracking);
+  text-wrap: balance;
 }
 
 /* ---------------------------------------------------------------------------
