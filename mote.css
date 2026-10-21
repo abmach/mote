@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.6.0 · MIT
+ * v0.6.1 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -219,7 +219,7 @@ a {
   transition: color var(--mote-transition), text-decoration-color var(--mote-transition);
 }
 
-a:hover {
+a:hover:where(:not(.mote-btn, .mote-ghost)) {
   color: var(--mote-accent-deep);
   text-decoration-color: currentColor;
 }
@@ -372,7 +372,8 @@ caption {
 }
 
 th, td {
-  padding: 0.6rem 0.8rem;
+  font-variant-numeric: tabular-nums;
+  padding: var(--mote-cell-pad, 0.6rem) var(--mote-cell-pad-inline, 0.8rem);
   border-block-end: var(--mote-border-width) solid var(--mote-border);
   text-align: start;
   vertical-align: top;
@@ -409,7 +410,7 @@ fieldset {
   border-radius: var(--mote-radius);
 }
 
-legend { padding-inline: 0.4rem; }
+legend { padding-inline: 0.4rem; font-weight: 600; }
 
 input, select, textarea {
   font: inherit;
@@ -501,7 +502,7 @@ button, [type="button"], [type="submit"], [type="reset"] {
   font: inherit;
   font-weight: 500;
   color: var(--mote-on-accent);
-  padding: 0.5rem 1.1rem;
+  padding: var(--mote-control-pad, 0.5rem) var(--mote-control-pad-inline, 1.1rem);
   background: var(--mote-accent);
   border: var(--mote-border-width) solid transparent;
   border-radius: var(--mote-radius-sm);
@@ -532,10 +533,13 @@ button:hover, [type="button"]:hover, [type="submit"]:hover, [type="reset"]:hover
 /* Ghost buttons: quiet, transparent fill, accent-tinted. Like solids,
    status colors come from the button's own class, never from context. */
 .mote-ghost {
+  display: inline-block;
+  font: inherit;
+  font-weight: 500;
   background: none;
   border: var(--mote-border-width) solid color-mix(in oklab, var(--mote-accent), transparent 55%);
   color: var(--mote-accent-deep);
-  padding: 0.5rem 1.1rem;
+  padding: var(--mote-control-pad, 0.5rem) var(--mote-control-pad-inline, 1.1rem);
   border-radius: var(--mote-radius-sm);
   text-decoration: none;
   cursor: pointer;
@@ -670,6 +674,10 @@ progress, meter {
 
 .mote-stack :is([type="checkbox"], [type="radio"]) {
   width: 1em;
+}
+
+.mote-stack :is(input, select, textarea):where(.mote-sr-only) {
+  width: 1px;
 }
 
 /* Solid button on any element — anchors, spans, divs.
@@ -868,4 +876,15 @@ progress, meter {
   .mote-print-only { display: block; }
 }
 
-.mote-print-only { display: none; }
+@media not print {
+  .mote-print-only { display: none; }
+}
+
+/* Theme switch: disable transitions during data-theme flips.
+   Chromium doesn't restart CSS transitions on custom-property changes,
+   so flipping data-theme leaves elements at the old theme's colors.
+   Apply this class before the flip, remove after one frame. */
+.mote-theme-switch,
+.mote-theme-switch * {
+  transition: none !important;
+}

@@ -5,7 +5,48 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.0] - 2026-10-20
+## [0.6.1] - 2026-10-20
+
+### Fixed
+
+- `.mote-print-only` now actually displays in print (the unconditional
+  `display: none` was after the print block at equal specificity —
+  scoped to `@media not print` and moved before it).
+- `.mote-stack` no longer stretches `.mote-sr-only` inputs to 100%
+  width (hidden file inputs were creating invisible horizontal scroll).
+- `.mote-doc > main` now uses `overflow-x: auto` (was `clip`, which
+  made wide tables invisible rather than scrollable).
+- `.mote-theme-switch` shipped in mote.css: disables transitions during
+  `data-theme` flips so Chromium doesn't wedge elements at stale colors
+  (custom-property changes don't restart CSS transitions). The docs'
+  toggle snippet now includes it; the demo uses it.
+- `.mote-doc > aside` gets the same sticky treatment as the nav rail
+  (top, max-height, overflow) — TOCs and aside content no longer scroll
+  out of view.
+- Nav rail `max-height` accounts for `--mote-rail-top` (was
+  `calc(100svh - 2rem)` regardless of header height).
+- Rail heading treatment (small uppercase labels) now applies to
+  `.mote-doc > aside` and `nav[aria-label="toc"]` headings too.
+- `legend` gets `font-weight: 600` so the group caption reads stronger
+  than the field labels inside it.
+
+### Added
+
+- `tabular-nums` on all `td` — figures align in data tables without
+  any page CSS (invisible on non-numeric content).
+- `.mote-table-scroll`: scrollable table wrapper with sticky `thead`,
+  no margin jump on scroll start, and no page-level horizontal scroll.
+- `.mote-grid-sparse`: auto-fit variant that collapses empty grid
+  tracks (footers, short card rows).
+- `--mote-control-pad` / `--mote-control-pad-inline` and
+  `--mote-cell-pad` / `--mote-cell-pad-inline` density tokens.
+- Docs: toggle snippet includes the theme-switch workaround; Chromium
+  note references the shipped class.
+
+### Changed
+
+- Third ten-app evaluation completed against v0.6.0; all round-2 fixes
+  verified holding. Round-3 findings addressed in this patch release.
 
 ### Fixed
 
@@ -335,6 +376,7 @@ Components:
 - Element gallery demo page (`demo.html`).
 
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
+[0.6.1]: https://gitlab.com/abmach/mote/compare/v0.6.0...v0.6.1
 [0.6.0]: https://gitlab.com/abmach/mote/compare/v0.5.1...v0.6.0
 [0.5.1]: https://gitlab.com/abmach/mote/compare/v0.5.0...v0.5.1
 [0.5.0]: https://gitlab.com/abmach/mote/compare/v0.4.0...v0.5.0

@@ -100,6 +100,8 @@ The consequence: theming is a handful of variable overrides, and an inline tweak
 | `--mote-display` | `clamp(2.75rem, 1.5rem + 4vw, 5rem)` | | Display text scale (opt-in) |
 | `--mote-grid-min` | `16rem` | | Card grid minimum track width |
 | `--mote-avatar` | `2.5rem` | | Avatar size |
+| `--mote-control-pad` | `0.5rem` | | Button/control vertical padding |
+| `--mote-cell-pad` | `0.6rem` | | Table cell vertical padding |
 | `--mote-shadow` / `--mote-shadow-sm` | warm diffuse | | Elevation |
 | `--mote-transition` | `150ms ease` | | Hover/focus timing |
 
@@ -152,11 +154,15 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Media objects | `.mote-media` — avatar/icon beside body (flex, last child grows) |
 | Display text | `.mote-display` — opt-in hero/error-code scale via `--mote-display` |
 | Content rows | `.mote-row` + `.mote-push` — flex row, right-align helper |
+| Stacked forms | `.mote-stack` — opt-in full-width fields, checkboxes stay 1em |
+| Scrollable tables | `.mote-table-scroll` — sticky `thead`, no page scroll, no margin jump |
+| Sparse grids | `.mote-grid-sparse` — auto-fit variant, collapses empty tracks |
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
 | Table of contents | `nav[aria-label="toc"]` — semantic, no class |
 | Footer baseline | `body > footer` — semantic top-border + padding |
 | Screen-reader helper | `.mote-sr-only` (doubles as a skip link when focused) |
 | Print helpers | `.mote-no-print` / `.mote-print-only` |
+| Theme-switch guard | `.mote-theme-switch` — prevents Chromium stale-color bug on `data-theme` flips |
 | Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |

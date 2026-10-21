@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.6.0 · MIT
+ * v0.6.1 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -243,6 +243,23 @@ nav[aria-label="toc"] a {
 
 nav[aria-label="toc"] a:hover {
   color: var(--mote-accent-deep);
+}
+
+/* Scrollable table wrapper: sticky thead, no page scroll, no margin jump */
+.mote-table-scroll {
+  overflow-x: auto;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.mote-table-scroll table {
+  margin-block: 0;
+}
+
+.mote-table-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: var(--mote-bg);
 }
 
 /* Page footer: the quiet sibling of the site header */
@@ -502,7 +519,7 @@ html:where(:has(body > header)) {
 /* Content stays inside the grid track — wide tables scroll here,
     not the page. */
 .mote-doc > main {
-  overflow-x: clip;
+  overflow-x: auto;
 }
 
 /* nav = left rail */
@@ -513,7 +530,7 @@ html:where(:has(body > header)) {
   align-self: start;
   position: sticky;
   top: var(--mote-rail-top, 1rem);
-  max-height: calc(100svh - 2rem);
+  max-height: calc(100svh - var(--mote-rail-top, 1rem) - 1rem);
   overflow: auto;
 }
 
@@ -550,7 +567,9 @@ html:where(:has(body > header)) {
 }
 
 /* Rail headings: small label-scale for grouped navigation */
-.mote-doc > nav :is(h2, h3) {
+.mote-doc > nav :is(h2, h3),
+.mote-doc > aside :is(h2, h3),
+nav[aria-label="toc"] :is(h2, h3) {
   margin: 1rem 0 0.3rem;
   padding-inline: 0.75rem;
   font-size: 0.72rem;
@@ -574,6 +593,10 @@ html:where(:has(body > header)) {
   grid-column: 2;
   min-width: 0;
   align-self: start;
+  position: sticky;
+  top: var(--mote-rail-top, 1rem);
+  max-height: calc(100svh - var(--mote-rail-top, 1rem) - 1rem);
+  overflow: auto;
 }
 
 .mote-doc:where(:has(> nav)) > aside {
@@ -615,4 +638,9 @@ html:where(:has(body > header)) {
   /* Density is a variable, not a class API: --mote-grid-min: 22rem
      gives 3-wide pricing; 26rem gives 2-column content. */
   grid-template-columns: repeat(auto-fill, minmax(min(var(--mote-grid-min, 16rem), 100%), 1fr));
+}
+
+/* Sparse grids: collapse empty tracks (footers, short card rows) */
+.mote-grid-sparse {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--mote-grid-min, 16rem), 100%), 1fr));
 }

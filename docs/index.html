@@ -23,6 +23,7 @@
         <li><a href="#elements">Elements</a></li>
         <li><a href="#popovers">Popovers</a></li>
         <li><a href="#layout">Layout</a></li>
+        <li><a href="#patterns">Patterns</a></li>
         <li><a href="#components">Components</a></li>
         <li><a href="https://github.com/abmach/mote">GitHub</a></li>
       </ul>
@@ -148,14 +149,18 @@ document.documentElement.dataset.theme = next;
 requestAnimationFrame(() =&gt;
 document.documentElement.classList.remove('mote-theme-switch'));
 </code></pre>
-<pre><code>.mote-theme-switch, .mote-theme-switch * {
+<pre><code>/* shipped in mote.css — just add/remove the class around the flip */
+.mote-theme-switch, .mote-theme-switch * {
 transition: none !important;
 }
 </code></pre>
-  <p>The toggle on this page is five lines of JavaScript — no library involvement:</p>
+  <p>The toggle on this page is seven lines of JavaScript, including the
+    <code>.mote-theme-switch</code> helper that prevents the stale-color bug:</p>
   <pre><code>const root = document.documentElement;
 document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
+  root.classList.add('mote-theme-switch');
   root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+  requestAnimationFrame(() =&gt; root.classList.remove('mote-theme-switch'));
 });
 </code></pre>
 
@@ -211,6 +216,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <blockquote class="mote-muted">A neutral rule.</blockquote>
 
   <h3>Tables</h3>
+  <p>Numeric columns align automatically — mote sets
+    <code>font-variant-numeric: tabular-nums</code> on every <code>td</code>.
+    For sticky headers and scrollable data tables, use the opt-in wrapper:</p>
+  <pre><code>&lt;div class="mote-table-scroll"&gt;
+  &lt;table&gt;…&lt;/table&gt;
+&lt;/div&gt;
+</code></pre>
   <p>Numeric columns (counts, prices) and sticky headers are page-level
     recipes — add them when your data needs them:</p>
   <pre><code>.num {
@@ -295,6 +307,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     on it explicitly — <code>class="mote-ghost mote-error"</code> for a quiet
     destructive, <code>class="mote-ghost mote-success"</code> for a quiet confirm.
     Ghosts work on buttons and anchors alike.</p>
+  <pre><code>&lt;button class="mote-ghost"&gt;Cancel&lt;/button&gt;
+&lt;a class="mote-ghost" href="/docs"&gt;Read the docs&lt;/a&gt;
+&lt;button class="mote-ghost mote-error"&gt;Delete draft&lt;/button&gt;
+</code></pre>
   <p>
     <a class="mote-ghost" href="#elements">Get started quietly</a>
   </p>
@@ -305,14 +321,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>
     <a class="mote-btn" href="#elements">Get started</a>
   </p>
-  <p>Media objects (avatar beside body) — <code>.mote-media</code> flexes
-    the last child:</p>
-  <pre><code>&lt;div class="mote-media"&gt;
-  &lt;img class="mote-avatar" src="…" alt=""&gt;
-  &lt;div&gt;&lt;p&gt;Post body…&lt;/p&gt;&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-
+  <h3>Live form demo</h3>
+  <p>The controls above, assembled — type an invalid email and blur to see
+    <code>:user-invalid</code> in action:</p>
   <form onsubmit="event.preventDefault()">
     <p>
       <label for="d-email">Email</label>
@@ -459,6 +470,11 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     removes the <code>name</code> attribute (and restores it after). The print
     stylesheet already forces the light palette, so dark-mode users get paper
     colors, not ink floods.</p>
+  <p>Print helpers: <code>.mote-no-print</code> hides any element on paper;
+    <code>.mote-print-only</code> shows only in print:</p>
+  <pre><code>&lt;header class="mote-no-print"&gt;…&lt;/header&gt;
+&lt;p class="mote-print-only"&gt;Printed notice&lt;/p&gt;
+</code></pre>
 
   <p>Summary markers read the status classes too — moss, honey, brick, dusty-blue
     or neutral markers, from one class on the details element:</p>
@@ -558,6 +574,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>A footer after <code>main</code> follows normal flow — fine for long pages.
     If you want it pinned to the viewport bottom even when content is short,
     use the document shell below.</p>
+  <p>Right-align content in rows with <code>.mote-push</code>:</p>
+  <pre><code>&lt;div class="mote-row"&gt;
+  &lt;strong&gt;Brand&lt;/strong&gt;
+  &lt;nav&gt;…&lt;/nav&gt;
+  &lt;button class="mote-push"&gt;Toggle&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
 
   <h3>Document layout</h3>
   <p>One class on <code>&lt;body&gt;</code> turns the landmarks you already write into the
@@ -802,6 +825,22 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 &lt;span class="mote-spinner mote-error" role="status" aria-label="Loading"&gt;&lt;/span&gt;
 </code></pre>
 
+  <h3>Media objects</h3>
+  <p>Avatar or icon beside body — forum posts, comments, chat, author boxes.
+    <code>.mote-media</code> flexes the row; the last child grows:</p>
+  <pre><code>&lt;div class="mote-media"&gt;
+  &lt;img class="mote-avatar" src="…" alt=""&gt;
+  &lt;div&gt;&lt;p&gt;Post body…&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+  <div class="mote-media" style="max-width:30rem">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Mote" alt="Author avatar">
+    <div>
+      <p><strong>Ada Lovelace</strong></p>
+      <p class="mote-muted">Wrote the first algorithm. Currently inspiring a CSS library.</p>
+    </div>
+  </div>
+
   <h3>Toasts</h3>
   <p>A styled <code>popover</code> pinned to the corner. Showing it takes one line — the
     browser handles stacking, Esc, and light-dismiss:</p>
@@ -911,6 +950,131 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <div class="mote-note mote-error">Something went softly wrong.</div>
   <div class="mote-note mote-muted">A neutral fact, quietly stated.</div>
 
+  <h2 id="patterns">Patterns</h2>
+  <p>Compositions that span multiple sections — each piece is documented
+    above; these show how they fit together. Copy, paste, adjust.</p>
+
+  <h3>Error page</h3>
+  <p>A full-height centered page with a themed giant code, search, and
+    quiet CTAs — <code>body class="mote-error"</code> tints everything
+    except the actions (<a href="#theming">theming</a>,
+    <a href="#elements">display text</a>, <a href="#elements">buttons</a>):</p>
+  <pre><code>&lt;body class="mote-error"&gt;
+  &lt;header&gt;Site header&lt;/header&gt;
+  &lt;main class="mote-container" style="text-align:center; padding-block: 8vh 0"&gt;
+    &lt;p class="mote-display"&gt;404&lt;/p&gt;
+    &lt;p&gt;This page drifted away.&lt;/p&gt;
+    &lt;form class="mote-row" role="search" style="justify-content:center"&gt;
+      &lt;label class="mote-sr-only" for="q"&gt;Search&lt;/label&gt;
+      &lt;input id="q" type="search" placeholder="Search…"&gt;
+      &lt;button type="submit"&gt;Go&lt;/button&gt;
+    &lt;/form&gt;
+    &lt;p&gt;
+      &lt;a class="mote-btn" href="/"&gt;Back home&lt;/a&gt;
+      &lt;a class="mote-ghost" href="/docs"&gt;Read the docs&lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+</code></pre>
+
+  <h3>Article page</h3>
+  <p>A narrow reading-measure article with breadcrumb, byline, tags,
+    and an author box — <code>--mote-container-max</code> narrows the
+    column (<a href="#layout">Simple page</a>,
+    <a href="#components">badges as links</a>,
+    <a href="#components">media objects</a>):</p>
+  <pre><code>&lt;main class="mote-container" style="--mote-container-max: 42rem"&gt;
+  &lt;nav aria-label="breadcrumb"&gt;
+    &lt;ol&gt;&lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href="/blog"&gt;Blog&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span aria-current="page"&gt;Article&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+  &lt;/nav&gt;
+  &lt;h1&gt;Article title&lt;/h1&gt;
+  &lt;p&gt;&lt;small class="mote-muted"&gt;October 2026 · 8 min read&lt;/small&gt;&lt;/p&gt;
+  &lt;p&gt;
+    &lt;a class="mote-badge" href="/tags/css"&gt;css&lt;/a&gt;
+    &lt;a class="mote-badge" href="/tags/design"&gt;design&lt;/a&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Article body…&lt;/p&gt;
+  &lt;blockquote&gt;&lt;p&gt;A pull quote.&lt;/p&gt;&lt;cite&gt;— Someone&lt;/cite&gt;&lt;/blockquote&gt;
+  &lt;figure&gt;
+    &lt;img src="photo.jpg" alt="Caption"&gt;
+    &lt;figcaption&gt;Photo credit&lt;/figcaption&gt;
+  &lt;/figure&gt;
+  &lt;div class="mote-media"&gt;
+    &lt;img class="mote-avatar" src="author.jpg" alt="Author"&gt;
+    &lt;div&gt;
+      &lt;p&gt;&lt;strong&gt;Author Name&lt;/strong&gt;&lt;/p&gt;
+      &lt;p class="mote-muted"&gt;Bio line&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+</code></pre>
+
+  <h3>Settings form</h3>
+  <p>A sidebar shell with grouped nav, stacked form, validation,
+    and destructive actions — <code>.mote-doc</code> +
+    <code>.mote-stack</code> + gated buttons
+    (<a href="#layout">Document layout</a>,
+    <a href="#elements">Forms</a>,
+    <a href="#elements">Buttons and statuses</a>):</p>
+  <pre><code>&lt;body class="mote-doc"&gt;
+  &lt;header&gt;Settings&lt;/header&gt;
+  &lt;nav&gt;
+    &lt;h2&gt;Account&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="#profile" aria-current="page"&gt;Profile&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#security"&gt;Security&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;h2&gt;Site&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="#preferences"&gt;Preferences&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;main&gt;
+    &lt;form class="mote-stack"&gt;
+      &lt;fieldset&gt;
+        &lt;legend&gt;Profile&lt;/legend&gt;
+        &lt;p&gt;&lt;label for="name"&gt;Name&lt;/label&gt;
+        &lt;input id="name" type="text" required&gt;&lt;/p&gt;
+        &lt;p&gt;&lt;label for="email"&gt;Email&lt;/label&gt;
+        &lt;input id="email" type="email" required aria-invalid="true"&gt;
+        &lt;span role="alert" class="mote-error"&gt;Invalid email&lt;/span&gt;&lt;/p&gt;
+      &lt;/fieldset&gt;
+      &lt;p&gt;
+        &lt;button type="submit"&gt;Save&lt;/button&gt;
+        &lt;button type="button" class="mote-ghost"&gt;Cancel&lt;/button&gt;
+      &lt;/p&gt;
+    &lt;/form&gt;
+  &lt;/main&gt;
+  &lt;aside&gt;
+    &lt;h2&gt;Danger zone&lt;/h2&gt;
+    &lt;div class="mote-note mote-error"&gt;
+      &lt;p&gt;Deleting your account is permanent.&lt;/p&gt;
+      &lt;button class="mote-error"&gt;Delete account&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/aside&gt;
+&lt;/body&gt;
+</code></pre>
+
+  <h3>Card grid with covers</h3>
+  <p>The flush-media recipe applied to a real grid — cover photos edge-to-edge,
+    titles and metadata pinned to the bottom
+    (<a href="#components">Cards</a>,
+    <a href="#layout">Card grids</a>):</p>
+  <pre><code>&lt;div class="mote-grid" style="--mote-grid-min: 22rem"&gt;
+  &lt;article class="mote-card"&gt;
+    &lt;div class="card-media"&gt;
+      &lt;img src="cover.jpg" alt=""&gt;
+    &lt;/div&gt;
+    &lt;h3&gt;Project title&lt;/h3&gt;
+    &lt;p class="mote-muted"&gt;Description…&lt;/p&gt;
+    &lt;p style="margin-block-start:auto"&gt;
+      &lt;a class="mote-ghost" href="/project"&gt;View →&lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+
   <h2 id="fonts">Fonts</h2>
   <p>mote declares font <em>stacks</em> only — it embeds nothing and requires nothing.
     Out of the box it falls back to your system fonts. For the full experience, add Inter and
@@ -954,9 +1118,11 @@ npm install @fontsource-variable/inter @fontsource/commit-mono
   const states = ['', 'light', 'dark'];
   let i = 0;
   btn.addEventListener('click', () => {
+    root.classList.add('mote-theme-switch');
     i = (i + 1) % states.length;
     root.dataset.theme = states[i];
     btn.textContent = 'Theme: ' + (states[i] || 'auto');
+    requestAnimationFrame(() => root.classList.remove('mote-theme-switch'));
   });
 
   // Modal demo
