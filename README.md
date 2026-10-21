@@ -1,8 +1,8 @@
 # mote.css
 
-> The smallest thing that can carry style — a tiny, semantic, classless CSS layer for plain HTML.
+> The smallest thing that can carry style — a tiny, semantic, class-optional CSS layer for plain HTML.
 
-A mote of styling for plain HTML: **zero dependencies, zero build step, zero classes required**. Write semantic HTML, drop in one file, and it looks like a place you'd want to stay a while — modern, warm, unobtrusive. Inspired by the quiet excellence of [oat](https://github.com/knadh/oat), with its own cozy voice.
+A mote of styling for plain HTML: **zero dependencies, zero build step, zero classes required** — but opt-in classes exist for statuses, components, and layout when you want them. Write semantic HTML, drop in one file, and it looks like a place you'd want to stay a while — modern, warm, unobtrusive. Inspired by the quiet excellence of [oat](https://github.com/knadh/oat), with its own cozy voice.
 
 Source on [GitLab](https://gitlab.com/abmach/mote) · mirrored on [GitHub](https://github.com/abmach/mote).
 
@@ -23,7 +23,7 @@ Source on [GitLab](https://gitlab.com/abmach/mote) · mirrored on [GitHub](https
 
 ## Principles
 
-- **Semantic HTML is the API.** mote styles elements by what they *are* — headings, forms, `dialog`, `menu` — not by the classes they wear. Classes exist only where the platform has no semantic carrier (a "card" is not a semantic concept).
+- **Semantic HTML is the API.** mote styles elements by what they *are* — headings, forms, `dialog`, `menu` — not by the classes they wear. Zero classes are required; optional classes exist as opt-in conveniences for statuses, components, and helpers.
 - **The platform before the library.** Interactive components ride on native features: `popover`, `dialog`, `<details name>`, `:user-invalid`. Where the browser can do it, mote never ships JavaScript to do it worse.
 - **Tokens all the way down.** Every color, radius, shadow, font and status is a `--mote-*` custom property, and derived tones are computed with `color-mix()`. Status classes set tokens and nothing else — one override re-skins every note, badge and toast. Re-theme by overriding variables, never by fighting selectors.
 - **Weightless by default.** `mote.css` styles your elements; `mote.components.css` is opt-in and CSS-only. You ship zero bytes of library JavaScript, ever.
@@ -125,7 +125,7 @@ Or self-host with `npm install @fontsource-variable/inter @fontsource/commit-mon
 
 ## Opt-in helpers
 
-mote is classless by design; these are the only escape hatches, plus status classes that every status-consuming component reads:
+mote is class-optional by design — elements are styled from tags alone; these classes are opt-in conveniences, never a required API:
 
 | Class | Purpose |
 |---|---|
@@ -141,13 +141,13 @@ mote is classless by design; these are the only escape hatches, plus status clas
 | Component | Hook |
 |---|---|
 | Document layout (landmark grid) | `.mote-doc` on `<body>` — `:has()` reads your `header`/`nav`/`main`/`aside`/`footer` |
-| Sticky site header / nav pills | `body > header` — classless; `.mote-header`/`.mote-nav` only for shells wrapped in a `<div>` |
+| Sticky site header / nav pills | `body > header` — semantic; `.mote-header`/`.mote-nav` only for shells wrapped in a `<div>` |
 | Semantic buttons (gated) | `class="mote-success"` etc. on the button itself — themed sections never recolor actions |
 | Ghost buttons | `.mote-ghost` — transparent fill; status tints from the button's own class (gated like solids) |
 | Display text | `.mote-display` — opt-in hero/error-code scale via `--mote-display` |
 | Content rows | `.mote-row` + `.mote-push` — flex row, right-align helper |
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
-| Footer baseline | `body > footer` — classless top-border + padding |
+| Footer baseline | `body > footer` — semantic top-border + padding |
 | Screen-reader helper | `.mote-sr-only` (doubles as a skip link when focused) |
 | Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |

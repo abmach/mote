@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>mote.css — documentation</title>
-  <meta name="description" content="Live documentation for mote.css — a tiny, semantic, classless CSS layer for plain HTML.">
+  <meta name="description" content="Live documentation for mote.css — a tiny, semantic, class-optional CSS layer for plain HTML.">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
@@ -33,7 +33,10 @@
 
 <main class="mote-container" id="top">
   <h1>mote.css</h1>
-  <p class="mote-muted">The smallest thing that can carry style — a tiny, semantic, classless CSS
+  <figure style="margin-block: 0 1.5rem; text-align: center;">
+    <img src="img/mote-logo.jpg" alt="A single dust mote floating in warm golden sunbeams" style="width: min(100%, 40rem); border-radius: var(--mote-radius-lg); box-shadow: var(--mote-shadow);">
+  </figure>
+  <p class="mote-muted">The smallest thing that can carry style — a tiny, semantic, class-optional CSS
     layer for plain HTML. Zero dependencies, zero build step, zero JavaScript.</p>
 
   <h2 id="principles">Principles</h2>
@@ -538,6 +541,32 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       <li><a href="#top">Docs</a></li>
       <li><span aria-current="page">Layout</span></li>
     </ol>
+  </nav>
+
+  <h3>Pagination</h3>
+  <p>Same idea as breadcrumbs — a semantic label, no class. mote styles the
+    link row and the <code>aria-current</code> pill. The current page works
+    best as a <code>&lt;span&gt;</code> (you are already there — not a link), but
+    if you use an <code>&lt;a&gt;</code>, mote keeps the pill state visible on
+    hover:</p>
+  <pre><code>&lt;nav aria-label="pagination"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="#top"&gt;← Prev&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#top" aria-current="page"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#top"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#top"&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#top"&gt;Next →&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+  <nav aria-label="pagination">
+    <ul>
+      <li><a href="#top">← Prev</a></li>
+      <li><a href="#top" aria-current="page">1</a></li>
+      <li><a href="#top">2</a></li>
+      <li><a href="#top">3</a></li>
+      <li><a href="#top">Next →</a></li>
+    </ul>
   </nav>
 
 

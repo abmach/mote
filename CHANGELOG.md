@@ -5,6 +5,28 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-10-20
+
+### Fixed
+
+- Pagination: the current page (`aria-current`) kept its pill state on
+  hover — previously the generic link hover overrode the accent pill,
+  making "you are here" indistinguishable from hovering any other page.
+  The current page now deepens on hover (same accent-mix pattern as solid
+  buttons); non-current links keep the soft-tint hover. Docs recommend a
+  `<span>` for the current page (you are already there — not a link).
+
+### Added
+
+- Logo: a cinematic photograph of a single dust mote floating in warm
+  golden sunbeams (docs/img/mote-logo.jpg), integrated into the docs hero.
+- Repositioned from "classless" to "class-optional" throughout — more
+  honest now that the library ships ~25 opt-in classes for statuses,
+  components, helpers, and layout. The core promise is unchanged:
+  zero classes required, semantic elements are the default.
+- Pagination documentation: code sample and live example in the Layout
+  section, alongside the breadcrumbs it mirrors.
+
 ## [0.5.0] - 2026-10-20
 
 ### Added
@@ -252,6 +274,7 @@ Components:
 - Element gallery demo page (`demo.html`).
 
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
+[0.5.1]: https://gitlab.com/abmach/mote/compare/v0.5.0...v0.5.1
 [0.5.0]: https://gitlab.com/abmach/mote/compare/v0.4.0...v0.5.0
 [0.4.0]: https://gitlab.com/abmach/mote/compare/v0.3.0...v0.4.0
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0

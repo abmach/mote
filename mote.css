@@ -1,10 +1,10 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.5.0 · MIT
+ * v0.5.1 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
- * framework-agnostic, semantic, classless, zero dependencies.
+ * framework-agnostic, semantic, class-optional, zero dependencies.
  *
  * MIT License. Fonts (Inter, Commit Mono) are NOT bundled.
  * See the README for one-line self-hosting instructions.
@@ -625,7 +625,8 @@ progress, meter {
 /* ---------------------------------------------------------------------------
  * 11. Opt-in helpers
  *
- * mote is classless by design; these are the only three escape hatches.
+ * mote is class-optional by design — elements are styled from tags
+ * alone; these classes are opt-in conveniences, never a required API.
  * ------------------------------------------------------------------------- */
 
 /* Centered page wrapper: <main class="mote-container"> */

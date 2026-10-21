@@ -1,7 +1,7 @@
 {
   "name": "mote.css",
-  "version": "0.5.0",
-  "description": "A mote of styling for plain HTML — tiny, semantic, classless CSS with zero dependencies and no build step.",
+  "version": "0.5.1",
+  "description": "A mote of styling for plain HTML — tiny, semantic, class-optional CSS with zero dependencies and no build step.",
   "style": "mote.css",
   "files": [
     "mote.css",
@@ -12,7 +12,7 @@
   ],
   "keywords": [
     "css",
-    "classless",
+    "class-optional",
     "semantic",
     "framework-agnostic",
     "dark-mode",

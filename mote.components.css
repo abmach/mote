@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.5.0 · MIT
+ * v0.5.1 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -110,7 +110,7 @@
 /* ---------------------------------------------------------------------------
  * 6. Site header and nav
  *
- * The page shell is styled classlessly: a header that is a direct
+ * The page shell is styled semantically: a header that is a direct
  * child of <body> is the site bar, its nav the pill row. The classes
  * exist for the one case landmarks cannot express — a shell wrapped
  * in a <div> (common with frameworks), where body > header cannot
@@ -200,13 +200,18 @@ nav[aria-label="pagination"] a {
   transition: background var(--mote-transition), color var(--mote-transition);
 }
 
-nav[aria-label="pagination"] a:hover {
+nav[aria-label="pagination"] a:hover:not([aria-current]) {
   background: var(--mote-accent-soft);
   color: var(--mote-accent-deep);
 }
 
 nav[aria-label="pagination"] [aria-current="page"] {
   background: var(--mote-accent);
+  color: var(--mote-on-accent);
+}
+
+nav[aria-label="pagination"] [aria-current="page"]:hover {
+  background: color-mix(in oklab, var(--mote-accent), var(--mote-fg) 14%);
   color: var(--mote-on-accent);
 }
 
