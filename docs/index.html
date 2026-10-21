@@ -138,6 +138,19 @@
   <p>mote follows the user's system preference automatically. To force a theme, set an
     attribute on <code>&lt;html&gt;</code>:</p>
   <pre><code>&lt;html data-theme="dark"&gt;  &lt;!-- or "light" --&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Chromium note:&lt;/strong&gt; toggling &lt;code&gt;data-theme&lt;/code&gt; can leave
+    transition-styled elements at the old theme's colors (the engine doesn't
+    restart CSS transitions on custom-property changes). If you hit this,
+    disable transitions around the flip:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;document.documentElement.classList.add('mote-theme-switch');
+document.documentElement.dataset.theme = next;
+requestAnimationFrame(() =&gt;
+document.documentElement.classList.remove('mote-theme-switch'));
+</code></pre>
+<pre><code>.mote-theme-switch, .mote-theme-switch * {
+transition: none !important;
+}
 </code></pre>
   <p>The toggle on this page is five lines of JavaScript — no library involvement:</p>
   <pre><code>const root = document.documentElement;
@@ -198,6 +211,20 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <blockquote class="mote-muted">A neutral rule.</blockquote>
 
   <h3>Tables</h3>
+  <p>Numeric columns (counts, prices) and sticky headers are page-level
+    recipes — add them when your data needs them:</p>
+  <pre><code>.num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.tbl-scroll { overflow-x: auto; }
+.tbl-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: var(--mote-bg);
+}
+</code></pre>
   <p>Tables wider than the viewport stay inside a scrollable wrapper — mote
     never scrolls your page sideways:</p>
   <pre><code>&lt;div style="overflow-x:auto"&gt;
@@ -228,6 +255,23 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>Fields keep their intrinsic width — for stacked forms, add
     <code>input, select, textarea { width: 100% }</code> in your page styles;
     inline forms are equally valid, so mote does not decide for you.</p>
+  <p>Or use the opt-in <code>.mote-stack</code> class, which stretches fields
+    and keeps checkboxes/radios at their native 1em — no page CSS needed:</p>
+  <pre><code>&lt;form class="mote-stack"&gt;
+  &lt;p&gt;&lt;label for="name"&gt;Name&lt;/label&gt; &lt;input id="name" type="text"&gt;&lt;/p&gt;
+&lt;/form&gt;
+</code></pre>
+  <p>Programmatic validation: <code>aria-invalid="true"</code> gets the same
+    brick border as <code>:user-invalid</code>, so server-side and failed-save
+    states are styleable without waiting for user interaction. A canonical
+    search form (sr-only label + inline row):</p>
+  <pre><code>&lt;form class="mote-row" role="search"&gt;
+  &lt;label class="mote-sr-only" for="q"&gt;Search&lt;/label&gt;
+  &lt;input id="q" type="search" placeholder="Search…"&gt;
+  &lt;button type="submit"&gt;Go&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
 
   <h3>Buttons and statuses</h3>
   <p>All button styles — solid and ghost — are <strong>gated</strong>: the
@@ -251,6 +295,24 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     on it explicitly — <code>class="mote-ghost mote-error"</code> for a quiet
     destructive, <code>class="mote-ghost mote-success"</code> for a quiet confirm.
     Ghosts work on buttons and anchors alike.</p>
+  <p>
+    <a class="mote-ghost" href="#elements">Get started quietly</a>
+  </p>
+  <p>Solid button on an anchor — <code>.mote-btn</code> is the opt-in class
+    for the full solid recipe on any element:</p>
+  <pre><code>&lt;a class="mote-btn" href="/signup"&gt;Get started&lt;/a&gt;
+</code></pre>
+  <p>
+    <a class="mote-btn" href="#elements">Get started</a>
+  </p>
+  <p>Media objects (avatar beside body) — <code>.mote-media</code> flexes
+    the last child:</p>
+  <pre><code>&lt;div class="mote-media"&gt;
+  &lt;img class="mote-avatar" src="…" alt=""&gt;
+  &lt;div&gt;&lt;p&gt;Post body…&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
   <form onsubmit="event.preventDefault()">
     <p>
       <label for="d-email">Email</label>
@@ -268,6 +330,31 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       <button type="reset">Reset</button>
     </p>
   </form>
+
+  <h3>Display text</h3>
+  <p>Opt-in hero/error-code scale via <code>.mote-display</code> — the body
+    heading scale is untouched. Widen per use with the <code>--mote-display</code>
+    variable. Display text reads <code>--mote-status</code> so a themed page
+    (e.g. <code>body class="mote-error"</code>) tints the giant code:</p>
+  <pre><code>&lt;h1 class="mote-display"&gt;404&lt;/h1&gt;
+&lt;h1 class="mote-display" style="--mote-display: clamp(6rem, 24vw, 12rem)"&gt;500&lt;/h1&gt;
+</code></pre>
+  <p>
+    <span class="mote-display">404</span>
+  </p>
+  <h3>Semantic feedback</h3>
+  <p><code>[role="alert"]</code> and <code>[role="status"]</code> are styled
+    as semantic feedback — they read <code>--mote-status</code> with
+    error/info fallbacks, so a status class on the element or an ancestor
+    tints them:</p>
+  <pre><code>&lt;p role="alert" class="mote-error"&gt;Invalid email&lt;/p&gt;
+&lt;p role="status"&gt;Saved&lt;/p&gt;
+</code></pre>
+  <p>
+    <p role="alert" class="mote-error" style="margin-block:0">Invalid email address</p>
+    <br>
+    <p role="status" style="margin-block:0">Saved successfully</p>
+  </p>
   <pre><code>&lt;form&gt;
   &lt;p&gt;
     &lt;label for="email"&gt;Email&lt;/label&gt;
@@ -464,6 +551,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <code>&lt;div&gt;</code> (some frameworks do), <code>.mote-header</code> and
     <code>.mote-nav</code> bring the same styles to headers the landmark
     selector cannot see.</p>
+  <p>For a narrower reading column (long-form articles), set
+    <code>--mote-container-max</code> — 42rem is a comfortable measure:</p>
+  <pre><code>&lt;main class="mote-container" style="--mote-container-max: 42rem"&gt;
+</code></pre>
   <p>A footer after <code>main</code> follows normal flow — fine for long pages.
     If you want it pinned to the viewport bottom even when content is short,
     use the document shell below.</p>
@@ -569,10 +660,34 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     </ul>
   </nav>
 
+  <h3>Table of contents</h3>
+  <p>Right-rail asides and "On this page" navigation, styled semantically
+    like breadcrumbs and pagination:</p>
+  <pre><code>&lt;nav aria-label="toc"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="#get-started"&gt;Get started&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#theming"&gt;Theming&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+  <nav aria-label="toc">
+    <ul>
+      <li><a href="#get-started">Get started</a></li>
+      <li><a href="#theming">Theming</a></li>
+      <li><a href="#elements">Elements</a></li>
+    </ul>
+  </nav>
+
 
   <h3>Card grids</h3>
   <p>One class; columns are computed from the container — as many 16rem cards as fit.
     <code>auto-fill</code> made column-count utilities obsolete:</p>
+  <p>For wider or narrower tracks, set <code>--mote-grid-min</code>:
+    22rem gives 3-wide pricing; 26rem gives 2-column content:</p>
+  <pre><code>&lt;div class="mote-grid" style="--mote-grid-min: 22rem"&gt;
+  &lt;!-- 3 columns on any container &gt;= 66rem --&gt;
+&lt;/div&gt;
+</code></pre>
   <pre><code>&lt;div class="mote-grid"&gt;
   &lt;article class="mote-card"&gt;…&lt;/article&gt;
   &lt;article class="mote-card"&gt;…&lt;/article&gt;
@@ -586,6 +701,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <article class="mote-card"><h3 style="margin-block-start:0">Four</h3><p>No utilities.</p></article>
   </div>
 
+  <p>For sparse grids (a 4-item footer in a wide container), switch to
+    auto-fit so empty tracks collapse:</p>
+  <pre><code>.mote-grid-sparse {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--mote-grid-min, 16rem), 100%), 1fr));
+}
+</code></pre>
+
   <h2 id="components">Components</h2>
   <p>From <code>mote.components.css</code> — opt-in, CSS-only, built on the platform.</p>
 
@@ -594,6 +716,30 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   &lt;h3&gt;Card title&lt;/h3&gt;
   &lt;p&gt;A soft surface for grouped content.&lt;/p&gt;
 &lt;/article&gt;
+</code></pre>
+  <p>Featured cards read <code>--mote-status</code> for their border —
+    one class tints the edge:</p>
+  <pre><code>&lt;article class="mote-card mote-success"&gt;
+  &lt;h3&gt;Accepted answer&lt;/h3&gt;
+  &lt;p&gt;The status class tints the border.&lt;/p&gt;
+&lt;/article&gt;
+</code></pre>
+  <div class="mote-card mote-success">
+    <h3 style="margin-block-start:0">Accepted answer</h3>
+    <p>The status class tints the border.</p>
+  </div>
+  <p>Flush-top media (cover photos, thumbnails) — the one compositional
+    pattern cards don't ship, because it couples to padding:</p>
+  <pre><code>.card-media {
+  margin: -1.25rem -1.5rem 1rem;
+  overflow: clip;
+}
+
+.card-media img {
+  display: block;
+  width: 100%;
+  max-width: none;
+}
 </code></pre>
   <div class="mote-card">
     <h3 style="margin-block-start:0">Card title</h3>
@@ -619,7 +765,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   </p>
 
   <h3>Avatars</h3>
+  <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem):</p>
   <pre><code>&lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Ada" alt="Ada Lovelace"&gt;
+&lt;img class="mote-avatar" style="--mote-avatar: 6rem" src="…" alt="Hero portrait"&gt;
 &lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Grace" alt="Grace Hopper"&gt;
 &lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Alan" alt="Alan Turing"&gt;
 </code></pre>
@@ -629,6 +777,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Alan" alt="Alan Turing avatar">
     <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Radia" alt="Radia Perlman avatar">
     <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Katherine" alt="Katherine Johnson avatar">
+  </p>
+  <p>
+    <img class="mote-avatar" style="--mote-avatar: 6rem" src="https://api.dicebear.com/9.x/notionists/svg?seed=Mote" alt="Hero portrait at 6rem">
   </p>
 
   <h3>Skeletons and spinners</h3>

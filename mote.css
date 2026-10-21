@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.5.1 · MIT
+ * v0.6.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -46,6 +46,9 @@
   --mote-tracking: -0.011em;
   /* Display scale — opt-in, for heroes and error pages; body scale untouched */
   --mote-display: clamp(2.75rem, 1.5rem + 4vw, 5rem);
+  /* Reading measure: the comfortable max width for long-form content.
+     Override per-page for narrow or wide layouts. */
+  --mote-container-max: 70rem;
 
   /* Shape & depth */
   --mote-radius: 10px;
@@ -451,8 +454,14 @@ select[multiple] {
   width: 1em;
   height: 1em;
   padding: 0;
-  accent-color: var(--mote-accent);
+  accent-color: var(--mote-status, var(--mote-accent));
   vertical-align: baseline;
+}
+
+/* Harden checkbox/radio sizing against page-level width: 100% rules
+   (the documented stacked-form recipe). :where() keeps it overridable. */
+:is([type="checkbox"], [type="radio"]):where(input) {
+  width: 1em;
 }
 
 [type="color"] {
@@ -484,7 +493,7 @@ select[multiple] {
   cursor: not-allowed;
 }
 
-:is(input, select, textarea):user-invalid {
+:is(input, select, textarea):is(:user-invalid, [aria-invalid="true"]) {
   border-color: var(--mote-error);
 }
 
@@ -526,6 +535,10 @@ button:hover, [type="button"]:hover, [type="submit"]:hover, [type="reset"]:hover
   background: none;
   border: var(--mote-border-width) solid color-mix(in oklab, var(--mote-accent), transparent 55%);
   color: var(--mote-accent-deep);
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--mote-radius-sm);
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .mote-ghost:hover {
@@ -631,7 +644,7 @@ progress, meter {
 
 /* Centered page wrapper: <main class="mote-container"> */
 .mote-container {
-  width: min(100% - 3rem, 70rem);
+  width: min(100% - 3rem, var(--mote-container-max));
   margin-inline: auto;
 }
 
@@ -648,6 +661,70 @@ progress, meter {
 }
 
 .mote-push { margin-inline-start: auto; }
+
+/* Stacked forms: stretch fields, keep checkboxes/radios compact.
+   An opt-in alternative to the page-global width: 100% recipe. */
+.mote-stack :is(input, select, textarea) {
+  width: 100%;
+}
+
+.mote-stack :is([type="checkbox"], [type="radio"]) {
+  width: 1em;
+}
+
+/* Solid button on any element — anchors, spans, divs.
+   Same recipe as the element-level button styles; status classes
+   gated identically (class on the element itself). */
+.mote-btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 500;
+  color: var(--mote-on-accent);
+  padding: 0.5rem 1.1rem;
+  background: var(--mote-accent);
+  border: var(--mote-border-width) solid transparent;
+  border-radius: var(--mote-radius-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--mote-transition), border-color var(--mote-transition),
+    transform var(--mote-transition);
+}
+
+.mote-btn:hover {
+  background: color-mix(in oklab, var(--mote-accent), var(--mote-fg) 14%);
+  box-shadow: var(--mote-shadow-sm);
+}
+
+.mote-btn:active {
+  transform: translateY(1px);
+}
+
+.mote-btn:where(.mote-success, .mote-warning, .mote-error, .mote-info, .mote-muted):where(:not(.mote-ghost)) {
+  background: var(--mote-status);
+  color: var(--mote-on-status, var(--mote-bg));
+}
+
+.mote-btn:where(.mote-success, .mote-warning, .mote-error, .mote-info, .mote-muted):where(:not(.mote-ghost)):hover {
+  background: color-mix(in oklab, var(--mote-status), var(--mote-fg) 14%);
+}
+
+/* Media object: avatar/icon beside body (forum posts, comments, chat) */
+.mote-media {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.mote-media > :last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Headings inside rows (version headers, card titles): default heading
+   margins balloon the row — zero them inside the flex context. */
+:where(.mote-row) > :is(h1, h2, h3, h4, h5, h6) {
+  margin-block: 0;
+}
 
 /* Visually hidden, screen-reader available */
 .mote-sr-only {
@@ -740,6 +817,7 @@ progress, meter {
   font-size: var(--mote-display);
   line-height: 1.1;
   letter-spacing: var(--mote-tracking);
+  color: var(--mote-status, inherit);
   text-wrap: balance;
 }
 
@@ -784,4 +862,10 @@ progress, meter {
   a { color: #000; }
   details { border: none; }
   dialog { box-shadow: none; }
+
+  /* Opt-in print helpers */
+  .mote-no-print { display: none !important; }
+  .mote-print-only { display: block; }
 }
+
+.mote-print-only { display: none; }

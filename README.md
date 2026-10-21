@@ -96,6 +96,10 @@ The consequence: theming is a handful of variable overrides, and an inline tweak
 | `--mote-radius` | `10px` | | Default corner softness |
 | `--mote-radius-sm` | `6px` | | Controls, inline code |
 | `--mote-radius-lg` | `16px` | | Dialogs |
+| `--mote-container-max` | `70rem` | | Page wrapper max width (narrow for reading) |
+| `--mote-display` | `clamp(2.75rem, 1.5rem + 4vw, 5rem)` | | Display text scale (opt-in) |
+| `--mote-grid-min` | `16rem` | | Card grid minimum track width |
+| `--mote-avatar` | `2.5rem` | | Avatar size |
 | `--mote-shadow` / `--mote-shadow-sm` | warm diffuse | | Elevation |
 | `--mote-transition` | `150ms ease` | | Hover/focus timing |
 
@@ -144,11 +148,15 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Sticky site header / nav pills | `body > header` — semantic; `.mote-header`/`.mote-nav` only for shells wrapped in a `<div>` |
 | Semantic buttons (gated) | `class="mote-success"` etc. on the button itself — themed sections never recolor actions |
 | Ghost buttons | `.mote-ghost` — transparent fill; status tints from the button's own class (gated like solids) |
+| Solid button on any element | `.mote-btn` — the full solid recipe for anchors, spans; status classes gated |
+| Media objects | `.mote-media` — avatar/icon beside body (flex, last child grows) |
 | Display text | `.mote-display` — opt-in hero/error-code scale via `--mote-display` |
 | Content rows | `.mote-row` + `.mote-push` — flex row, right-align helper |
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
+| Table of contents | `nav[aria-label="toc"]` — semantic, no class |
 | Footer baseline | `body > footer` — semantic top-border + padding |
 | Screen-reader helper | `.mote-sr-only` (doubles as a skip link when focused) |
+| Print helpers | `.mote-no-print` / `.mote-print-only` |
 | Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |

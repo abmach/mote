@@ -5,7 +5,68 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.1] - 2026-10-20
+## [0.6.0] - 2026-10-20
+
+### Fixed
+
+- Pagination `<span>` current page: the pill box (display, min-width,
+  padding) now targets `[aria-current="page"]` as well as `<a>` — the
+  docs-recommended span form renders correctly (was a 6.5px sliver).
+- Pagination: `flex-wrap: wrap` on the link row — 10 pills at 390px
+  no longer scroll the page horizontally.
+- Anchor ghosts: `.mote-ghost` now carries its own padding, border-radius,
+  text-decoration:none and cursor:pointer — `<a class="mote-ghost">`
+  renders as a proper pill (was an underlined unpadded rectangle).
+- Badge links: `a.mote-badge` no longer underlines; `user-select: none`
+  dropped from badges so version numbers and tags can be copied.
+- `.mote-display` reads `--mote-status` — themed pages (error, warning)
+  tint their giant display text automatically.
+- Default `--mote-rail-top` is now 4.75rem when `body > header` exists
+  (the sticky rail clears the sticky header without manual overrides).
+- `.mote-doc > main` gets `overflow-x: clip` — wide tables truly scroll
+  inside main, never the page.
+- Sticky header: default `padding-block: 0.7rem` — content no longer hugs
+  the border.
+- `.mote-row` zeroes heading margins inside the row — version headers
+  and card titles no longer balloon the flex context.
+- Checkbox/radio `width: 1em` hardened against page-level
+  `width: 100%` rules.
+
+### Added
+
+- `.mote-btn`: solid button recipe on any element (anchors, spans) —
+  the full solid chrome including gated status classes; hero CTAs and
+  pricing links no longer need page CSS.
+- `.mote-media`: media object (avatar/icon beside body) — flex row,
+  last child grows; forum posts, comments, chat.
+- `nav[aria-label="toc"]`: semantic table-of-contents pattern (mirrors
+  breadcrumbs and pagination) — right-rail asides, "On this page" nav.
+- `.mote-no-print` / `.mote-print-only`: opt-in print visibility helpers.
+- `aria-invalid="true"` styled alongside `:user-invalid` — programmatic
+  validation states (server-side, failed-save) without waiting for user
+  interaction.
+- Rail headings: `.mote-doc > nav :is(h2, h3)` at label scale —
+  grouped sidebar navigation without page CSS.
+- `.mote-card` reads `--mote-status` for its border — featured/emphasized
+  cards from one status class.
+- Docs recipes: card flush-media, numeric table columns with sticky
+  headers, sparse grids (auto-fit), canonical search form.
+- `.mote-stack` opt-in class: stretches form fields to 100% while
+  keeping checkboxes/radios at native 1em — no page CSS needed.
+- `--mote-container-max` token (default 70rem): narrow the reading
+  measure for long-form pages without new classes.
+- Spinner sized in em (1.25em, 0.15em border) — scales with context
+  (buttons, table rows, loading text).
+- Docs: display text section with error-code example and status tinting;
+  `--mote-avatar` sizing variable documented; `--mote-grid-min` density
+  variable documented; `[role="alert"]`/`[role="status"]` semantic
+  feedback helpers documented; safe stacked-form recipe and `.mote-stack`;
+  Chromium theme-toggle transition workaround.
+
+### Changed
+
+- Second ten-app evaluation completed against v0.5.1; all round-1 fixes
+  verified holding. Round-2 findings addressed in this release.
 
 ### Fixed
 
@@ -274,6 +335,7 @@ Components:
 - Element gallery demo page (`demo.html`).
 
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
+[0.6.0]: https://gitlab.com/abmach/mote/compare/v0.5.1...v0.6.0
 [0.5.1]: https://gitlab.com/abmach/mote/compare/v0.5.0...v0.5.1
 [0.5.0]: https://gitlab.com/abmach/mote/compare/v0.4.0...v0.5.0
 [0.4.0]: https://gitlab.com/abmach/mote/compare/v0.3.0...v0.4.0

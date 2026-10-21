@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.5.1 · MIT
+ * v0.6.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -19,6 +19,7 @@
   flex-direction: column;
   padding: 1.25rem 1.5rem;
   border: var(--mote-border-width) solid var(--mote-border);
+  border-color: color-mix(in oklab, var(--mote-status, var(--mote-border)), var(--mote-border) 60%);
   border-radius: var(--mote-radius-lg);
   background: color-mix(in oklab, var(--mote-surface) 55%, var(--mote-bg));
   box-shadow: var(--mote-shadow-sm);
@@ -48,7 +49,11 @@
   line-height: 1.4;
   background: var(--mote-status-soft, var(--mote-accent-soft));
   color: var(--mote-status, var(--mote-accent-deep));
-  user-select: none;
+}
+
+/* Badges as links (tag chips, version pills): kill the underline */
+a:where(.mote-badge) {
+  text-decoration: none;
 }
 
 /* ---------------------------------------------------------------------------
@@ -95,9 +100,10 @@
 .mote-spinner {
   display: inline-block;
   vertical-align: -0.25em;
-  width: 1.25rem;
-  height: 1.25rem;
-  border: 2px solid color-mix(in oklab, var(--mote-status, var(--mote-accent)), transparent 65%);
+  /* em sizing: scales with context (buttons, table rows, loading text) */
+  width: 1.25em;
+  height: 1.25em;
+  border: 0.15em solid color-mix(in oklab, var(--mote-status, var(--mote-accent)), transparent 65%);
   border-block-start-color: var(--mote-status, var(--mote-accent));
   border-radius: 999px;
   animation: mote-spin 0.7s linear infinite;
@@ -124,6 +130,7 @@
   background: color-mix(in oklab, var(--mote-bg) 82%, transparent);
   backdrop-filter: blur(10px);
   border-block-end: var(--mote-border-width) solid var(--mote-border);
+  padding-block: 0.7rem;
 }
 
 :where(body > header nav, .mote-nav) ul {
@@ -183,13 +190,14 @@ nav[aria-label="breadcrumb"] [aria-current="page"] {
 /* Pagination — semantic selector, no class (mirrors breadcrumbs) */
 nav[aria-label="pagination"] ul {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.25rem;
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
-nav[aria-label="pagination"] a {
+nav[aria-label="pagination"] :is(a, [aria-current="page"]) {
   display: inline-block;
   min-width: 2.2rem;
   padding: 0.35rem 0.6rem;
@@ -213,6 +221,28 @@ nav[aria-label="pagination"] [aria-current="page"] {
 nav[aria-label="pagination"] [aria-current="page"]:hover {
   background: color-mix(in oklab, var(--mote-accent), var(--mote-fg) 14%);
   color: var(--mote-on-accent);
+}
+
+/* Table of contents — semantic selector (mirrors breadcrumbs/pagination) */
+nav[aria-label="toc"] ul {
+  padding-inline-start: 0.8rem;
+  margin: 0;
+  list-style: none;
+  font-size: 0.9em;
+}
+
+nav[aria-label="toc"] li {
+  margin-block: 0.2rem;
+}
+
+nav[aria-label="toc"] a {
+  color: var(--mote-muted);
+  text-decoration: none;
+  transition: color var(--mote-transition);
+}
+
+nav[aria-label="toc"] a:hover {
+  color: var(--mote-accent-deep);
 }
 
 /* Page footer: the quiet sibling of the site header */
@@ -461,12 +491,19 @@ details[name] > :not(summary):last-child {
    when the header actually exists. */
 html:where(:has(body > header)) {
   scroll-padding-block-start: 5rem;
+  --mote-rail-top: 4.75rem;
 }
 
 .mote-doc > header { grid-row: 1; grid-column: 1 / -1; }
 .mote-doc > footer { grid-row: 3; grid-column: 1 / -1; }
 
 .mote-doc > main { grid-row: 2; grid-column: 1; min-width: 0; }
+
+/* Content stays inside the grid track — wide tables scroll here,
+    not the page. */
+.mote-doc > main {
+  overflow-x: clip;
+}
 
 /* nav = left rail */
 .mote-doc > nav {
@@ -510,6 +547,17 @@ html:where(:has(body > header)) {
 .mote-doc > nav a[aria-current="page"] {
   background: var(--mote-accent);
   color: var(--mote-on-accent);
+}
+
+/* Rail headings: small label-scale for grouped navigation */
+.mote-doc > nav :is(h2, h3) {
+  margin: 1rem 0 0.3rem;
+  padding-inline: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mote-muted);
 }
 
 .mote-doc:where(:has(> nav)) {
