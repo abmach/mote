@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.6.1 · MIT
+ * v0.7.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -40,6 +40,10 @@
  *    <span class="mote-badge mote-success">success</span>
  * ------------------------------------------------------------------------- */
 
+/* Badges are content markers, not surfaces — they declare their own
+   status, never inherit it from context (same gating as buttons).
+   A plain .mote-badge is always accent-tinted; a status class on the
+   badge itself provides the tint. */
 .mote-badge {
   display: inline-block;
   padding: 0.1rem 0.6rem;
@@ -47,13 +51,22 @@
   font-size: 0.8em;
   font-weight: 500;
   line-height: 1.4;
-  background: var(--mote-status-soft, var(--mote-accent-soft));
-  color: var(--mote-status, var(--mote-accent-deep));
+  background: var(--mote-accent-soft);
+  color: var(--mote-accent-deep);
+}
+
+.mote-badge:where(.mote-success, .mote-warning, .mote-error, .mote-info, .mote-muted) {
+  background: var(--mote-status-soft);
+  color: var(--mote-status);
 }
 
 /* Badges as links (tag chips, version pills): kill the underline */
 a:where(.mote-badge) {
   text-decoration: none;
+}
+
+a:where(.mote-badge):hover {
+  filter: brightness(0.92);
 }
 
 /* ---------------------------------------------------------------------------
@@ -245,15 +258,36 @@ nav[aria-label="toc"] a:hover {
   color: var(--mote-accent-deep);
 }
 
+/* Flush-top cover media for cards: negative margins derived from the
+   card's own padding, clipped overflow, radius matched to the card. */
+.mote-card-media {
+  margin: -1.25rem -1.5rem 1rem;
+  overflow: clip;
+  border-radius: calc(var(--mote-radius-lg) - var(--mote-border-width))
+    calc(var(--mote-radius-lg) - var(--mote-border-width)) 0 0;
+}
+
+.mote-card-media img,
+.mote-card-media video {
+  display: block;
+  width: 100%;
+  max-width: none;
+  border-radius: inherit;
+}
+
 /* Scrollable table wrapper: sticky thead, no page scroll, no margin jump */
 .mote-table-scroll {
   overflow-x: auto;
-  max-height: 60vh;
+  max-height: var(--mote-table-max, 60vh);
   overflow-y: auto;
 }
 
+/* Chromium paints collapsed borders at the original flow position,
+   not with the sticky cell — separate borders belong to the cell. */
 .mote-table-scroll table {
   margin-block: 0;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .mote-table-scroll thead th {
@@ -621,6 +655,12 @@ nav[aria-label="toc"] :is(h2, h3) {
   .mote-doc > :is(nav, aside, main) {
     grid-column: 1 / -1;
     grid-row: auto;
+  }
+
+  .mote-doc > aside {
+    position: static;
+    max-height: none;
+    overflow: visible;
   }
 
   .mote-doc > nav {

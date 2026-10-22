@@ -5,7 +5,55 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.1] - 2026-10-20
+## [0.7.0] - 2026-10-21
+
+### Changed
+
+- **Badges are gated** (same as buttons): a plain `.mote-badge` is always
+  accent-tinted; a status class on the badge itself provides the tint —
+  never inherited from context. Closes the "tag chips silently re-tint
+  inside themed cards" surprise from four evaluation rounds.
+  Two-tier principle: **content surfaces follow context; content markers
+  and actions declare their own status.**
+
+### Fixed
+
+- `.mote-table-scroll` sticky-header borders: Chromium paints collapsed
+  borders at the original flow position, not with the sticky cell —
+  switched to `border-collapse: separate; border-spacing: 0` inside the
+  wrapper.
+- `.mote-table-scroll` clips rows in print: `max-height: none;
+  overflow: visible` added to the `@media print` block.
+- Bare `<pre>` without `<code>` now gets the mono stack and 0.875rem size.
+- `.mote-btn` now reads `var(--mote-control-pad, …)` instead of hardcoded
+  `0.5rem 1.1rem` — density overrides reach all buttons uniformly.
+- Form controls (input/select/textarea) now read the same density tokens
+  as buttons: `var(--mote-control-pad, …) var(--mote-control-pad-inline, …)`.
+- `.mote-stack` now stretches `progress` and `meter` alongside fields.
+- `.mote-doc > aside` resets to `position: static` under 50rem (was
+  staying sticky while the nav went static — clipped scroll region on mobile).
+- `.mote-table-scroll` max-height tokenized: `var(--mote-table-max, 60vh)`.
+- Badge links get a hover state: `filter: brightness(0.92)`.
+- Docs: theme-toggle snippet now 3-state (auto→light→dark) matching the
+  working demo; Patterns error-page uses `.mote-hero`; docs' own header
+  uses `.mote-row`/`.mote-push` instead of inline styles.
+
+### Added
+
+- `.mote-hero`: vertically centers content in the remaining viewport
+  height — for error pages, login screens, empty states. Uses
+  `--mote-hero-offset` (default 12rem) to account for header/footer.
+- `.mote-card-media`: flush-top cover images for cards — negative margins,
+  clipped overflow, radius matched to the card, all in one class. Replaces
+  the 5-line page recipe that broke card corners.
+- `.mote-brand`: quiet wordmark link for site headers — `font-weight: 700`,
+  fg color, no underline.
+- `.mote-num`: right-aligned tabular figures for data table columns.
+
+### Changed (evaluation)
+
+- Fourth ten-app evaluation completed against v0.6.1; all round-3 fixes
+  verified holding. Round-4 findings addressed in this minor release.
 
 ### Fixed
 
@@ -376,6 +424,7 @@ Components:
 - Element gallery demo page (`demo.html`).
 
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
+[0.7.0]: https://gitlab.com/abmach/mote/compare/v0.6.1...v0.7.0
 [0.6.1]: https://gitlab.com/abmach/mote/compare/v0.6.0...v0.6.1
 [0.6.0]: https://gitlab.com/abmach/mote/compare/v0.5.1...v0.6.0
 [0.5.1]: https://gitlab.com/abmach/mote/compare/v0.5.0...v0.5.1

@@ -151,11 +151,15 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Semantic buttons (gated) | `class="mote-success"` etc. on the button itself — themed sections never recolor actions |
 | Ghost buttons | `.mote-ghost` — transparent fill; status tints from the button's own class (gated like solids) |
 | Solid button on any element | `.mote-btn` — the full solid recipe for anchors, spans; status classes gated |
+| Hero centering | `.mote-hero` — vertically centers content for error/login/empty-state pages |
+| Card cover media | `.mote-card-media` — flush-top cover images with matched radius |
+| Brand/wordmark | `.mote-brand` — quiet non-nav link for site headers |
 | Media objects | `.mote-media` — avatar/icon beside body (flex, last child grows) |
 | Display text | `.mote-display` — opt-in hero/error-code scale via `--mote-display` |
 | Content rows | `.mote-row` + `.mote-push` — flex row, right-align helper |
 | Stacked forms | `.mote-stack` — opt-in full-width fields, checkboxes stay 1em |
 | Scrollable tables | `.mote-table-scroll` — sticky `thead`, no page scroll, no margin jump |
+| Numeric columns | `.mote-num` — right-aligned tabular figures |
 | Sparse grids | `.mote-grid-sparse` — auto-fit variant, collapses empty tracks |
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
 | Table of contents | `nav[aria-label="toc"]` — semantic, no class |
@@ -164,10 +168,12 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Print helpers | `.mote-no-print` / `.mote-print-only` |
 | Theme-switch guard | `.mote-theme-switch` — prevents Chromium stale-color bug on `data-theme` flips |
 | Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |
+| Hero offset | `--mote-hero-offset` (default 12rem) — space for header/footer in `.mote-hero` |
+| Table max height | `--mote-table-max` (default 60vh) — `.mote-table-scroll` panel cap |
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
 | Cards | `.mote-card` |
-| Badges | `.mote-badge` + optional status class |
+| Badges | `.mote-badge` — gated: status from the badge's own class, never inherited |
 | Avatars | `.mote-avatar` |
 | Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |
 | Tooltips | `[popover].mote-tooltip` + `popovertarget` button |
@@ -189,7 +195,7 @@ animations become instant, on older engines.
 
 ## Demo
 
-Open [`docs/index.html`](docs/index.html) for the full live documentation, or [`demo.html`](demo.html) for a quick gallery of every styled element.
+Open [`docs/index.html`](docs/index.html) for the full live documentation, or [`docs/demo.html`](docs/demo.html) for a quick gallery of every styled element.
 
 ## License
 

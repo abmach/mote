@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.6.1 · MIT
+ * v0.7.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -335,6 +335,8 @@ kbd {
 pre {
   padding: 1rem 1.2rem;
   overflow-x: auto;
+  font-family: var(--mote-font-mono);
+  font-size: 0.875rem;
   border-radius: var(--mote-radius);
   background: var(--mote-surface);
   border: var(--mote-border-width) solid var(--mote-border);
@@ -415,7 +417,7 @@ legend { padding-inline: 0.4rem; font-weight: 600; }
 input, select, textarea {
   font: inherit;
   color: inherit;
-  padding: 0.5rem 0.75rem;
+  padding: var(--mote-control-pad, 0.5rem) var(--mote-control-pad-inline, 0.75rem);
   background: var(--mote-surface);
   border: var(--mote-border-width) solid var(--mote-border);
   border-radius: var(--mote-radius-sm);
@@ -666,9 +668,20 @@ progress, meter {
 
 .mote-push { margin-inline-start: auto; }
 
+/* Hero: vertically center content in the remaining viewport height.
+   For error pages, login screens, empty states. */
+.mote-hero {
+  min-height: calc(100svh - var(--mote-hero-offset, 12rem));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 /* Stacked forms: stretch fields, keep checkboxes/radios compact.
    An opt-in alternative to the page-global width: 100% recipe. */
-.mote-stack :is(input, select, textarea) {
+.mote-stack :is(input, select, textarea, progress, meter) {
   width: 100%;
 }
 
@@ -688,7 +701,7 @@ progress, meter {
   font: inherit;
   font-weight: 500;
   color: var(--mote-on-accent);
-  padding: 0.5rem 1.1rem;
+  padding: var(--mote-control-pad, 0.5rem) var(--mote-control-pad-inline, 1.1rem);
   background: var(--mote-accent);
   border: var(--mote-border-width) solid transparent;
   border-radius: var(--mote-radius-sm);
@@ -735,6 +748,19 @@ progress, meter {
 }
 
 /* Visually hidden, screen-reader available */
+/* Brand/wordmark: quiet non-nav link for site headers */
+.mote-brand {
+  font-weight: 700;
+  color: var(--mote-fg);
+  text-decoration: none;
+}
+
+/* Numeric table column: right-align tabular figures */
+.mote-num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
 .mote-sr-only {
   position: absolute;
   width: 1px;
@@ -874,6 +900,7 @@ progress, meter {
   /* Opt-in print helpers */
   .mote-no-print { display: none !important; }
   .mote-print-only { display: block; }
+  .mote-table-scroll { max-height: none; overflow: visible; }
 }
 
 @media not print {
