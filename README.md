@@ -152,6 +152,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Ghost buttons | `.mote-ghost` — transparent fill; status tints from the button's own class (gated like solids) |
 | Solid button on any element | `.mote-btn` — the full solid recipe for anchors, spans; status classes gated |
 | Hero centering | `.mote-hero` — vertically centers content for error/login/empty-state pages |
+| CTA bands | `.mote-band` — full-bleed tinted section; opaque in both themes, reads `--mote-status` |
 | Card cover media | `.mote-card-media` — flush-top cover images with matched radius |
 | Brand/wordmark | `.mote-brand` — quiet non-nav link for site headers |
 | Media objects | `.mote-media` — avatar/icon beside body (flex, last child grows) |
@@ -163,8 +164,9 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Sparse grids | `.mote-grid-sparse` — auto-fit variant, collapses empty tracks |
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
 | Table of contents | `nav[aria-label="toc"]` — semantic, no class |
-| Footer baseline | `body > footer` — semantic top-border + padding |
-| Screen-reader helper | `.mote-sr-only` (doubles as a skip link when focused) |
+| Footer baseline | `body > footer` — semantic top-border + padding; its `nav` renders as a quiet wrapped row |
+| Screen-reader helper | `.mote-sr-only` — pure hiding, never appears |
+| Skip link | `.mote-skip-link` — sr-only until keyboard focus, then a fixed pill |
 | Print helpers | `.mote-no-print` / `.mote-print-only` |
 | Theme-switch guard | `.mote-theme-switch` — prevents Chromium stale-color bug on `data-theme` flips |
 | Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |
@@ -172,7 +174,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Table max height | `--mote-table-max` (default 60vh) — `.mote-table-scroll` panel cap |
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
-| Cards | `.mote-card` |
+| Cards | `.mote-card` — normalizes content: alignment reads start even inside centered regions |
 | Badges | `.mote-badge` — gated: status from the badge's own class, never inherited |
 | Avatars | `.mote-avatar` |
 | Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |

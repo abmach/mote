@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../mote.components.css">
 </head>
 <body>
+<a class="mote-skip-link" href="#top">Skip to content</a>
 
 <header class="mote-header">
   <div class="mote-container mote-row">
@@ -24,6 +25,7 @@
         <li><a href="#popovers">Popovers</a></li>
         <li><a href="#layout">Layout</a></li>
         <li><a href="#patterns">Patterns</a></li>
+        <li><a href="#tokens">Tokens</a></li>
         <li><a href="#components">Components</a></li>
         <li><a href="https://github.com/abmach/mote">GitHub</a></li>
       </ul>
@@ -217,32 +219,31 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <blockquote class="mote-error">A brick rule.</blockquote>
   <blockquote class="mote-info">A dusty-blue rule.</blockquote>
   <blockquote class="mote-muted">A neutral rule.</blockquote>
+  <p>For callout boxes — info and warning panels rather than quotes — see
+    <a href="#notes">Notes and callouts</a>: <code>.mote-note</code> is the box
+    component; the tinted rule above is the quote treatment.</p>
 
   <h3>Tables</h3>
-  <p>Numeric columns align automatically — mote sets
+  <p>Numeric figures align automatically — mote sets
     <code>font-variant-numeric: tabular-nums</code> on every <code>td</code>.
-    For sticky headers and scrollable data tables, use the opt-in wrapper:</p>
+    Right-align a whole column with the opt-in <code>.mote-num</code> class on
+    its cells:</p>
+  <pre><code>&lt;th class="mote-num"&gt;Price&lt;/th&gt;
+&lt;td class="mote-num"&gt;$24&lt;/td&gt;
+</code></pre>
+  <p>For sticky headers and scrollable data tables, wrap in the opt-in
+    <code>.mote-table-scroll</code> — the header row sticks, wide tables scroll
+    inside the wrapper, never the page. Cap the panel height with
+    <code>--mote-table-max</code> (default 60vh); the sticky header engages once
+    the wrapper actually scrolls. Inside the wrapper, cell borders are drawn
+    per side — Chromium paints collapsed borders at the flow position, not
+    with the sticky cell:</p>
   <pre><code>&lt;div class="mote-table-scroll"&gt;
   &lt;table&gt;…&lt;/table&gt;
 &lt;/div&gt;
-</code></pre>
-  <p>Numeric columns (counts, prices) and sticky headers are page-level
-    recipes — add them when your data needs them:</p>
-  <pre><code>.num {
-  text-align: end;
-  font-variant-numeric: tabular-nums;
-}
 
-.tbl-scroll { overflow-x: auto; }
-.tbl-scroll thead th {
-  position: sticky;
-  top: 0;
-  background: var(--mote-bg);
-}
-</code></pre>
-  <p>Tables wider than the viewport stay inside a scrollable wrapper — mote
-    never scrolls your page sideways:</p>
-  <pre><code>&lt;div style="overflow-x:auto"&gt;
+&lt;!-- dense panels: cap the height --&gt;
+&lt;div class="mote-table-scroll" style="--mote-table-max: 24rem"&gt;
   &lt;table&gt;…&lt;/table&gt;
 &lt;/div&gt;
 </code></pre>
@@ -275,7 +276,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <pre><code>&lt;form class="mote-stack"&gt;
   &lt;p&gt;&lt;label for="name"&gt;Name&lt;/label&gt; &lt;input id="name" type="text"&gt;&lt;/p&gt;
 &lt;/form&gt;
-</code></pre>
+</code></pre>  <p>File inputs get a minimal drop-zone treatment — a dashed border and the
+    same density tokens as every other control, so their height matches
+    sibling fields in a stack.</p>
+
   <p>Programmatic validation: <code>aria-invalid="true"</code> gets the same
     brick border as <code>:user-invalid</code>, so server-side and failed-save
     states are styleable without waiting for user interaction. A canonical
@@ -547,17 +551,23 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 
   <h3>Simple page</h3>
   <p>Most pages need nothing more than a sticky header and a centered column —
-    exactly the layout of the page you are reading. No classes at all: a header
-    that is a direct child of <code>&lt;body&gt;</code> is the site bar, and its nav
-    the pill row:</p>
+    exactly the layout of the page you are reading. The header bar and its pill
+    nav style themselves from landmarks; the classes on the inner div are the
+    layout: <code>.mote-container</code> adds the gutters, <code>.mote-row</code> flexes,
+    <code>.mote-brand</code> quiets the wordmark, <code>.mote-push</code> right-aligns
+    the last control:</p>
   <pre><code>&lt;body&gt;
   &lt;header&gt;
-    &lt;nav&gt;
-      &lt;ul&gt;
-        &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
-      &lt;/ul&gt;
-    &lt;/nav&gt;
+    &lt;div class="mote-container mote-row"&gt;
+      &lt;a href="/" class="mote-brand"&gt;Brand&lt;/a&gt;
+      &lt;nav&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+      &lt;button type="button" class="mote-push"&gt;Toggle&lt;/button&gt;
+    &lt;/div&gt;
   &lt;/header&gt;
   &lt;main class="mote-container"&gt;
     &lt;h1&gt;Page title&lt;/h1&gt;
@@ -565,11 +575,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   &lt;/main&gt;
 &lt;/body&gt;
 </code></pre>
-  <p>The one class left is <code>.mote-container</code> — centering stays opt-in
-    because full-bleed pages are equally valid. If your shell is wrapped in a
-    <code>&lt;div&gt;</code> (some frameworks do), <code>.mote-header</code> and
-    <code>.mote-nav</code> bring the same styles to headers the landmark
-    selector cannot see.</p>
+  <p>Centering stays opt-in because full-bleed pages are equally valid. If your
+    shell is wrapped in a <code>&lt;div&gt;</code> (some frameworks do),
+    <code>.mote-header</code> and <code>.mote-nav</code> bring the same
+    styles to headers the landmark selector cannot see.</p>
   <p>For a narrower reading column (long-form articles), set
     <code>--mote-container-max</code> — 42rem is a comfortable measure:</p>
   <pre><code>&lt;main class="mote-container" style="--mote-container-max: 42rem"&gt;
@@ -585,6 +594,47 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 &lt;/div&gt;
 </code></pre>
 
+  <h3>Hero and bands</h3>
+  <p>Two helpers for focused layouts:</p>
+  <p><code>.mote-hero</code> centers content in the remaining viewport height —
+    error pages, login screens, empty states. The offset clears a header and
+    footer; tune it per page with <code>--mote-hero-offset</code> (default 12rem):</p>
+  <pre><code>&lt;main class="mote-container mote-hero"&gt;…&lt;/main&gt;
+
+&lt;!-- taller header/footer: raise the offset --&gt;
+&lt;main class="mote-container mote-hero" style="--mote-hero-offset: 14rem"&gt;…&lt;/main&gt;
+</code></pre>
+  <div class="mote-container mote-hero" style="--mote-hero-offset: calc(100svh - 14rem); border: 1px dashed var(--mote-border); border-radius: var(--mote-radius)">
+    <p class="mote-display" style="--mote-display: 3rem; margin-block:0">404</p>
+    <p style="margin-block:0.5rem 0">The block centers its content; the offset sets the height.</p>
+    <p style="margin-block:0">
+      <a class="mote-btn" href="#top">Back home</a>
+      <a class="mote-ghost" href="#top">Read the docs</a>
+    </p>
+  </div>
+  <p class="mote-muted">Hero scaled to fit this page via the offset — on a real error page the
+    default 12rem gives the block nearly the full viewport.</p>
+  <p><code>.mote-band</code> is a full-bleed tinted section — CTA bands, section
+    dividers, announcement strips. The mix is opaque, so it reads as a
+    deliberate section in both palettes (unlike <code>--mote-accent-soft</code>,
+    which is transparent and can vanish over dark backgrounds). Bands are
+    content surfaces: a status class on the band or an ancestor tints them.
+    The band provides color and breathing room; the container inside provides
+    the gutters:</p>
+  <pre><code>&lt;section class="mote-band"&gt;
+  &lt;div class="mote-container"&gt;
+    &lt;h2&gt;Ready when you are.&lt;/h2&gt;
+    &lt;p&gt;&lt;a class="mote-btn" href="/signup"&gt;Create account&lt;/a&gt;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+  <section class="mote-band" style="border-radius: var(--mote-radius); padding-block: 1.5rem; margin-block: 1rem">
+    <div class="mote-container" style="text-align:center">
+      <strong>Ready when you are.</strong>
+      <p style="margin-block: 0.5rem"><a class="mote-btn" href="#top">Create account</a></p>
+      <small class="mote-muted">Accent tint by default — a status class re-tints the band.</small>
+    </div>
+  </section>
   <h3>Document layout</h3>
   <p>One class on <code>&lt;body&gt;</code> turns the landmarks you already write into the
     layout: <code>header</code> and <code>footer</code> span the page, a <code>nav</code>
@@ -594,10 +644,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>On <code>&lt;body&gt;</code> the shell includes page gutters, a pinned footer and
     content tracks that absorb wide content (<code>minmax(0, 1fr)</code>) — a wide
     table scrolls inside <code>main</code>, never the page. The nav rail is a
-    quiet vertical list by default. When you also use the sticky site header,
-    lift the rail and anchored content past it with one variable:</p>
+    quiet vertical list by default. When a sticky site header (<code>body &gt; header</code>)
+    exists, the rail top and the scroll padding for anchor jumps derive
+    themselves — nothing to set. Set <code>--mote-rail-top</code> only for
+    wrapped shells (<code>.mote-header</code>, which the landmark selector cannot
+    see) or a custom offset:</p>
   <pre><code>:root {
-  --mote-rail-top: 4.75rem;  /* clear the sticky header */
+  --mote-rail-top: 4.75rem;  /* wrapped shells only — landmarks do this for you */
 }
 </code></pre>
   <pre><code>&lt;body class="mote-doc"&gt;
@@ -755,18 +808,22 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <p>The status class tints the border.</p>
   </div>
   <p>Flush-top media (cover photos, thumbnails) — the one compositional
-    pattern cards don't ship, because it couples to padding:</p>
-  <pre><code>.card-media {
-  margin: -1.25rem -1.5rem 1rem;
-  overflow: clip;
-}
-
-.card-media img {
-  display: block;
-  width: 100%;
-  max-width: none;
-}
+    card pattern that ships as a class: <code>.mote-card-media</code> pulls
+    the media edge-to-edge and matches the card radius:</p>
+  <pre><code>&lt;article class="mote-card"&gt;
+  &lt;div class="mote-card-media"&gt;
+    &lt;img src="cover.jpg" alt=""&gt;
+  &lt;/div&gt;
+  &lt;h3&gt;Card title&lt;/h3&gt;
+&lt;/article&gt;
 </code></pre>
+  <article class="mote-card" style="max-width: 24rem">
+    <div class="mote-card-media">
+      <img src="https://picsum.photos/seed/mote-cover/480/240" alt="Cover photo example">
+    </div>
+    <h3 style="margin-block-start:0">Card title</h3>
+    <p>Media flush to the card edges, radius matched — one class.</p>
+  </article>
   <div class="mote-card">
     <h3 style="margin-block-start:0">Card title</h3>
     <p>A soft surface for grouped content — a border, a whisper of shadow, and nothing else
@@ -793,6 +850,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <span class="mote-badge mote-info">info</span>
     <span class="mote-badge mote-muted">muted</span>
   </p>
+  <p>Badges scale with their context — inside a heading they render at the
+    heading's size. That is usually right (a version pill grows with its
+    release heading); force a body-scale pill with an inline
+    <code>font-size</code> when it is not.</p>
 
   <h3>Avatars</h3>
   <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem):</p>
@@ -924,7 +985,7 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <table>
     <thead><tr><th>Consumer</th><th>Variants shown at</th></tr></thead>
     <tbody>
-      <tr><td>Notes</td><td><a href="#helpers">Helpers — notes</a></td></tr>
+      <tr><td>Notes</td><td><a href="#notes">Helpers — Notes and callouts</a></td></tr>
       <tr><td>Badges (gated)</td><td><a href="#components">Components — Badges</a> — declare their own status</td></tr>
       <tr><td>Toasts</td><td><a href="#components">Components — Toasts</a></td></tr>
       <tr><td>Spinners</td><td><a href="#components">Components — Skeletons and spinners</a></td></tr>
@@ -939,10 +1000,26 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <tbody>
       <tr><td><code>.mote-container</code></td><td>Centered page wrapper: <code>width: min(100% - 3rem, 70rem)</code></td></tr>
       <tr><td><code>.mote-muted</code></td><td>Dimmed secondary text</td></tr>
-      <tr><td><code>.mote-note</code> + status class</td><td>Tinted message surfaces</td></tr>
+      <tr><td><code>.mote-note</code> + status class</td><td>Tinted message surfaces — see <a href="#notes">Notes and callouts</a></td></tr>
+      <tr><td><code>.mote-row</code></td><td>Flex row with wrapping and a gap</td></tr>
+      <tr><td><code>.mote-push</code></td><td>Right-aligns its element in a row</td></tr>
+      <tr><td><code>.mote-brand</code></td><td>Quiet wordmark link: bold, foreground, no underline</td></tr>
+      <tr><td><code>.mote-display</code></td><td>Hero/error-code scale, per use via <code>--mote-display</code></td></tr>
+      <tr><td><code>.mote-num</code></td><td>Right-aligned tabular figures for table columns</td></tr>
+      <tr><td><code>.mote-hero</code></td><td>Centers content in the remaining viewport; <code>--mote-hero-offset</code></td></tr>
+      <tr><td><code>.mote-band</code></td><td>Full-bleed tinted section; reads <code>--mote-status</code></td></tr>
+      <tr><td><code>.mote-stack</code></td><td>Stretches form fields to full width; checkboxes stay native</td></tr>
+      <tr><td><code>.mote-sr-only</code> · <code>.mote-skip-link</code></td><td>Visually hidden; the skip link reveals as a fixed pill on keyboard focus</td></tr>
       <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
     </tbody>
   </table>
+  <h3 id="notes">Notes and callouts</h3>
+  <p>Two mechanisms cover note-like surfaces. <code>.mote-note</code> is the
+    callout box — the component for info panels, warnings, confirmations. A
+    <code>blockquote</code> with a status class is the quote treatment — a tinted
+    rule, quieter than a box. Both are content surfaces: they inherit status
+    from an ancestor, and both fall back to the accent when no status is
+    present:</p>
   <pre><code>&lt;div class="mote-note"&gt;Plain, accent tint&lt;/div&gt;
 &lt;div class="mote-note mote-success"&gt;Saved. Everything is fine.&lt;/div&gt;
 &lt;div class="mote-note mote-info"&gt;Heads up — a gentle fact.&lt;/div&gt;
@@ -968,7 +1045,7 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <a href="#elements">display text</a>, <a href="#elements">buttons</a>):</p>
   <pre><code>&lt;body class="mote-error"&gt;
   &lt;header&gt;Site header&lt;/header&gt;
-  &lt;main class="mote-container" class="mote-hero"&gt;
+  &lt;main class="mote-container mote-hero"&gt;
     &lt;p class="mote-display"&gt;404&lt;/p&gt;
     &lt;p&gt;This page drifted away.&lt;/p&gt;
     &lt;form class="mote-row" role="search" style="justify-content:center"&gt;
@@ -1070,7 +1147,7 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <a href="#layout">Card grids</a>):</p>
   <pre><code>&lt;div class="mote-grid" style="--mote-grid-min: 22rem"&gt;
   &lt;article class="mote-card"&gt;
-    &lt;div class="card-media"&gt;
+    &lt;div class="mote-card-media"&gt;
       &lt;img src="cover.jpg" alt=""&gt;
     &lt;/div&gt;
     &lt;h3&gt;Project title&lt;/h3&gt;
@@ -1081,6 +1158,202 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   &lt;/article&gt;
 &lt;/div&gt;
 </code></pre>
+
+  <h3>Login page</h3>
+  <p>A focused auth screen — <code>.mote-hero</code> centers the card in the
+    viewport, the card resets alignment so labels read normally inside the
+    centered hero, <code>.mote-stack</code> stretches fields, and
+    <code>.mote-row</code> + <code>.mote-push</code> split the remember-me line.
+    The full-width submit is the one page rule — the stack stretches fields,
+    not buttons:</p>
+  <pre><code>&lt;body&gt;
+  &lt;main class="mote-container mote-hero" style="--mote-container-max: 26rem"&gt;
+    &lt;form class="mote-card mote-stack"&gt;
+      &lt;h1&gt;Sign in&lt;/h1&gt;
+      &lt;p&gt;&lt;label for="email"&gt;Email&lt;/label&gt;
+        &lt;input id="email" type="email" required&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;label for="password"&gt;Password&lt;/label&gt;
+        &lt;input id="password" type="password" required&gt;&lt;/p&gt;
+      &lt;p class="mote-row"&gt;
+        &lt;label&gt;&lt;input type="checkbox"&gt; Remember me&lt;/label&gt;
+        &lt;a class="mote-push" href="/reset"&gt;Forgot password?&lt;/a&gt;
+      &lt;/p&gt;
+      &lt;p style="margin-block:0"&gt;
+        &lt;button type="submit" style="width:100%"&gt;Sign in&lt;/button&gt;
+      &lt;/p&gt;
+    &lt;/form&gt;
+    &lt;p class="mote-muted"&gt;No account? &lt;a href="/signup"&gt;Create one&lt;/a&gt;&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+</code></pre>
+  <h3>Marketing hero</h3>
+  <p><code>.mote-hero</code> fills the viewport — right for 404s and logins,
+    wrong for marketing, where the CTA must sit above the fold. A marketing
+    hero is a plain centered section; the closing call-to-action band is
+    <code>.mote-band</code> (<a href="#layout">Hero and bands</a>):</p>
+  <pre><code>&lt;main&gt;
+  &lt;section class="mote-container" style="text-align:center; padding-block:5rem 4rem"&gt;
+    &lt;span class="mote-badge mote-success"&gt;New — v0.8&lt;/span&gt;
+    &lt;h1 class="mote-display"&gt;Ship plain HTML&lt;/h1&gt;
+    &lt;p class="mote-muted"&gt;Zero classes required. Opt-in where semantics run out.&lt;/p&gt;
+    &lt;p&gt;
+      &lt;a class="mote-btn" href="/signup"&gt;Get started&lt;/a&gt;
+      &lt;a class="mote-ghost" href="/docs"&gt;Read the docs&lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section class="mote-band"&gt;
+    &lt;div class="mote-container" style="text-align:center"&gt;
+      &lt;h2&gt;Ready when you are.&lt;/h2&gt;
+      &lt;p&gt;&lt;a class="mote-btn" href="/signup"&gt;Create account&lt;/a&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+</code></pre>
+  <h3>Stat row</h3>
+  <p>A stats strip — cards in a grid, display-scale numbers with a per-use
+    <code>--mote-display</code>, muted labels:</p>
+  <pre><code>&lt;div class="mote-grid"&gt;
+  &lt;article class="mote-card"&gt;
+    &lt;p class="mote-display" style="--mote-display:2.25rem; margin-block:0"&gt;99.98%&lt;/p&gt;
+    &lt;p class="mote-muted" style="margin-block:0"&gt;Uptime, trailing 90 days&lt;/p&gt;
+  &lt;/article&gt;
+  &lt;article class="mote-card"&gt;
+    &lt;p class="mote-display" style="--mote-display:2.25rem; margin-block:0"&gt;214 ms&lt;/p&gt;
+    &lt;p class="mote-muted" style="margin-block:0"&gt;Median response&lt;/p&gt;
+  &lt;/article&gt;
+  &lt;article class="mote-card"&gt;
+    &lt;p class="mote-display" style="--mote-display:2.25rem; margin-block:0"&gt;0&lt;/p&gt;
+    &lt;p class="mote-muted" style="margin-block:0"&gt;Incidents this quarter&lt;/p&gt;
+  &lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+  <h3>Billing toggle</h3>
+  <p>The pricing-page idiom, CSS-only: hidden radios steer the prices with
+    <code>:checked ~</code> selectors. The radios must precede, as siblings,
+    every element they steer — they sit bare in <code>main</code>, not in a
+    <code>p</code> or <code>fieldset</code>. And <code>.mote-sr-only</code> is the
+    wrong way to hide them — it doubles as a skip link on keyboard focus — so
+    hide them yourself:</p>
+  <pre><code>&lt;style&gt;
+  main &gt; input[type="radio"] { position: absolute; opacity: 0; }
+  main &gt; label {
+    padding: var(--mote-control-pad, 0.5rem) 0.9rem;
+    border-radius: var(--mote-radius-sm);
+    cursor: pointer;
+  }
+  main &gt; input:focus-visible + label { box-shadow: var(--mote-focus-ring); }
+  #bill-monthly:checked + label,
+  #bill-yearly:checked + label {
+    background: var(--mote-accent);
+    color: var(--mote-on-accent);
+  }
+  .yearly { display: none; }
+  #bill-yearly:checked ~ * .monthly { display: none; }
+  #bill-yearly:checked ~ * .yearly { display: inline; }
+&lt;/style&gt;
+
+&lt;main class="mote-container"&gt;
+  &lt;input type="radio" name="bill" id="bill-monthly" checked&gt;
+  &lt;label for="bill-monthly"&gt;Monthly&lt;/label&gt;
+  &lt;input type="radio" name="bill" id="bill-yearly"&gt;
+  &lt;label for="bill-yearly"&gt;Yearly &lt;small class="mote-muted"&gt;−17%&lt;/small&gt;&lt;/label&gt;
+
+  &lt;section&gt;
+    &lt;span class="price"&gt;&lt;span class="monthly"&gt;$24&lt;/span&gt;&lt;span class="yearly"&gt;$20&lt;/span&gt;/mo&lt;/span&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+</code></pre>
+  <h3>Display pull-quote</h3>
+  <p>Editorial pull-quote — compose <code>blockquote</code> with
+    <code>.mote-display</code> on the quoted paragraph: the rule tints from the
+    blockquote, the attribution stays body-scale:</p>
+  <pre><code>&lt;blockquote&gt;
+  &lt;p class="mote-display" style="--mote-display: 1.75rem"&gt;
+    Quotes carry more weight when they are larger than the prose around them.
+  &lt;/p&gt;
+  &lt;cite&gt;— Every magazine, ever&lt;/cite&gt;
+&lt;/blockquote&gt;
+</code></pre>
+  <h3>Row hover</h3>
+  <p>mote ships zebra striping; attention-on-hover stays a page opinion.
+    One token-reading rule covers both themes:</p>
+  <pre><code>tbody tr:hover {
+  background: var(--mote-accent-soft);
+}
+</code></pre>
+  <h3>Feedback row</h3>
+  <p>The end-of-article "was this helpful?" — a row, a solid and a ghost
+    button, a pushed support link:</p>
+  <pre><code>&lt;p class="mote-row" style="margin-block-start:3rem"&gt;
+  &lt;span&gt;Was this page helpful?&lt;/span&gt;
+  &lt;button type="button"&gt;Yes&lt;/button&gt;
+  &lt;button type="button" class="mote-ghost"&gt;Not really&lt;/button&gt;
+  &lt;a class="mote-push" href="/support"&gt;Get support&lt;/a&gt;
+&lt;/p&gt;
+</code></pre>
+  <h2 id="tokens">Tokens</h2>
+  <p>Every knob in the library is a custom property. Page CSS that reads these
+    re-themes automatically — check for a token before writing a value. The
+    palette redefines itself per theme; the layout and density tokens are
+    inline defaults — set them per use, on the element or a selector. The
+    status contract (<code>--mote-status</code> / <code>--mote-status-soft</code>)
+    is covered in <a href="#helpers">Helpers — status classes</a>.</p>
+
+  <h3>Palette <span class="mote-muted">(light / dark)</span></h3>
+  <table>
+    <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-bg</code></td><td>#faf9f7 / #1c1a17</td><td>Page background, sticky table headers</td></tr>
+      <tr><td><code>--mote-surface</code></td><td>#f1eee7 / #262320</td><td>Cards, popovers, code blocks</td></tr>
+      <tr><td><code>--mote-fg</code></td><td>#2b2924 / #eae6de</td><td>Body text, <code>.mote-brand</code></td></tr>
+      <tr><td><code>--mote-muted</code></td><td>#716a60 / #a49c90</td><td>Secondary text, captions</td></tr>
+      <tr><td><code>--mote-border</code></td><td>#e6e0d4 / #3b362f</td><td>Rules, card edges, input borders</td></tr>
+      <tr><td><code>--mote-border-strong</code></td><td>mix(border 55%, fg)</td><td>Table header rules</td></tr>
+      <tr><td><code>--mote-accent</code></td><td>#6f5486 / #b8a1ca</td><td>Links, primary buttons, focus, badges</td></tr>
+      <tr><td><code>--mote-accent-deep</code></td><td>mix(accent, black 14%)<br>dark: white 14%</td><td>Ghost text, badge text fallback</td></tr>
+      <tr><td><code>--mote-accent-soft</code></td><td>accent 9%, <em>transparent</em></td><td>Ghost fills, subtle tints. Transparent by design — for opaque section tints use <code>.mote-band</code></td></tr>
+      <tr><td><code>--mote-success</code> · <code>--mote-warning</code> · <code>--mote-error</code> · <code>--mote-info</code></td><td>status palette<br>(soft variants: 10–12%, transparent)</td><td>Everything status-consuming, via the contract</td></tr>
+      <tr><td><code>--mote-on-accent</code></td><td>#fff / #241d28</td><td>Text on accent fills</td></tr>
+      <tr><td><code>--mote-on-status</code></td><td>bg</td><td>Text on status fills</td></tr>
+      <tr><td><code>--mote-selection</code></td><td>accent 18%, transparent</td><td><code>::selection</code></td></tr>
+      <tr><td><code>--mote-focus-ring</code></td><td>accent 32% ring</td><td><code>:focus-visible</code> everywhere</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Type, shape and motion</h3>
+  <table>
+    <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-font</code></td><td>Inter → system stack</td><td>Body text</td></tr>
+      <tr><td><code>--mote-font-mono</code></td><td>Commit Mono → ui-monospace</td><td>Code, <code>kbd</code>, <code>pre</code></td></tr>
+      <tr><td><code>--mote-line-height</code></td><td>1.65</td><td>Body text</td></tr>
+      <tr><td><code>--mote-tracking</code></td><td>-0.011em</td><td>Headings, display text</td></tr>
+      <tr><td><code>--mote-display</code></td><td>clamp(2.75rem, 1.5rem + 4vw, 5rem)</td><td><code>.mote-display</code> — set per use</td></tr>
+      <tr><td><code>--mote-radius</code></td><td>10px</td><td>Inputs, popovers, toasts</td></tr>
+      <tr><td><code>--mote-radius-sm</code></td><td>6px</td><td>Buttons, badges, notes</td></tr>
+      <tr><td><code>--mote-radius-lg</code></td><td>16px</td><td>Cards</td></tr>
+      <tr><td><code>--mote-border-width</code></td><td>1px</td><td>All borders</td></tr>
+      <tr><td><code>--mote-shadow</code> / <code>--mote-shadow-sm</code></td><td>soft / softer</td><td>Cards, popovers, dialogs</td></tr>
+      <tr><td><code>--mote-transition</code></td><td>150ms ease</td><td>Hovers, color changes</td></tr>
+      <tr><td><code>--mote-chevron</code></td><td>data-URI arrow</td><td><code>select</code> marker</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Layout and density <span class="mote-muted">(inline defaults — set per use)</span></h3>
+  <table>
+    <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-container-max</code></td><td>70rem</td><td><code>.mote-container</code> — 42rem reads like an article, 26rem like an auth card</td></tr>
+      <tr><td><code>--mote-grid-min</code></td><td>16rem</td><td><code>.mote-grid</code> — 22rem gives 3-wide pricing, 26rem 2-column content</td></tr>
+      <tr><td><code>--mote-avatar</code></td><td>2.5rem</td><td><code>.mote-avatar</code></td></tr>
+      <tr><td><code>--mote-cell-pad</code> / <code>--mote-cell-pad-inline</code></td><td>0.6rem / 0.8rem</td><td>Table cells</td></tr>
+      <tr><td><code>--mote-control-pad</code> / <code>--mote-control-pad-inline</code></td><td>0.5rem / 0.75rem<br>(buttons 1.1rem)</td><td>Inputs, selects, textareas, buttons, file inputs — one density scale for all controls</td></tr>
+      <tr><td><code>--mote-table-max</code></td><td>60vh</td><td><code>.mote-table-scroll</code> panel cap; sticky header engages once the wrapper scrolls</td></tr>
+      <tr><td><code>--mote-hero-offset</code></td><td>12rem</td><td><code>.mote-hero</code> — header/footer clearance</td></tr>
+      <tr><td><code>--mote-rail-top</code></td><td>auto (4.75rem with a sticky header)</td><td><code>.mote-doc</code> rails; set only for wrapped shells</td></tr>
+    </tbody>
+  </table>
 
   <h2 id="fonts">Fonts</h2>
   <p>mote declares font <em>stacks</em> only — it embeds nothing and requires nothing.

@@ -5,6 +5,68 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-10-22
+
+### Added
+
+- `.mote-band`: full-bleed tinted section — CTA bands, section dividers,
+  announcement strips. Opaque `color-mix()` (unlike `--mote-accent-soft`,
+  which is transparent and can vanish over dark backgrounds). Reads
+  `--mote-status`, so bands are content surfaces under the two-tier
+  principle.
+- `.mote-skip-link`: sr-only until keyboard focus, then a fixed pill.
+  Split from `.mote-sr-only`, which is now pure hiding — using sr-only to
+  hide toggle radios made them pop a skip-link pill on focus.
+
+### Changed
+
+- `.mote-card` normalizes `text-align: start` — form labels inside a card
+  read normally even when the card sits in a centered `.mote-hero`
+  (cards already zeroed first/last-child margins; this finishes the job).
+- Page footer navs (`body > footer nav ul`) render as quiet wrapped rows —
+  no bullets — matching the header's semantic treatment. No class needed.
+- File inputs use the density tokens (`--mote-control-pad`), so their
+  height matches sibling fields in a stack (was 41px vs 44px).
+- Labels wrapping checkboxes/radios get `cursor: pointer` — the label is
+  the click target. Scoped via `label:has()`; text-input labels untouched.
+
+### Fixed (docs — the bulk of this release, from a ten-agent build round)
+
+- **Tokens reference**: new section listing every `--mote-*` knob — palette,
+  type/shape/motion, layout/density — including the actual
+  `--mote-accent-soft` definition (9% *transparent* mix) and a pointer to
+  `.mote-band` for opaque tints. Nav pill added.
+- **Simple-page header snippet now shows the real composition**
+  (`.mote-container.mote-row` + `.mote-brand` + `.mote-push` inside the
+  header) — the old "no classes at all" snippet left the brand flush at
+  the viewport edge.
+- **Notes and callouts** section: `.mote-note` (shipped since 0.3.0, never
+  documented as a concept) framed alongside the `blockquote` + status
+  quote treatment. Cross-linked from Blockquote and the consumer map.
+- `.mote-num` documented (replaces the DIY `.num` page recipe);
+  `--mote-table-max` documented next to `.mote-table-scroll` (with the
+  sticky-engages-on-scroll note); `.mote-hero` + `--mote-hero-offset`
+  documented in Layout under "Hero and bands" — all previously findable
+  only by grepping the stylesheet.
+- `.mote-card-media` documented (replaces the DIY `.card-media` recipe and
+  the false "cards don't ship this" claim); live band, hero and card-media
+  examples added.
+- `--mote-rail-top`: docs now say it auto-derives from the sticky header —
+  set it only for wrapped shells (`.mote-header`).
+- File-input treatment, badge context-scaling, and label-cursor behavior
+  documented.
+- Seven new pattern recipes: login page, marketing hero (+ CTA band),
+  stat row, CSS-only billing toggle (with the sr-only-is-not-hiding
+  warning), display pull-quote, row hover, feedback row.
+- Docs page gets a `.mote-skip-link` (dogfooding the new class).
+
+### Evaluation
+
+- Fifth round: ten agents each built a real page (pricing, blog, login,
+  404, settings, dashboard, KB, landing, release notes, contact) against
+  v0.7.0 and reported DX honestly. 10/10 would-use-again, zero rendering
+  failures; every change above traces to that round.
+
 ## [0.7.0] - 2026-10-21
 
 ### Changed
@@ -424,6 +486,7 @@ Components:
 - Element gallery demo page (`demo.html`).
 
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
+[0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0
 [0.7.0]: https://gitlab.com/abmach/mote/compare/v0.6.1...v0.7.0
 [0.6.1]: https://gitlab.com/abmach/mote/compare/v0.6.0...v0.6.1
 [0.6.0]: https://gitlab.com/abmach/mote/compare/v0.5.1...v0.6.0

@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.7.0 · MIT
+ * v0.8.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -23,6 +23,9 @@
   border-radius: var(--mote-radius-lg);
   background: color-mix(in oklab, var(--mote-surface) 55%, var(--mote-bg));
   box-shadow: var(--mote-shadow-sm);
+  /* Cards normalize their content: alignment reads normally even when the
+     card sits inside a centered region (.mote-hero, centered sections). */
+  text-align: start;
 }
 
 :where(.mote-card) > :first-child {
@@ -31,6 +34,21 @@
 
 :where(.mote-card) > :last-child {
   margin-block-end: 0;
+}
+
+/* Band: a full-bleed tinted section — CTA bands, section dividers,
+   announcement strips. An opaque mix (unlike --mote-accent-soft, which is
+   transparent and can vanish over dark backgrounds), so it reads as a
+   deliberate section in both palettes. Content surfaces follow context:
+   a status class on an ancestor tints the band.
+
+     <section class="mote-band">
+       <div class="mote-container">…</div>
+     </section>
+*/
+.mote-band {
+  padding-block: 4rem;
+  background: color-mix(in oklab, var(--mote-status, var(--mote-accent)) 12%, var(--mote-bg));
 }
 
 /* ---------------------------------------------------------------------------
@@ -301,6 +319,17 @@ nav[aria-label="toc"] a:hover {
   margin-block-start: 3rem;
   padding-block: 1.5rem;
   border-block-start: var(--mote-border-width) solid var(--mote-border);
+}
+
+/* The page footer's nav is a quiet wrapped row — not pills like the
+   header. The landmark styles itself; no class needed. */
+:where(body > footer, .mote-footer) nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 /* ---------------------------------------------------------------------------

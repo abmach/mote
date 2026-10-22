@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.7.0 · MIT
+ * v0.8.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -406,6 +406,11 @@ label {
   font-weight: 500;
 }
 
+/* A label that wraps a checkbox or radio is the click target itself */
+:where(label:has(:is([type="checkbox"], [type="radio"]))) {
+  cursor: pointer;
+}
+
 fieldset {
   padding: 1rem 1.2rem;
   border: var(--mote-border-width) solid var(--mote-border);
@@ -473,7 +478,7 @@ select[multiple] {
 }
 
 [type="file"] {
-  padding: 0.4rem;
+  padding: var(--mote-control-pad, 0.5rem) var(--mote-control-pad-inline, 0.75rem);
   background: none;
   border-style: dashed;
 }
@@ -761,7 +766,8 @@ progress, meter {
   font-variant-numeric: tabular-nums;
 }
 
-.mote-sr-only {
+.mote-sr-only,
+.mote-skip-link {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -773,8 +779,11 @@ progress, meter {
   border: 0;
 }
 
-/* Skip link: sr-only until focused, then a fixed pill */
-.mote-sr-only:focus-visible {
+/* Skip link: sr-only until focused, then a fixed pill.
+   Use .mote-skip-link for the accessibility skip link;
+   use plain .mote-sr-only to hide things that must never
+   appear (radios driving CSS toggles, visually hidden labels). */
+.mote-skip-link:focus-visible {
   position: fixed;
   top: 1rem;
   left: 1rem;
