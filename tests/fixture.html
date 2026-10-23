@@ -134,6 +134,16 @@
       <article class="mote-card">a</article><article class="mote-card">b</article>
     </div>
 
+    <!-- Avatar radius, tabular figures, doc shell -->
+    <img id="t-avatar-sq" class="mote-avatar" alt=""
+      src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="--mote-avatar-radius: 0">
+    <p>Day <span id="t-tabular" class="mote-tabular">23</span> of the month</p>
+
+    <div class="mote-doc" style="grid-template-columns: 1fr">
+      <header id="t-doc-header">Doc shell header</header>
+      <main>Doc shell main</main>
+    </div>
+
     <!-- Print helpers, avatar, band pad -->
     <div id="t-printonly" class="mote-print-only">print only</div>
     <div id="t-noprint" class="mote-no-print">no print</div>
@@ -348,6 +358,23 @@
     t('overflowing nav actually scrolls', () =>
       $('t-nav-ul').scrollWidth > $('t-nav-ul').clientWidth
         ? ok() : fail('scrollWidth ' + $('t-nav-ul').scrollWidth + ' not wider'));
+
+    // ---- v0.10 additions ----
+    t('doc-shell header yields to its track (min-width: 0)', () =>
+      eq(gcs($('t-doc-header')).minWidth, '0px', 'min-width'));
+    t('avatar radius is a token (square covers)', () =>
+      eq(gcs($('t-avatar-sq')).borderRadius, '0px', 'radius'));
+    t('default avatars stay round', () =>
+      parseInt(gcs($('t-avatar')).borderRadius) >= 999 ? ok()
+        : fail('radius: ' + gcs($('t-avatar')).borderRadius));
+    t('.mote-tabular sets figures without alignment', () => {
+      const cs = gcs($('t-tabular'));
+      if (cs.fontVariantNumeric !== 'tabular-nums') return fail('variant: ' + cs.fontVariantNumeric);
+      return (cs.textAlign === 'start' || cs.textAlign === 'left')
+        ? ok() : fail('text-align: ' + cs.textAlign);
+    });
+    t('header nav pills never break mid-label', () =>
+      eq(gcs(document.querySelector('.mote-nav a')).whiteSpace, 'nowrap', 'white-space'));
 
     // ---- Landmarks ----
     t('header nav renders pills', () =>

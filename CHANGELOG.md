@@ -5,6 +5,53 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-10-23
+
+### Fixed
+
+- **`.mote-doc > header` was missing `min-width: 0`** (the shell gives it
+  to main, nav, and aside but not the header): a header carrying long nav
+  content pushed the *page* sideways at narrow viewports. Found by the
+  round-7 course builder; fixture-pinned.
+
+### Added
+
+- `.mote-tabular`: tabular figures without the right-alignment — day
+  numbers, headline balances, meta lines. `.mote-num` keeps
+  alignment + figures for table columns (tables already render tabular
+  numerals on every cell, so alignment is the column class's real job).
+  Five round-7 builds hit the old coupling.
+- `--mote-avatar-radius` (default 999px): square cover art and favicons
+  no longer fight the circular default — three round-7 builds overrode it
+  by hand.
+
+### Changed
+
+- Header nav pills never break mid-label (`white-space: nowrap`): the
+  pill row scrolls instead — three round-7 builds added this rule by
+  hand; deferred from round 6 as a recipe, three recurrences made it a
+  default.
+
+### Fixed (docs — round-7 findings)
+
+- Status classes are token carriers, not text colors — documented with
+  the tinted-text recipe (`color: var(--mote-success)`).
+- `.mote-stack` on a `<fieldset>` flattens the legend notch — documented.
+- Nav hints only exist while the pills overflow — documented.
+- New recipes: small indicator dots (skeleton `min-height`), grouped
+  messages (`.mote-media` + `aria-hidden` spacer), weekend columns
+  (row-tint-safe column shading), quiet captions.
+- `--mote-avatar-radius` and `.mote-tabular` in the token and class
+  tables.
+
+### Evaluation
+
+- Seventh round: ten agents built ten NEW page types (chat, job board,
+  calendar, recipe, transactions, lesson, search results, team, hotel,
+  podcast) against v0.9.1 on a faster builder model. 10/10
+  would-use-again, zero final-state rendering failures; every v0.9.x
+  feature verified in the wild by every agent that touched it.
+
 ## [0.9.1] - 2026-10-23
 
 ### Fixed
@@ -572,6 +619,7 @@ Components:
 [0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0
 [0.9.0]: https://gitlab.com/abmach/mote/compare/v0.8.0...v0.9.0
 [0.9.1]: https://gitlab.com/abmach/mote/compare/v0.9.0...v0.9.1
+[0.10.0]: https://gitlab.com/abmach/mote/compare/v0.9.1...v0.10.0
 [0.7.0]: https://gitlab.com/abmach/mote/compare/v0.6.1...v0.7.0
 [0.6.1]: https://gitlab.com/abmach/mote/compare/v0.6.0...v0.6.1
 [0.6.0]: https://gitlab.com/abmach/mote/compare/v0.5.1...v0.6.0

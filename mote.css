@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.9.1 · MIT
+ * v0.10.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -782,6 +782,14 @@ progress, meter {
 /* Numeric table column: right-align tabular figures */
 .mote-num {
   text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tabular figures without the right-alignment — day numbers, headline
+   figures, meta lines. Tables already render tabular numerals on every
+   cell; this is for figures outside them (or cells that must not align
+   end). */
+.mote-tabular {
   font-variant-numeric: tabular-nums;
 }
 

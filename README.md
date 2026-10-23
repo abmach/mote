@@ -100,6 +100,7 @@ The consequence: theming is a handful of variable overrides, and an inline tweak
 | `--mote-display` | `clamp(2.75rem, 1.5rem + 4vw, 5rem)` | | Display text scale (opt-in) |
 | `--mote-grid-min` | `16rem` | | Card grid minimum track width |
 | `--mote-avatar` | `2.5rem` | | Avatar size |
+| Avatar corners | `--mote-avatar-radius` (default 999px) — 0 for square covers and favicons |
 | `--mote-control-pad` | `0.5rem` | | Button/control vertical padding |
 | `--mote-cell-pad` | `0.6rem` | | Table cell vertical padding |
 | `--mote-shadow` / `--mote-shadow-sm` | warm diffuse | | Elevation |
@@ -161,6 +162,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Stacks | `.mote-stack` — vertical rhythm with `--mote-stack-gap`; fields full width, checkboxes 1em, works on any content |
 | Scrollable tables | `.mote-table-scroll` — sticky `thead`, no page scroll, no margin jump |
 | Numeric columns | `.mote-num` — right-aligned tabular figures |
+| Tabular figures | `.mote-tabular` — tabular numerals without the right-alignment (day numbers, meta lines) |
 | Sparse grids | `.mote-grid-sparse` — standalone auto-fit variant, collapses empty tracks |
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
 | Table of contents | `nav[aria-label="toc"]` — semantic, no class |

@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.9.1 · MIT
+ * v0.10.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -96,7 +96,9 @@ a:where(.mote-badge):hover {
 .mote-avatar {
   width: var(--mote-avatar, 2.5rem);
   height: var(--mote-avatar, 2.5rem);
-  border-radius: 999px;
+  /* Round by default (people); square cover art and favicons set
+     --mote-avatar-radius: 0 (or any corner value). */
+  border-radius: var(--mote-avatar-radius, 999px);
   object-fit: cover;
   border: var(--mote-border-width) solid var(--mote-border);
   box-shadow: var(--mote-shadow-sm);
@@ -263,6 +265,8 @@ a:where(.mote-badge):hover {
   display: inline-block;
   padding: 0.35rem 0.8rem;
   border-radius: 999px;
+  /* Pills never break mid-label; the row scrolls instead. */
+  white-space: nowrap;
   color: var(--mote-fg);
   text-decoration: none;
   transition: background var(--mote-transition), color var(--mote-transition);
@@ -660,7 +664,7 @@ html:where(:has(body > header)) {
   --mote-rail-top: 4.75rem;
 }
 
-.mote-doc > header { grid-row: 1; grid-column: 1 / -1; }
+.mote-doc > header { grid-row: 1; grid-column: 1 / -1; min-width: 0; }
 .mote-doc > footer { grid-row: 3; grid-column: 1 / -1; }
 
 .mote-doc > main { grid-row: 2; grid-column: 1; min-width: 0; }

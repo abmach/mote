@@ -229,7 +229,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>Numeric figures align automatically — mote sets
     <code>font-variant-numeric: tabular-nums</code> on every <code>td</code>.
     Right-align a whole column with the opt-in <code>.mote-num</code> class on
-    its cells:</p>
+    its cells; when you want the tabular figures without the alignment
+    (day numbers, headline figures, meta lines), use
+    <code>.mote-tabular</code> instead:</p>
   <pre><code>&lt;th class="mote-num"&gt;Price&lt;/th&gt;
 &lt;td class="mote-num"&gt;$24&lt;/td&gt;
 </code></pre>
@@ -254,6 +256,8 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     it on both parities):</p>
   <pre><code>&lt;tr aria-current="true"&gt;…&lt;/tr&gt;
 </code></pre>
+  <p>Captions center by default; a quiet left-aligned caption is one page
+    rule: <code>caption { text-align: start }</code>.</p>
   <table>
     <caption>Deliverables</caption>
     <thead><tr><th>File</th><th>Purpose</th></tr></thead>
@@ -282,7 +286,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     forms and lists: children space by <code>--mote-stack-gap</code>
     (default 1.25rem) with their block margins zeroed, fields stretch full
     width, checkboxes/radios stay at 1em. It stacks any content, not just
-    forms:</p>
+    forms. On a <code>&lt;fieldset&gt;</code> it flattens the native legend
+    notch — the legend renders as the first line inside the box, which
+    reads fine for most forms:</p>
   <pre><code>&lt;form class="mote-stack"&gt;
   &lt;p&gt;&lt;label for="name"&gt;Name&lt;/label&gt; &lt;input id="name" type="text"&gt;&lt;/p&gt;
 &lt;/form&gt;
@@ -719,7 +725,8 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     below — without it there is no line at all: zero-JS headers keep just
     the pills, and the cut pill is the overflow signal. With the snippet,
     the hairline appears only while the nav actually scrolls: a single
-    pill leaves nothing on the line.
+    pill leaves nothing on the line — and on wide viewports, where the
+    pills never overflow, there is nothing to see at all.
     The snippet's math is direction-agnostic; the gradients flip under
     <code>[dir="rtl"]</code>. Breadcrumbs need no class at all — mote
     styles the semantic pattern:</p>
@@ -891,7 +898,9 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     small print) still scale down with the em side.</p>
 
   <h3>Avatars</h3>
-  <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem):</p>
+  <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem);
+    corners via <code>--mote-avatar-radius</code> (default 999px — round for
+    people; square cover art and favicons set it to 0):</p>
   <pre><code>&lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Ada" alt="Ada Lovelace"&gt;
 &lt;img class="mote-avatar" style="--mote-avatar: 6rem" src="…" alt="Hero portrait"&gt;
 &lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Grace" alt="Grace Hopper"&gt;
@@ -926,6 +935,10 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     <span class="mote-spinner mote-muted" role="status"></span> muted:</p>
   <pre><code>&lt;span class="mote-spinner" role="status" aria-label="Loading"&gt;&lt;/span&gt;
 &lt;span class="mote-spinner mote-error" role="status" aria-label="Loading"&gt;&lt;/span&gt;
+</code></pre>
+  <p>Small indicator dots: the skeleton's 1em minimum is for content
+    placeholders — dots need one page rule:</p>
+  <pre><code>.dot { min-height: 0; width: 0.45rem; height: 0.45rem; border-radius: 50%; }
 </code></pre>
 
   <h3>Media objects</h3>
@@ -1016,6 +1029,10 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>No specificity to fight: restyle a status once and every note, badge and toast follows.
     Or set the variable inline — <code>style="--mote-status: rebeccapurple"</code> — on any
     status-consuming element.</p>
+  <p>Status classes are token carriers, not text colors: a plain
+    <code>mote-success</code> on a paragraph does not recolor its text.
+    For tinted text, write <code>color: var(--mote-success)</code> in
+    your page CSS — the tokens are yours to read.</p>
   <p>More than badges read the tokens. Each consumer now shows every variant
     exactly once, in its own section — follow the map:</p>
   <table>
@@ -1042,6 +1059,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>.mote-brand</code></td><td>Quiet wordmark link: bold, foreground, no underline</td></tr>
       <tr><td><code>.mote-display</code></td><td>Hero/error-code scale, per use via <code>--mote-display</code></td></tr>
       <tr><td><code>.mote-num</code></td><td>Right-aligned tabular figures — table columns or any figure block</td></tr>
+      <tr><td><code>.mote-tabular</code></td><td>Tabular figures without the alignment — day numbers, headline figures, meta lines</td></tr>
       <tr><td><code>.mote-hero</code></td><td>Centers content in the remaining viewport; <code>--mote-hero-offset</code></td></tr>
       <tr><td><code>.mote-band</code></td><td>Full-bleed tinted section; reads <code>--mote-status</code></td></tr>
       <tr><td><code>.mote-stack</code></td><td>Vertical rhythm with gap: children margin-zeroed, fields full width, checkboxes 1em — <code>--mote-stack-gap</code></td></tr>
@@ -1405,6 +1423,31 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;button type="submit"&gt;Search&lt;/button&gt;
 &lt;/form&gt;
 </code></pre>
+  <h3>Grouped messages</h3>
+  <p>Consecutive chat or comment messages from the same sender: repeat
+    <code>.mote-media</code> with an <code>aria-hidden</code> spacer the width of
+    the avatar, so follow-ups align under the text rather than the face:</p>
+  <pre><code>&lt;div class="mote-media"&gt;
+  &lt;img class="mote-avatar" src="a.png" alt="Ada"&gt;
+  &lt;div&gt;First message…&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="mote-media"&gt;
+  &lt;span aria-hidden="true" style="flex: 0 0 var(--mote-avatar, 2.5rem)"&gt;&lt;/span&gt;
+  &lt;div&gt;Follow-up from the same sender…&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+  <h3>Weekend columns</h3>
+  <p>Calendar grids: the zebra and the <code>tr[aria-current]</code> tint
+    paint on the row, so column shading must be a <code>background-image</code>
+    layered over the row color — a plain cell background would cover the
+    current-row tint:</p>
+  <pre><code>.weekend {
+  background-image: linear-gradient(
+    color-mix(in oklab, var(--mote-surface) 55%, transparent),
+    color-mix(in oklab, var(--mote-surface) 55%, transparent)
+  );
+}
+</code></pre>
   <h2 id="tokens">Tokens</h2>
   <p>Every knob in the library is a custom property. Page CSS that reads these
     re-themes automatically — check for a token before writing a value. The
@@ -1460,6 +1503,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>--mote-container-max</code></td><td>70rem</td><td><code>.mote-container</code> — 42rem reads like an article, 26rem like an auth card</td></tr>
       <tr><td><code>--mote-grid-min</code></td><td>16rem</td><td><code>.mote-grid</code> — 22rem gives 3-wide pricing, 26rem 2-column content</td></tr>
       <tr><td><code>--mote-avatar</code></td><td>2.5rem</td><td><code>.mote-avatar</code></td></tr>
+      <tr><td><code>--mote-avatar-radius</code></td><td>999px</td><td><code>.mote-avatar</code> — 0 for square covers/favicons</td></tr>
       <tr><td><code>--mote-cell-pad</code> / <code>--mote-cell-pad-inline</code></td><td>0.6rem / 0.8rem</td><td>Table cells</td></tr>
       <tr><td><code>--mote-control-pad</code> / <code>--mote-control-pad-inline</code></td><td>0.5rem / 0.75rem<br>(buttons 1.1rem)</td><td>Inputs, selects, textareas, buttons, file inputs — one density scale for all controls</td></tr>
       <tr><td><code>--mote-table-max</code></td><td>60vh</td><td><code>.mote-table-scroll</code> panel cap; sticky header engages once the wrapper scrolls</td></tr>
