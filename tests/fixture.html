@@ -333,6 +333,18 @@
         && gcsP($('t-nav'), '::before').opacity === '1'
           ? ok() : fail('data-nav: ' + $('t-nav').dataset.nav + ', ::before ' + gcsP($('t-nav'), '::before').opacity);
     });
+    t('nav hairline hides when nothing scrolls', () => {
+      $('t-nav').dataset.nav = '';
+      const hidden = gcs($('t-nav')).backgroundImage === 'none';
+      syncHints();  // restore the probe state
+      return hidden ? ok() : fail('hairline painted on empty data-nav');
+    });
+    t('nav hairline absent without the snippet', () => {
+      delete $('t-nav').dataset.nav;
+      const hidden = gcs($('t-nav')).backgroundImage === 'none';
+      syncHints();  // restore the probe state
+      return hidden ? ok() : fail('hairline painted with no data-nav at all');
+    });
     t('overflowing nav actually scrolls', () =>
       $('t-nav-ul').scrollWidth > $('t-nav-ul').clientWidth
         ? ok() : fail('scrollWidth ' + $('t-nav-ul').scrollWidth + ' not wider'));

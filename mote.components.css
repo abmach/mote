@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.9.0 · MIT
+ * v0.9.1 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -187,6 +187,14 @@ a:where(.mote-badge):hover {
   position: relative;
   flex: 1 1 0%;
   min-width: 0;
+}
+
+/* The hairline is snippet-driven: it paints only while the nav
+   actually scrolls. An empty data-nav means "nothing to scroll" —
+   no line under a single pill. No attribute at all means no snippet:
+   no line either; zero-JS headers keep just the pills, and the cut
+   pill is the overflow signal. */
+:where(body > header nav[data-nav]:not([data-nav=""]), .mote-nav[data-nav]:not([data-nav=""])) {
   background:
     linear-gradient(var(--mote-border), var(--mote-border)) left bottom / 100% 2px no-repeat;
 }

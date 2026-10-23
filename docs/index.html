@@ -716,7 +716,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     that bloom toward whichever side holds more content. Pure CSS cannot
     tell "at the start" from "nothing to scroll", so the fades key off a
     <code>data-nav</code> attribute kept current by the seven-line snippet
-    below — without it, the hairline and the cut pill are the whole hint.
+    below — without it there is no line at all: zero-JS headers keep just
+    the pills, and the cut pill is the overflow signal. With the snippet,
+    the hairline appears only while the nav actually scrolls: a single
+    pill leaves nothing on the line.
     The snippet's math is direction-agnostic; the gradients flip under
     <code>[dir="rtl"]</code>. Breadcrumbs need no class at all — mote
     styles the semantic pattern:</p>

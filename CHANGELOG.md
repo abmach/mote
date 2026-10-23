@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2026-10-23
+
+### Fixed
+
+- The header hairline is now fully snippet-driven: it paints only
+  while the nav actually scrolls. With the snippet, an empty
+  `data-nav` (a single pill, nothing to scroll) leaves the line gone;
+  without the snippet there is no line at all — zero-JS headers keep
+  just the pills, and the cut pill is the overflow signal. Both states
+  fixture-pinned.
+
 ## [0.9.0] - 2026-10-22
 
 ### Added
@@ -560,6 +571,7 @@ Components:
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
 [0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0
 [0.9.0]: https://gitlab.com/abmach/mote/compare/v0.8.0...v0.9.0
+[0.9.1]: https://gitlab.com/abmach/mote/compare/v0.9.0...v0.9.1
 [0.7.0]: https://gitlab.com/abmach/mote/compare/v0.6.1...v0.7.0
 [0.6.1]: https://gitlab.com/abmach/mote/compare/v0.6.0...v0.6.1
 [0.6.0]: https://gitlab.com/abmach/mote/compare/v0.5.1...v0.6.0
