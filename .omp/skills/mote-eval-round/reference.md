@@ -1,45 +1,64 @@
 # mote-eval-round — reference
 
-Verbatim templates and learned protocols. Fill the `{{PLACEHOLDERS}}` per
-round; change nothing else without cause.
+The dispatch procedure, templates, and learned protocols. The skill never
+hardcodes library facts — those are derived from the repo at dispatch
+time so the skill stays valid as mote evolves.
 
-## Context contract (dispatched to every builder)
+## Filling the context contract
+
+The builders' context block is assembled from the repo *at dispatch time*.
+Never reuse a previous round's copy; never write library claims from
+memory. Sources:
+
+1. `D:\Personal\mote\README.md` — positioning and claims (what the
+   library says it is), package shape, the zero-JS stance, the
+   feature/class/token tables. The context's *positioning paragraph*
+   is a compressed restatement of the README's own framing.
+2. `D:\Personal\mote\docs\index.html` — read the section **headings**
+   only; they give the reference map ("Tokens", "Notes and callouts",
+   "Hero and bands", "Gallery", "Patterns", …) that tells builders what
+   documentation exists and where. Write the map as it currently is.
+3. `D:\Personal\mote\CHANGELOG.md` — the current version's section. Its
+   bullets become the `{{NEW_FEATURES}}` list, each rephrased as a
+   behavior promise a browser can verify ("badges never grow past body
+   scale — measure one inside a heading").
+4. Any gotchas the docs currently warn about (case-sensitive selectors,
+   class-merge traps, placement rules) — list them verbatim-in-spirit
+   under "gotchas".
+
+What the derived context must always tell builders, whatever the current
+wording:
+
+- **Positioning**: what mote is and its class-optional claim, per the
+  README intro.
+- **Linking**: scratch path, both stylesheets linked relatively, core
+  first. (Scratch mechanics are below — stable.)
+- **Docs map**: the current section list with one clause each, plus the
+  paths to `docs/index.html`, `README.md`, and `tests/fixture.html`
+  ("the library's own regression page — a quick map of intended
+  behaviors").
+- **Design language**: semantic HTML first, `.mote-*` opt-in, and the
+  current fonts policy exactly as the docs' Fonts section states it.
+- **Status principle**: however the docs phrase status inheritance and
+  gating today — the builders must know which surfaces inherit and
+  which elements are gated, in the docs' current words.
+- **JavaScript policy**: "ONLY snippets documented on the docs page"
+  — name the snippets exactly as the docs currently document them
+  (the list grows release by release; do not enumerate from memory).
+- **Gotchas**: the current documented traps.
+
+## Stable contract skeleton (dispatch verbatim)
 
 ```
 # Goal
-Round {{N}} of hands-on evaluation of mote.css — a class-optional CSS
-library (zero classes required; opt-in `.mote-*` classes). Ten
-independent agents each build one realistic temporary webpage using the
-library, then report honestly on developer experience. This round tests
-v{{VERSION}}, which just shipped:
+Round {{N}} of hands-on evaluation of mote.css. Ten independent agents
+each build one realistic temporary webpage using the library, then
+report honestly on developer experience. This round tests v{{VERSION}},
+which just shipped:
 
-{{NEW_FEATURES — 4-7 bullets, one line each, phrased as behavior promises
-the builder can verify in a browser}}
+{{NEW_FEATURES}}
 
-# Library facts (canonical — do not re-derive)
-- Scratch workspace: `{{SCRATCH}}` — contains fresh copies of `mote.css`
-  (core, load first) and `mote.components.css` (opt-in, load second).
-  Link them RELATIVELY: `<link rel="stylesheet" href="mote.css">`.
-- Write your page to `<scratch>/<your-page>.html` and your report to
-  `<scratch>/report-<name>.md`. If either file already exists, overwrite
-  it completely.
-- Reference documentation: `D:\Personal\mote\docs\index.html` — read the
-  sections relevant to your brief BEFORE building. It has a full **Tokens**
-  reference, **Notes and callouts**, **Hero and bands**, a **Gallery**
-  (every element), and a **Patterns** section with copy-paste recipes.
-  Also: `D:\Personal\mote\README.md` and `D:\Personal\mote\tests\fixture.html`
-  (the library's own regression page — a quick map of intended behaviors).
-- Design language: semantic HTML first; `.mote-*` classes are opt-in
-  extras. Fonts: Inter + Commit Mono stacks — you MAY add the fontsource
-  CDN links the docs show, nothing else.
-- Two-tier status principle: content surfaces (notes, blockquotes,
-  progress, card borders, bands, display) inherit `--mote-status` from
-  ancestors; actions (buttons, ghosts) and content markers (badges) are
-  GATED — status class on the element itself.
-- JavaScript: ONLY documented snippets (theme toggle, toast, dialog, nav
-  scroll hints). CSS-only techniques preferred.
-- The semantic `aria-label` selectors (`pagination`, `breadcrumb`, `toc`)
-  match case-sensitively — copy exact lowercase.
+{{LIBRARY_FACTS — the block assembled per "Filling the context contract"}}
 
 # Contract (all agents)
 1. Read the relevant docs sections BEFORE writing markup. Check the
@@ -81,6 +100,17 @@ reached for.
 ## Verdict
 One sentence: would you reach for this library again for this kind of
 page?
+```
+
+Scratch mechanics (stable, part of every round):
+
+```
+- Scratch workspace: `{{OS-TEMP}}\mote-tmp\round{{N}}\` — contains fresh
+  copies of the two stylesheets. Link them RELATIVELY:
+  `<link rel="stylesheet" href="mote.css">`.
+- Write your page to `<scratch>/<your-page>.html` and your report to
+  `<scratch>/report-<name>.md`. If either file already exists,
+  overwrite it completely.
 ```
 
 ## Brief shape (one per agent)

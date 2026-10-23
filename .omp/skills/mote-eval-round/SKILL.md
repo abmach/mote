@@ -11,29 +11,35 @@ honestly. Rounds find real bugs, doc gaps, and design friction that review
 rounds miss; three rounds of fixes trace almost entirely to them.
 
 Read `skill://mote-eval-round/reference.md` before dispatching — it holds
-the verbatim context contract, report template, archetype pool, and the
-learned protocols (respawns, scratch rules). Do not
-improvise those pieces; they encode real failures.
+the dispatch procedure, report template, archetype pool, and the learned
+protocols (respawns, scratch rules). Do not improvise those pieces; they
+encode real failures.
 
 ## Flow
 
-1. **Pre-flight** (from reference.md):
+1. **Pre-flight** (details in reference.md):
    - Confirm the registry's `dist-tags.latest` matches the working copy
      (the round tests the *shipped* release, or the staged next one if
      the user says so).
    - Create `<os-temp>/mote-tmp/round<N>/` and copy the two stylesheets
      in fresh. Never put scratch inside the repo.
-2. **Pick archetypes** from the pool in reference.md — ten per round,
+2. **Derive the library facts from the repo** (reference.md, "Filling the
+   context contract"): read `README.md`, the docs section headings, and
+   the current version's `CHANGELOG.md` section. The builders' context is
+   built from what the repo says *today* — never from a previous round's
+   copy, never from memory. This keeps the skill valid as the library
+   evolves.
+3. **Pick archetypes** from the pool in reference.md — ten per round,
    never repeating any previous round's pages. Each brief names what the
-   page should exercise, including the current release's new features.
-3. **Dispatch** one `task` call with the shared context (reference.md
-   contract, filled in) + ten self-contained briefs, on the default
-   model.
-4. **Wait; respawn failures.** Provider TCP drops kill ~1 in 10 agents
+   page should exercise, including the current release's new features
+   (from the CHANGELOG bullets).
+4. **Dispatch** one `task` call with the filled context + ten
+   self-contained briefs, on the default model.
+5. **Wait; respawn failures.** Provider TCP drops kill ~1 in 10 agents
    mid-build — respawn with the same brief; keep completed results.
-5. **Gather** all ten reports; compile `EVALUATION-R<N>.md` in the repo
+6. **Gather** all ten reports; compile `EVALUATION-R<N>.md` in the repo
    root using the aggregate structure in reference.md.
-6. **Present** the summary and STOP. No fixes until the user says so.
+7. **Present** the summary and STOP. No fixes until the user says so.
    The evaluation file is deleted only when the round's fixes ship.
 
 ## Hard rules
