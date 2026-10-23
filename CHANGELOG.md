@@ -5,6 +5,78 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-10-22
+
+### Added
+
+- **`tests/fixture.html` — the regression fixture**: a self-checking page
+  loading the real committed stylesheets, with 54 assertions pinning the
+  principle invariants (two-tier gating, status inheritance, control
+  density, stack behavior, zebra-vs-`aria-current` order, skip-link states,
+  landmark styling, theme flip). Open it in any browser — the title shows
+  PASS or FAIL. Its first run caught two real bugs, both fixed in this
+  release.
+- `tr[aria-current]` current-row treatment: accent-soft tint that reads
+  over zebra (same vocabulary as nav pills and pagination). The fixture
+  asserts it on both parities.
+- `.mote-grid-sparse` is now standalone-complete (`display: grid` + gap) —
+  it was a columns-only modifier that silently rendered as a plain block
+  when used alone, as the README advertised it (fixture-caught).
+
+### Changed
+
+- **Badges never grow past body scale**: `font-size: min(0.8em, 0.8rem)` —
+  a pill inside a heading stays readable (three round-6 builds hit the old
+  heading-scale default), small contexts still scale down with the em side.
+- **`.mote-stack` is now a real stack**: flex column with
+  `--mote-stack-gap` (default 1.25rem) and zeroed child margins, so the
+  name is honest for any content — form rhythm is designed, not `<p>`
+  margin luck. Field stretching and the 1em checkbox/radio exception are
+  unchanged. The sr-only control rule inside stacks was strengthened to
+  beat the checkbox width rule on specificity.
+- **Header navs scroll instead of wrapping**: `body > header nav` /
+  `.mote-nav` pill rows stay one line at any width — a long section list
+  (the docs' own ten pills) scrolls inside the bar instead of pushing the
+  brand or the theme toggle to a second row. The scrollbar is hidden;
+  a hairline under the pills carries directional accent fades pinned to
+  the nav edges — they never float with scroll position. Pure CSS cannot
+  distinguish "at the start" from "nothing to scroll", so the fades key
+  off a `data-nav` attribute kept current by a seven-line documented
+  snippet (the theme-toggle precedent, including a webfont-load re-sync);
+  without it, the hairline and the
+  cut pill are the whole hint. Direction-agnostic snippet math; the
+  gradients flip under `[dir="rtl"]`.
+- Tokenized the hardcoded paddings: `--mote-grid-gap` (1.25rem) and
+  `--mote-band-pad` (4rem) — thin strips and matched split rhythms no
+  longer need hand-copied values.
+
+### Fixed (docs — round-6 build findings)
+
+- Band placement warning: inside `main.mote-container` a band bleeds only
+  to the container edge — the docs now say so (the one round-6 trap that
+  actually broke a build mid-flight)
+- `.mote-card` + `.mote-media` merge warning: the card's column direction
+  silently wins; nest instead.
+- `aria-label` case-sensitivity warning on the semantic selectors.
+- `.mote-num` widened: "table columns or any figure block".
+- Media-object default alignment (`flex-start`) documented.
+- Skip-link mechanism wording: clipped via `clip-path`, not `display: none`.
+- Badge and stack paragraphs rewritten for the new behavior; note-width
+  recipe added; three new token rows.
+- Six new pattern recipes: toolbar row, result rows, price line, post
+  actions, growing input, prominent search.
+- **`demo.html` merged into the docs page as the Gallery section** (every
+  input type, footnoted table, sample output) and deleted — one canonical
+  page, no drift risk. README and in-page links updated.
+
+### Evaluation
+
+- Sixth round: ten agents built ten NEW page types (forum, product,
+  status, checkout, inbox, gallery, profile, FAQ, poll, playlist) against
+  v0.8.0. 10/10 would-use-again, zero rendering failures; every v0.8.0
+  fix verified load-bearing. Asymmetric grid splits stay page CSS by
+  design (documented, not a gap).
+
 ## [0.8.0] - 2026-10-22
 
 ### Added
@@ -487,6 +559,7 @@ Components:
 
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
 [0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0
+[0.9.0]: https://gitlab.com/abmach/mote/compare/v0.8.0...v0.9.0
 [0.7.0]: https://gitlab.com/abmach/mote/compare/v0.6.1...v0.7.0
 [0.6.1]: https://gitlab.com/abmach/mote/compare/v0.6.0...v0.6.1
 [0.6.0]: https://gitlab.com/abmach/mote/compare/v0.5.1...v0.6.0

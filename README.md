@@ -158,12 +158,13 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Media objects | `.mote-media` — avatar/icon beside body (flex, last child grows) |
 | Display text | `.mote-display` — opt-in hero/error-code scale via `--mote-display` |
 | Content rows | `.mote-row` + `.mote-push` — flex row, right-align helper |
-| Stacked forms | `.mote-stack` — opt-in full-width fields, checkboxes stay 1em |
+| Stacks | `.mote-stack` — vertical rhythm with `--mote-stack-gap`; fields full width, checkboxes 1em, works on any content |
 | Scrollable tables | `.mote-table-scroll` — sticky `thead`, no page scroll, no margin jump |
 | Numeric columns | `.mote-num` — right-aligned tabular figures |
-| Sparse grids | `.mote-grid-sparse` — auto-fit variant, collapses empty tracks |
+| Sparse grids | `.mote-grid-sparse` — standalone auto-fit variant, collapses empty tracks |
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
 | Table of contents | `nav[aria-label="toc"]` — semantic, no class |
+| Current table row | `tr[aria-current]` — accent-tinted row, reads over zebra |
 | Footer baseline | `body > footer` — semantic top-border + padding; its `nav` renders as a quiet wrapped row |
 | Screen-reader helper | `.mote-sr-only` — pure hiding, never appears |
 | Skip link | `.mote-skip-link` — sr-only until keyboard focus, then a fixed pill |
@@ -172,10 +173,13 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |
 | Hero offset | `--mote-hero-offset` (default 12rem) — space for header/footer in `.mote-hero` |
 | Table max height | `--mote-table-max` (default 60vh) — `.mote-table-scroll` panel cap |
+| Stack gap | `--mote-stack-gap` (default 1.25rem) — `.mote-stack` vertical rhythm |
+| Grid gap | `--mote-grid-gap` (default 1.25rem) — `.mote-grid` / `.mote-grid-sparse` |
+| Band padding | `--mote-band-pad` (default 4rem) — `.mote-band`; 1rem for thin strips |
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
 | Cards | `.mote-card` — normalizes content: alignment reads start even inside centered regions |
-| Badges | `.mote-badge` — gated: status from the badge's own class, never inherited |
+| Badges | `.mote-badge` — gated: status from the badge's own class, never inherited; never grows past body scale |
 | Avatars | `.mote-avatar` |
 | Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |
 | Tooltips | `[popover].mote-tooltip` + `popovertarget` button |
@@ -197,7 +201,9 @@ animations become instant, on older engines.
 
 ## Demo
 
-Open [`docs/index.html`](docs/index.html) for the full live documentation, or [`docs/demo.html`](docs/demo.html) for a quick gallery of every styled element.
+Open [`tests/fixture.html`](tests/fixture.html) in any browser for the regression checks — the title shows PASS or FAIL.
+
+Open [`docs/index.html`](docs/index.html) for the full live documentation — it ends with a gallery of every styled element.
 
 ## License
 

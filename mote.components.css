@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.8.0 · MIT
+ * v0.9.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -47,7 +47,7 @@
      </section>
 */
 .mote-band {
-  padding-block: 4rem;
+  padding-block: var(--mote-band-pad, 4rem);
   background: color-mix(in oklab, var(--mote-status, var(--mote-accent)) 12%, var(--mote-bg));
 }
 
@@ -66,7 +66,9 @@
   display: inline-block;
   padding: 0.1rem 0.6rem;
   border-radius: 999px;
-  font-size: 0.8em;
+  /* Never past body scale: 0.8em inside a heading balloons,
+     so clamp it — small contexts still scale down. */
+  font-size: min(0.8em, 0.8rem);
   font-weight: 500;
   line-height: 1.4;
   background: var(--mote-accent-soft);
@@ -164,13 +166,89 @@ a:where(.mote-badge):hover {
   padding-block: 0.7rem;
 }
 
+/* Long navs scroll inside the bar — they never wrap to a second line
+   or push the rest of the row (brand, toggle) off it. min-width lets
+   the nav yield space before the surrounding row needs to. */
+:where(body > header nav, .mote-nav) {
+  /* basis 0 keeps the nav on the row's first line no matter how long
+     (line-breaking sees the unshrunk basis, so a content-sized basis
+     would push trailing controls to a second line); it then grows
+     into the free space and the pill row scrolls inside it. */
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+/* Long navs: basis 0 keeps the nav on the row's first line no matter
+   how long (line-breaking sees the unshrunk basis, so a content-sized
+   basis would push trailing controls to a second line); it then grows
+   into the free space and the pill row scrolls inside it. The nav also
+   carries the hairline under the pills and hosts the fade pseudos. */
+:where(body > header nav, .mote-nav) {
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  background:
+    linear-gradient(var(--mote-border), var(--mote-border)) left bottom / 100% 2px no-repeat;
+}
+
+/* Scroll hints: the hairline under the pills carries directional fades
+   that bloom toward whichever side holds more content. Pure CSS cannot
+   distinguish "scrolled to the start" from "nothing to scroll", so the
+   fades key off a data-nav attribute kept current by the seven-line
+   documented snippet (same opt-in pattern as the theme toggle).
+   Without it: the hairline and the cut pill are the whole hint.
+   The pseudos pin to the nav edges — the accent never floats inward,
+   whatever the scroll position. */
+:where(body > header nav, .mote-nav)::before,
+:where(body > header nav, .mote-nav)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 4rem;
+  height: 2px;
+  opacity: 0;
+  transition: opacity var(--mote-transition);
+  pointer-events: none;
+}
+
+:where(body > header nav, .mote-nav)::before {
+  inset-inline-start: 0;
+  background: linear-gradient(to left, transparent, color-mix(in oklab, var(--mote-accent) 55%, var(--mote-bg)) 40%);
+}
+
+:where(body > header nav, .mote-nav)::after {
+  inset-inline-end: 0;
+  background: linear-gradient(to right, transparent, color-mix(in oklab, var(--mote-accent) 55%, var(--mote-bg)) 40%);
+}
+
+:where(body > header nav[data-nav~="start"], nav.mote-nav[data-nav~="start"])::before,
+:where(body > header nav[data-nav~="end"], nav.mote-nav[data-nav~="end"])::after {
+  opacity: 1;
+}
+
+/* RTL: the logical anchors flip on their own; the gradients flip with them. */
+[dir="rtl"] :where(body > header nav, .mote-nav)::before {
+  background: linear-gradient(to right, transparent, color-mix(in oklab, var(--mote-accent) 55%, var(--mote-bg)) 40%);
+}
+
+[dir="rtl"] :where(body > header nav, .mote-nav)::after {
+  background: linear-gradient(to left, transparent, color-mix(in oklab, var(--mote-accent) 55%, var(--mote-bg)) 40%);
+}
+
 :where(body > header nav, .mote-nav) ul {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.25rem;
   padding: 0;
   margin: 0;
   list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+:where(body > header nav, .mote-nav) ul::-webkit-scrollbar {
+  display: none;
 }
 
 :where(body > header nav, .mote-nav) a {
@@ -703,7 +781,7 @@ nav[aria-label="toc"] :is(h2, h3) {
    Columns are computed from the container: as many as fit in 16rem. */
 .mote-grid {
   display: grid;
-  gap: 1.25rem;
+  gap: var(--mote-grid-gap, 1.25rem);
   /* Density is a variable, not a class API: --mote-grid-min: 22rem
      gives 3-wide pricing; 26rem gives 2-column content. */
   grid-template-columns: repeat(auto-fill, minmax(min(var(--mote-grid-min, 16rem), 100%), 1fr));
@@ -711,5 +789,7 @@ nav[aria-label="toc"] :is(h2, h3) {
 
 /* Sparse grids: collapse empty tracks (footers, short card rows) */
 .mote-grid-sparse {
+  display: grid;
+  gap: var(--mote-grid-gap, 1.25rem);
   grid-template-columns: repeat(auto-fit, minmax(min(var(--mote-grid-min, 16rem), 100%), 1fr));
 }

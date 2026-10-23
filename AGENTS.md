@@ -9,7 +9,8 @@ A tiny classless CSS framework: two committed stylesheets, zero dependencies, ze
 - package shape: css
 - build needed in CI: no — both CSS files ship exactly as committed
 - version stamps: `mote.css` and `mote.components.css` header stamps (vX.Y.Z · MIT)
-- files whitelist notes: ships `mote.css`, `mote.components.css`, `README.md`, `LICENSE`, `CHANGELOG.md`; `docs/`, `demo.html`, CI config stay out
+- files whitelist notes: ships `mote.css`, `mote.components.css`, `README.md`, `LICENSE`, `CHANGELOG.md`; `docs/`, `tests/`, CI config stay out
+- regression gate: `tests/fixture.html` must show all assertions green (page title = PASS) before any tag — any browser, headless is fine
 - CDN verify URLs:
   - `https://cdn.jsdelivr.net/npm/mote.css@X.Y.Z/mote.css`
   - `https://cdn.jsdelivr.net/npm/mote.css@X.Y.Z/mote.components.css`

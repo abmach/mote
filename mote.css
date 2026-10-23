@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.8.0 · MIT
+ * v0.9.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -396,6 +396,13 @@ tbody tr:nth-child(even) {
   background: color-mix(in oklab, var(--mote-surface) 55%, transparent);
 }
 
+/* The current row — same aria-current vocabulary as nav pills and
+   pagination. Opt-in via the attribute; accent-soft reads over zebra
+   because this rule follows it in source order. */
+tbody tr[aria-current] {
+  background: var(--mote-accent-soft);
+}
+
 /* ---------------------------------------------------------------------------
  * 8. Forms & buttons
  * ------------------------------------------------------------------------- */
@@ -684,8 +691,20 @@ progress, meter {
   text-align: center;
 }
 
-/* Stacked forms: stretch fields, keep checkboxes/radios compact.
-   An opt-in alternative to the page-global width: 100% recipe. */
+/* Stack: a vertical rhythm for forms and lists — gap drives the
+   spacing, children's block margins are zeroed, fields stretch full
+   width while checkboxes/radios stay at 1em. Works on any content;
+   --mote-stack-gap tunes it. */
+.mote-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mote-stack-gap, 1.25rem);
+}
+
+.mote-stack > * {
+  margin-block: 0;
+}
+
 .mote-stack :is(input, select, textarea, progress, meter) {
   width: 100%;
 }
@@ -694,7 +713,7 @@ progress, meter {
   width: 1em;
 }
 
-.mote-stack :is(input, select, textarea):where(.mote-sr-only) {
+.mote-stack .mote-sr-only:is(input, select, textarea) {
   width: 1px;
 }
 

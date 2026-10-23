@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mote.css — regression fixture</title>
+  <link rel="stylesheet" href="../mote.css">
+  <link rel="stylesheet" href="../mote.components.css">
+  <style>
+    /* Fixture-local layout glue only — never a style assertion target */
+    .probe-grid { width: 60rem; max-width: 100%; }
+    #t-nav::before, #t-nav::after { transition: none; }
+  </style>
+</head>
+<body>
+  <a id="t-skip" class="mote-skip-link" href="#results">Skip to results</a>
+  <header class="mote-header">
+    <div class="mote-container mote-row">
+      <a class="mote-brand" href="#results">mote.css — regression fixture</a>
+      <nav class="mote-nav" aria-label="Sections">
+        <ul><li><a href="#results" aria-current="page">Results</a></li></ul>
+      </nav>
+      <button class="mote-push" type="button">Spacer</button>
+    </div>
+  </header>
+
+  <main class="mote-container">
+    <h1>Regression fixture</h1>
+    <p>Every feature with one probe; every principle as an assertion.
+      Open in any browser — the table below is the verdict.</p>
+
+    <h2 id="results">Results</h2>
+    <p id="summary" class="mote-note">Running…</p>
+    <table>
+      <caption>Assertion results</caption>
+      <thead><tr><th>Check</th><th>Result</th><th>Detail</th></tr></thead>
+      <tbody id="results-body"></tbody>
+    </table>
+
+    <h2>Probes</h2>
+
+    <!-- Two-tier: gated actions and markers inside a themed section -->
+    <section id="t-gated" class="mote-error">
+      <span id="t-badge-plain" class="mote-badge">plain</span>
+      <span id="t-badge-error" class="mote-badge mote-error">error</span>
+      <span id="t-badge-default" class="mote-badge mote-default">forced</span>
+      <button id="t-btn-plain" type="button">Plain</button>
+      <button id="t-btn-error" class="mote-error" type="button">Delete</button>
+      <a id="t-ghost-plain" class="mote-ghost" href="#results">Ghost</a>
+      <a id="t-ghost-error" class="mote-ghost mote-error" href="#results">Ghost err</a>
+      <div id="t-note-inherit" class="mote-note">inherits</div>
+      <progress id="t-progress-inherit" value="50" max="100"></progress>
+      <p id="t-display-inherit" class="mote-display">404</p>
+      <div id="t-band-inherit" class="mote-band" style="--mote-band-pad: 1rem"></div>
+    </section>
+    <div id="t-reset" class="mote-reset mote-error">
+      <span id="t-badge-reset" class="mote-badge">reset</span>
+    </div>
+
+    <!-- Neutral reference probes -->
+    <section id="t-neutral">
+      <span id="t-badge-body" class="mote-badge">body</span>
+      <button id="t-btn-neutral" type="button">Neutral</button>
+      <a id="t-ghost-neutral" class="mote-ghost" href="#results">Ghost</a>
+      <div id="t-note-plain" class="mote-note">plain</div>
+      <div id="t-note-error" class="mote-note mote-error">explicit</div>
+      <progress id="t-progress-neutral" value="50" max="100"></progress>
+      <div id="t-band-plain" class="mote-band" style="--mote-band-pad: 1rem"></div>
+      <div id="t-card-plain" class="mote-card">Plain card</div>
+    </section>
+
+    <!-- Badge scaling -->
+    <h1 id="t-h1">Heading <span id="t-badge-in-h1" class="mote-badge">v1</span></h1>
+    <p><small><span id="t-badge-small" class="mote-badge">s</span> small context</small></p>
+
+    <!-- Stack -->
+    <div id="t-stack" class="mote-stack">
+      <p id="t-stack-p">stacked paragraph</p>
+      <label><input id="t-stack-cb" type="checkbox"> checkbox</label>
+      <label><input id="t-stack-sr" type="checkbox" class="mote-sr-only"> hidden control</label>
+      <input id="t-stack-input" type="text">
+    </div>
+
+    <!-- Tables -->
+    <div id="t-scroll" class="mote-table-scroll">
+      <table id="t-table-in-scroll">
+        <tbody>
+          <tr id="t-row1"><td>one</td></tr>
+          <tr id="t-row2"><td>two</td></tr>
+          <tr id="t-row3" aria-current="true"><td>three</td></tr>
+          <tr id="t-row4" aria-current="true"><td>four</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="t-scroll-2" class="mote-table-scroll" style="--mote-table-max: 200px">
+      <table><tbody><tr><td>x</td></tr></tbody></table>
+    </div>
+    <table id="t-plain-table"><tbody><tr><td id="t-num" class="mote-num">1,024</td></tr></tbody></table>
+
+    <!-- Card alignment, hero, media -->
+    <div id="t-centered" style="text-align: center">
+      <article id="t-card-align" class="mote-card">Aligned card</article>
+    </div>
+    <div id="t-hero" class="mote-hero" style="--mote-hero-offset: calc(100svh - 10rem)">Hero probe</div>
+    <div id="t-media" class="mote-media"><span>side</span><div id="t-media-body">grows</div></div>
+
+    <!-- Skip link states (probed by script) -->
+    <span id="t-sronly" class="mote-sr-only" tabindex="0">sr-only</span>
+
+    <!-- Controls -->
+    <form id="t-controls" class="mote-row" onsubmit="return false">
+      <label id="t-label-text" for="t-text">Field</label>
+      <input id="t-text" type="text">
+      <input id="t-file" type="file">
+      <button id="t-button" type="button">Go</button>
+      <button id="t-dense" type="button" style="--mote-control-pad: 0.1rem">Dense</button>
+    </form>
+    <label id="t-label-cb"><input type="checkbox"> pointer label</label>
+
+    <!-- Nav scroll -->
+    <div id="t-navwrap" style="width: 220px; display: flex; gap: 1rem">
+      <nav class="mote-nav" id="t-nav"><ul id="t-nav-ul">
+        <li><a href="#results">One</a></li><li><a href="#results">Two</a></li>
+        <li><a href="#results">Three</a></li><li><a href="#results">Four</a></li>
+        <li><a href="#results">Five</a></li><li><a href="#results">Six</a></li>
+        <li><a href="#results">Seven</a></li><li><a href="#results">Eight</a></li>
+      </ul></nav>
+    </div>
+
+    <!-- Grids -->
+    <div id="t-grid" class="mote-grid probe-grid"><article class="mote-card">one</article></div>
+    <div id="t-grid-sparse" class="mote-grid-sparse probe-grid"><article class="mote-card">one</article></div>
+    <div id="t-grid-gap" class="mote-grid probe-grid" style="--mote-grid-gap: 2rem">
+      <article class="mote-card">a</article><article class="mote-card">b</article>
+    </div>
+
+    <!-- Print helpers, avatar, band pad -->
+    <div id="t-printonly" class="mote-print-only">print only</div>
+    <div id="t-noprint" class="mote-no-print">no print</div>
+    <img id="t-avatar" class="mote-avatar" alt=""
+      src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="--mote-avatar: 3rem">
+    <section id="t-band-strip" class="mote-band" style="--mote-band-pad: 1rem">Strip</section>
+  </main>
+
+  <footer>
+    <div class="mote-container">
+      <nav aria-label="footer">
+        <ul id="t-footer-nav"><li><a href="#results">GitLab</a></li><li><a href="#results">npm</a></li></ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    'use strict';
+    const gcs = (el) => getComputedStyle(el);
+    const gcsP = (el, sel) => getComputedStyle(el, sel);
+    const ok = () => '';
+    const fail = (m) => m;
+    const eq = (a, b, what) => (a === b ? ok() : `${what || 'values'} differ: ${a} vs ${b}`);
+    const neq = (a, b, what) => (a !== b ? ok() : `${what || 'values'} identical: ${a}`);
+    const $ = (id) => document.getElementById(id);
+    // Same logic as the documented snippet, scoped to the probe nav
+    const hintUl = $('t-nav-ul');
+    const syncHints = () => hintUl.parentElement.dataset.nav =
+      (hintUl.scrollLeft > 1 ? 'start ' : '') +
+      (hintUl.scrollLeft + hintUl.clientWidth < hintUl.scrollWidth - 1 ? 'end' : '');
+    hintUl.addEventListener('scroll', syncHints, { passive: true });
+    syncHints();
+
+    const out = [];
+    function t(name, fn) {
+      try { const msg = fn(); out.push({ name, pass: !msg, msg: msg || '' }); }
+      catch (e) { out.push({ name, pass: false, msg: e.message }); }
+    }
+
+    // ---- Two-tier principle: actions and markers are gated ----
+    t('plain badge stays accent inside error ancestor', () =>
+      eq(gcs($('t-badge-plain')).color, gcs($('t-badge-body')).color, 'colors'));
+    t('gated badge tints from its own class', () =>
+      neq(gcs($('t-badge-error')).color, gcs($('t-badge-plain')).color, 'colors'));
+    t('.mote-default forces accent through context', () =>
+      eq(gcs($('t-badge-default')).color, gcs($('t-badge-body')).color, 'colors'));
+    t('.mote-reset clears inherited status', () =>
+      eq(gcs($('t-badge-reset')).color, gcs($('t-badge-body')).color, 'colors'));
+    t('plain button stays accent inside error ancestor', () =>
+      eq(gcs($('t-btn-plain')).backgroundColor, gcs($('t-btn-neutral')).backgroundColor, 'backgrounds'));
+    t('gated button tints from its own class', () =>
+      neq(gcs($('t-btn-error')).backgroundColor, gcs($('t-btn-plain')).backgroundColor, 'backgrounds'));
+    t('plain ghost stays accent inside error ancestor', () =>
+      eq(gcs($('t-ghost-plain')).color, gcs($('t-ghost-neutral')).color, 'colors'));
+    t('gated ghost tints from its own class', () =>
+      neq(gcs($('t-ghost-error')).color, gcs($('t-ghost-plain')).color, 'colors'));
+
+    // ---- Two-tier principle: content surfaces inherit ----
+    t('note inherits status from ancestor', () =>
+      eq(gcs($('t-note-inherit')).borderLeftColor, gcs($('t-note-error')).borderLeftColor, 'border colors'));
+    t('inherited note differs from plain note', () =>
+      neq(gcs($('t-note-inherit')).borderLeftColor, gcs($('t-note-plain')).borderLeftColor, 'border colors'));
+    t('progress inherits status from ancestor', () =>
+      neq(gcs($('t-progress-inherit')).accentColor, gcs($('t-progress-neutral')).accentColor, 'accent colors'));
+    t('display reads inherited status', () =>
+      eq(gcs($('t-display-inherit')).color, gcs($('t-note-error')).borderLeftColor, 'status color'));
+    t('band inherits status from ancestor', () =>
+      neq(gcs($('t-band-inherit')).backgroundColor, gcs($('t-band-plain')).backgroundColor, 'backgrounds'));
+
+    // ---- Badge scale clamp (v0.9.0) ----
+    t('badge clamps to body scale inside headings', () =>
+      eq(gcs($('t-badge-in-h1')).fontSize, gcs($('t-badge-body')).fontSize, 'font sizes'));
+    t('badge still scales down in small contexts', () =>
+      parseFloat(gcs($('t-badge-small')).fontSize) < parseFloat(gcs($('t-badge-body')).fontSize)
+        ? ok() : fail('small-context badge not smaller'));
+
+    // ---- Stack (v0.9.0) ----
+    t('stack is a flex column with gap rhythm', () => {
+      const s = gcs($('t-stack'));
+      return eq(s.display, 'flex', 'display') || eq(s.flexDirection, 'column', 'direction') ||
+        eq(s.rowGap, '20px', 'gap');
+    });
+    t('stack zeroes child block margins', () =>
+      eq(gcs($('t-stack-p')).marginBlock, '0px', 'margin'));
+    t('stack stretches fields to full width', () =>
+      eq(Math.round($('t-stack-input').getBoundingClientRect().width),
+        Math.round($('t-stack').getBoundingClientRect().width), 'widths'));
+    t('stack keeps checkboxes at 1em', () =>
+      eq(gcs($('t-stack-cb')).width, '16px', 'width'));
+    t('stack keeps sr-only controls at 1px', () =>
+      eq(gcs($('t-stack-sr')).width, '1px', 'width'));
+
+    // ---- Tables ----
+    t('aria-current row beats zebra on odd rows', () =>
+      neq(gcs($('t-row3')).backgroundColor, gcs($('t-row1')).backgroundColor, 'backgrounds'));
+    t('aria-current row beats zebra on even rows', () =>
+      neq(gcs($('t-row4')).backgroundColor, gcs($('t-row2')).backgroundColor, 'backgrounds'));
+    t('aria-current tint is consistent across parities', () =>
+      eq(gcs($('t-row3')).backgroundColor, gcs($('t-row4')).backgroundColor, 'backgrounds'));
+    t('zebra still applies to plain even rows', () =>
+      neq(gcs($('t-row2')).backgroundColor, gcs($('t-row1')).backgroundColor, 'backgrounds'));
+    t('scroll wrapper overflows horizontally', () =>
+      eq(gcs($('t-scroll')).overflowX, 'auto', 'overflow-x'));
+    t('--mote-table-max caps the panel', () =>
+      eq(gcs($('t-scroll-2')).maxHeight, '200px', 'max-height'));
+    t('scroll wrapper switches to separate borders', () =>
+      eq(gcs($('t-table-in-scroll')).borderCollapse, 'separate', 'collapse'));
+    t('plain tables stay collapsed', () =>
+      eq(gcs($('t-plain-table')).borderCollapse, 'collapse', 'collapse'));
+    t('.mote-num right-aligns tabular figures', () => {
+      const n = gcs($('t-num'));
+      return (n.textAlign === 'end' || n.textAlign === 'right')
+        ? eq(n.fontVariantNumeric, 'tabular-nums', 'numeric variant')
+        : fail('text-align: ' + n.textAlign);
+    });
+
+    // ---- Cards, hero, media ----
+    t('card normalizes alignment inside centered parent', () =>
+      eq(gcs($('t-card-align')).textAlign, 'start', 'text-align'));
+    t('hero min-height follows the offset formula', () =>
+      eq(gcs($('t-hero')).minHeight, '160px', 'min-height'));
+    t('hero centers its content', () =>
+      eq(gcs($('t-hero')).justifyContent, 'center', 'justify-content'));
+    t('media object aligns rows to flex-start', () =>
+      (gcs($('t-media')).alignItems === 'flex-start' || gcs($('t-media')).alignItems === 'start')
+        ? ok() : fail('align-items: ' + gcs($('t-media')).alignItems));
+    t('media object grows its last child', () =>
+      parseInt(gcs($('t-media-body')).flexGrow, 10) >= 1 ? ok()
+        : fail('flex-grow: ' + gcs($('t-media-body')).flexGrow));
+
+    // ---- Skip link and sr-only ----
+    t('skip link is hidden at rest', () => {
+      const s = gcs($('t-skip'));
+      return eq(s.position, 'absolute', 'position') || eq(s.width, '1px', 'width') ||
+        eq(s.clipPath, 'inset(50%)', 'clip');
+    });
+    t('skip link becomes a fixed pill on focus', () => {
+      const skip = document.querySelector('.mote-skip-link');
+      skip.focus();
+      const p = gcs(skip).position;
+      skip.blur();
+      return eq(p, 'fixed', 'position');
+    });
+    t('sr-only never reveals on focus', () => {
+      const sr = $('t-sronly');
+      sr.focus();
+      const w = gcs(sr).width;
+      sr.blur();
+      return eq(w, '1px', 'width');
+    });
+
+    // ---- Control density ----
+    t('file input matches text input height', () =>
+      Math.abs($('t-file').getBoundingClientRect().height - $('t-text').getBoundingClientRect().height) < 1
+        ? ok() : fail('heights differ'));
+    t('button matches input height', () =>
+      Math.abs($('t-button').getBoundingClientRect().height - $('t-text').getBoundingClientRect().height) < 1
+        ? ok() : fail('heights differ'));
+    t('--mote-control-pad shrinks controls', () =>
+      $('t-dense').getBoundingClientRect().height < $('t-button').getBoundingClientRect().height - 8
+        ? ok() : fail('dense button not smaller'));
+    t('checkbox labels show pointer cursor', () =>
+      eq(gcs($('t-label-cb')).cursor, 'pointer', 'cursor'));
+    t('text-input labels keep default cursor', () =>
+      neq(gcs($('t-label-text')).cursor, 'pointer', 'cursor'));
+    t('--mote-avatar sizes avatars', () =>
+      eq(Math.round($('t-avatar').getBoundingClientRect().width), 48, 'width'));
+    t('--mote-band-pad tunes bands', () =>
+      eq(gcs($('t-band-strip')).paddingBlock, '16px', 'padding'));
+
+    // ---- Nav scroll ----
+    t('nav yields space in rows (min-width: 0)', () =>
+      eq(gcs($('t-nav')).minWidth, '0px', 'min-width'));
+    t('nav stays on the first line (flex-basis: 0)', () =>
+      ['0px', '0%'].includes(gcs($('t-nav')).flexBasis)
+        ? ok() : fail('flex-basis: ' + gcs($('t-nav')).flexBasis));
+    t('nav pill row never wraps', () =>
+      eq(gcs($('t-nav-ul')).flexWrap, 'nowrap', 'wrap'));
+    t('nav pill row scrolls horizontally', () =>
+      eq(gcs($('t-nav-ul')).overflowX, 'auto', 'overflow-x'));
+    t('nav carries the hairline under the pills', () =>
+      gcs($('t-nav')).backgroundImage.includes('linear-gradient')
+        ? ok() : fail('no hairline layer'));
+    t('nav fades mark the overflow side at rest', () => {
+      syncHints();
+      return ($('t-nav').dataset.nav || '').includes('end')
+        && gcsP($('t-nav'), '::after').opacity === '1'
+        && gcsP($('t-nav'), '::before').opacity === '0'
+          ? ok() : fail('data-nav: ' + $('t-nav').dataset.nav +
+            ', ::after ' + gcsP($('t-nav'), '::after').opacity +
+            ', ::before ' + gcsP($('t-nav'), '::before').opacity);
+    });
+    t('nav fades track scrolling both ways', () => {
+      $('t-nav-ul').scrollLeft = 40;
+      syncHints();
+      return ($('t-nav').dataset.nav || '').includes('start')
+        && gcsP($('t-nav'), '::before').opacity === '1'
+          ? ok() : fail('data-nav: ' + $('t-nav').dataset.nav + ', ::before ' + gcsP($('t-nav'), '::before').opacity);
+    });
+    t('overflowing nav actually scrolls', () =>
+      $('t-nav-ul').scrollWidth > $('t-nav-ul').clientWidth
+        ? ok() : fail('scrollWidth ' + $('t-nav-ul').scrollWidth + ' not wider'));
+
+    // ---- Landmarks ----
+    t('header nav renders pills', () =>
+      parseFloat(gcs(document.querySelector('.mote-nav a')).borderRadius) > 0
+        ? ok() : fail('no radius on header nav link'));
+    t('footer nav renders a quiet row', () => {
+      const ul = gcs($('t-footer-nav'));
+      return eq(ul.display, 'flex', 'display') || eq(ul.listStyleType, 'none', 'list-style');
+    });
+    t('footer nav links are not pills', () =>
+      eq(gcs(document.querySelector('#t-footer-nav a')).borderRadius, '0px', 'radius'));
+    t('site header is sticky', () =>
+      eq(gcs(document.querySelector('.mote-header')).position, 'sticky', 'position'));
+
+    // ---- Grids ----
+    const tracks = (el) => gcs(el).gridTemplateColumns.split(' ').filter(v => v !== '0px' && v !== '').length;
+    t('grid auto-fills multiple tracks', () =>
+      tracks($('t-grid')) >= 2 ? ok() : fail('tracks: ' + gcs($('t-grid')).gridTemplateColumns));
+    t('sparse grid collapses empty tracks', () =>
+      eq(tracks($('t-grid-sparse')), 1, 'tracks'));
+    t('--mote-grid-gap tunes grids', () =>
+      eq(gcs($('t-grid-gap')).rowGap, '32px', 'gap'));
+
+    // ---- Print helpers ----
+    t('.mote-print-only hides on screen', () =>
+      eq(gcs($('t-printonly')).display, 'none', 'display'));
+    t('.mote-no-print stays visible on screen', () =>
+      neq(gcs($('t-noprint')).display, 'none', 'display'));
+
+    // ---- Theme flip ----
+    t('data-theme flips the palette', () => {
+      document.documentElement.dataset.theme = 'light';
+      const light = gcs(document.body).backgroundColor;
+      document.documentElement.dataset.theme = 'dark';
+      const dark = gcs(document.body).backgroundColor;
+      document.documentElement.dataset.theme = '';
+      return neq(light, dark, 'backgrounds');
+    });
+
+    // ---- Render ----
+    const body = $('results-body');
+    const failed = out.filter(r => !r.pass);
+    for (const r of out) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td></td><td></td><td></td>';
+      tr.children[0].textContent = r.name;
+      tr.children[1].textContent = r.pass ? 'PASS' : 'FAIL';
+      tr.children[2].textContent = r.msg;
+      if (!r.pass) tr.setAttribute('aria-invalid', 'true');
+      body.appendChild(tr);
+    }
+    const sum = $('summary');
+    sum.textContent = out.length - failed.length + ' / ' + out.length +
+      ' checks pass' + (failed.length ? ' — FAILURES ABOVE' : ' — all green.');
+    sum.className = 'mote-note ' + (failed.length ? 'mote-error' : 'mote-success');
+    document.title = failed.length
+      ? 'FAIL — ' + failed.length + ' check' + (failed.length > 1 ? 's' : '')
+      : 'PASS — ' + out.length + ' checks';
+  </script>
+</body>
+</html>

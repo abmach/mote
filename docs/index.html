@@ -26,6 +26,7 @@
         <li><a href="#layout">Layout</a></li>
         <li><a href="#patterns">Patterns</a></li>
         <li><a href="#tokens">Tokens</a></li>
+        <li><a href="#gallery">Gallery</a></li>
         <li><a href="#components">Components</a></li>
         <li><a href="https://github.com/abmach/mote">GitHub</a></li>
       </ul>
@@ -171,7 +172,8 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 
   <h2 id="elements">Elements</h2>
   <p>Everything below is plain semantic HTML — no classes, no attributes beyond semantics.
-    Open the <a href="demo.html">element gallery</a> for the complete set rendered on one page.</p>
+    The <a href="#gallery">gallery</a> at the end of this page renders the
+    complete set.</p>
 
   <h3>Typography</h3>
   <h1>Heading 1</h1>
@@ -247,6 +249,11 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   &lt;table&gt;…&lt;/table&gt;
 &lt;/div&gt;
 </code></pre>
+  <p>Mark the current row with <code>aria-current</code> — the same vocabulary
+    as nav pills. The tint reads over zebra (the regression fixture asserts
+    it on both parities):</p>
+  <pre><code>&lt;tr aria-current="true"&gt;…&lt;/tr&gt;
+</code></pre>
   <table>
     <caption>Deliverables</caption>
     <thead><tr><th>File</th><th>Purpose</th></tr></thead>
@@ -271,8 +278,11 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>Fields keep their intrinsic width — for stacked forms, add
     <code>input, select, textarea { width: 100% }</code> in your page styles;
     inline forms are equally valid, so mote does not decide for you.</p>
-  <p>Or use the opt-in <code>.mote-stack</code> class, which stretches fields
-    and keeps checkboxes/radios at their native 1em — no page CSS needed:</p>
+  <p>Or use the opt-in <code>.mote-stack</code> class — a vertical rhythm for
+    forms and lists: children space by <code>--mote-stack-gap</code>
+    (default 1.25rem) with their block margins zeroed, fields stretch full
+    width, checkboxes/radios stay at 1em. It stacks any content, not just
+    forms:</p>
   <pre><code>&lt;form class="mote-stack"&gt;
   &lt;p&gt;&lt;label for="name"&gt;Name&lt;/label&gt; &lt;input id="name" type="text"&gt;&lt;/p&gt;
 &lt;/form&gt;
@@ -547,7 +557,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>Layout pieces from <code>mote.components.css</code> — default modern CSS,
     no JavaScript, no column utilities, no breakpoints. The document shell below
     is the whole story: header, nav, aside and footer flex from plain landmarks,
-    and the sticky translucent header on this very page is the same pattern.</p>
+    and the sticky translucent header on this very page is the same pattern.
+    The semantic selectors (<code>nav[aria-label]</code>) match their
+    values case-sensitively — copy the exact lowercase
+    (<code>"breadcrumb"</code>, <code>"pagination"</code>, <code>"toc"</code>).</p>
 
   <h3>Simple page</h3>
   <p>Most pages need nothing more than a sticky header and a centered column —
@@ -620,7 +633,8 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     which is transparent and can vanish over dark backgrounds). Bands are
     content surfaces: a status class on the band or an ancestor tints them.
     The band provides color and breathing room; the container inside provides
-    the gutters:</p>
+    the gutters. The band itself goes <em>outside</em> the container — a
+    sibling of <code>main</code> — or it bleeds only to the container edge:</p>
   <pre><code>&lt;section class="mote-band"&gt;
   &lt;div class="mote-container"&gt;
     &lt;h2&gt;Ready when you are.&lt;/h2&gt;
@@ -696,7 +710,25 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   &lt;/nav&gt;
 &lt;/header&gt;
 </code></pre>
-  <p>Breadcrumbs need no class at all — mote styles the semantic pattern:</p>
+  <p>Long navs scroll horizontally inside the bar — a section list of any
+    length keeps the header one line, and the brand and pushed controls
+    keep their place. Under the pills a hairline carries directional fades
+    that bloom toward whichever side holds more content. Pure CSS cannot
+    tell "at the start" from "nothing to scroll", so the fades key off a
+    <code>data-nav</code> attribute kept current by the seven-line snippet
+    below — without it, the hairline and the cut pill are the whole hint.
+    The snippet's math is direction-agnostic; the gradients flip under
+    <code>[dir="rtl"]</code>. Breadcrumbs need no class at all — mote
+    styles the semantic pattern:</p>
+  <pre><code>const pills = document.querySelector('header nav ul');
+const sync = () => pills.parentElement.dataset.nav =
+  (pills.scrollLeft > 1 ? 'start ' : '') +
+  (pills.scrollLeft + pills.clientWidth < pills.scrollWidth - 1 ? 'end' : '');
+pills.addEventListener('scroll', sync, { passive: true });
+addEventListener('resize', sync);
+sync();
+document.fonts?.ready.then(sync);  // pill widths change when webfonts load
+</code></pre>
   <pre><code>&lt;nav aria-label="breadcrumb"&gt;
   &lt;ol&gt;
     &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
@@ -780,11 +812,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <article class="mote-card"><h3 style="margin-block-start:0">Four</h3><p>No utilities.</p></article>
   </div>
 
-  <p>For sparse grids (a 4-item footer in a wide container), switch to
-    auto-fit so empty tracks collapse:</p>
-  <pre><code>.mote-grid-sparse {
-  grid-template-columns: repeat(auto-fit, minmax(min(var(--mote-grid-min, 16rem), 100%), 1fr));
-}
+  <p>For sparse grids (a 4-item footer in a wide container), the variant
+    class collapses empty tracks — standalone, no <code>.mote-grid</code>
+    needed:</p>
+  <pre><code>&lt;div class="mote-grid-sparse"&gt;…&lt;/div&gt;
 </code></pre>
 
   <h2 id="components">Components</h2>
@@ -809,7 +840,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   </div>
   <p>Flush-top media (cover photos, thumbnails) — the one compositional
     card pattern that ships as a class: <code>.mote-card-media</code> pulls
-    the media edge-to-edge and matches the card radius:</p>
+    the media edge-to-edge and matches the card radius:</p>  <p><code>.mote-card</code> and <code>.mote-media</code> don't merge —
+    the card's column direction wins over the media row. Nest the media
+    inside the card.</p>
   <pre><code>&lt;article class="mote-card"&gt;
   &lt;div class="mote-card-media"&gt;
     &lt;img src="cover.jpg" alt=""&gt;
@@ -850,10 +883,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <span class="mote-badge mote-info">info</span>
     <span class="mote-badge mote-muted">muted</span>
   </p>
-  <p>Badges scale with their context — inside a heading they render at the
-    heading's size. That is usually right (a version pill grows with its
-    release heading); force a body-scale pill with an inline
-    <code>font-size</code> when it is not.</p>
+  <p>Badges never grow past body scale — <code>min(0.8em, 0.8rem)</code>
+    keeps a pill inside a heading readable, while small contexts (footer
+    small print) still scale down with the em side.</p>
 
   <h3>Avatars</h3>
   <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem):</p>
@@ -895,7 +927,8 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 
   <h3>Media objects</h3>
   <p>Avatar or icon beside body — forum posts, comments, chat, author boxes.
-    <code>.mote-media</code> flexes the row; the last child grows:</p>
+    <code>.mote-media</code> flexes the row; the last child grows. Rows align
+    to flex-start — long content never stretches the avatar row:</p>
   <pre><code>&lt;div class="mote-media"&gt;
   &lt;img class="mote-avatar" src="…" alt=""&gt;
   &lt;div&gt;&lt;p&gt;Post body…&lt;/p&gt;&lt;/div&gt;
@@ -1005,11 +1038,11 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       <tr><td><code>.mote-push</code></td><td>Right-aligns its element in a row</td></tr>
       <tr><td><code>.mote-brand</code></td><td>Quiet wordmark link: bold, foreground, no underline</td></tr>
       <tr><td><code>.mote-display</code></td><td>Hero/error-code scale, per use via <code>--mote-display</code></td></tr>
-      <tr><td><code>.mote-num</code></td><td>Right-aligned tabular figures for table columns</td></tr>
+      <tr><td><code>.mote-num</code></td><td>Right-aligned tabular figures — table columns or any figure block</td></tr>
       <tr><td><code>.mote-hero</code></td><td>Centers content in the remaining viewport; <code>--mote-hero-offset</code></td></tr>
       <tr><td><code>.mote-band</code></td><td>Full-bleed tinted section; reads <code>--mote-status</code></td></tr>
-      <tr><td><code>.mote-stack</code></td><td>Stretches form fields to full width; checkboxes stay native</td></tr>
-      <tr><td><code>.mote-sr-only</code> · <code>.mote-skip-link</code></td><td>Visually hidden; the skip link reveals as a fixed pill on keyboard focus</td></tr>
+      <tr><td><code>.mote-stack</code></td><td>Vertical rhythm with gap: children margin-zeroed, fields full width, checkboxes 1em — <code>--mote-stack-gap</code></td></tr>
+      <tr><td><code>.mote-sr-only</code> · <code>.mote-skip-link</code></td><td>Clipped to nothing (clip-path, not display: none); the skip link reveals as a fixed pill on keyboard focus</td></tr>
       <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
     </tbody>
   </table>
@@ -1033,6 +1066,8 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <div class="mote-note mote-warning">Careful now.</div>
   <div class="mote-note mote-error">Something went softly wrong.</div>
   <div class="mote-note mote-muted">A neutral fact, quietly stated.</div>
+  <p>In centered sections a note stretches full width; for a callout-sized
+    box: <code>style="width: fit-content; margin-inline: auto"</code>.</p>
 
   <h2 id="patterns">Patterns</h2>
   <p>Compositions that span multiple sections — each piece is documented
@@ -1178,7 +1213,7 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
         &lt;label&gt;&lt;input type="checkbox"&gt; Remember me&lt;/label&gt;
         &lt;a class="mote-push" href="/reset"&gt;Forgot password?&lt;/a&gt;
       &lt;/p&gt;
-      &lt;p style="margin-block:0"&gt;
+      &lt;p&gt;
         &lt;button type="submit" style="width:100%"&gt;Sign in&lt;/button&gt;
       &lt;/p&gt;
     &lt;/form&gt;
@@ -1292,6 +1327,81 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   &lt;a class="mote-push" href="/support"&gt;Get support&lt;/a&gt;
 &lt;/p&gt;
 </code></pre>
+  <h3>Toolbar row</h3>
+  <p>Filter and action bars — a search, a select, quiet actions, a pushed
+    count — one <code>.mote-row</code>. Controls keep intrinsic widths and
+    equal heights:</p>
+  <pre><code>&lt;form class="mote-row" role="search"&gt;
+  &lt;label class="mote-sr-only" for="q"&gt;Filter&lt;/label&gt;
+  &lt;input id="q" type="search" placeholder="Filter…"&gt;
+  &lt;label class="mote-sr-only" for="sort"&gt;Sort&lt;/label&gt;
+  &lt;select id="sort"&gt;&lt;option&gt;Newest&lt;/option&gt;&lt;/select&gt;
+  &lt;button type="submit" class="mote-ghost"&gt;Apply&lt;/button&gt;
+  &lt;span class="mote-muted mote-push"&gt;12 of 48 shown&lt;/span&gt;
+&lt;/form&gt;
+</code></pre>
+  <h3>Result rows</h3>
+  <p>Poll results, skill bars, quota meters — label, bar, figure rows that
+    align across different label lengths. A small grid does what a flex row
+    can't:</p>
+  <pre><code>&lt;style&gt;
+  .results {
+    display: grid;
+    gap: 0.5rem 1rem;
+    grid-template-columns: minmax(10rem, 1fr) minmax(8rem, 2fr) auto;
+  }
+&lt;/style&gt;
+
+&lt;div class="results"&gt;
+  &lt;span&gt;Cascade layers&lt;/span&gt;
+  &lt;progress class="mote-success" value="1538" max="4812"&gt;&lt;/progress&gt;
+  &lt;span class="mote-num"&gt;32.0%&lt;/span&gt;
+  &lt;span&gt;color-mix()&lt;/span&gt;
+  &lt;progress value="1204" max="4812"&gt;&lt;/progress&gt;
+  &lt;span class="mote-num"&gt;25.0%&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+  <h3>Price line</h3>
+  <p>Product pricing — display scale for the number, a muted compare-at
+    strike, plain-text stars. One inline <code>--mote-display</code> keeps
+    the price huge without hijacking the whole line:</p>
+  <pre><code>&lt;p class="mote-display" style="--mote-display: 2.25rem; margin-block:0"&gt;
+  $179 &lt;s class="mote-muted" style="font-size: 1.15rem"&gt;$229&lt;/s&gt;
+&lt;/p&gt;
+&lt;p class="mote-muted" style="margin-block-start:0"&gt;★★★★★ 4.6 — 312 reviews&lt;/p&gt;
+</code></pre>
+  <h3>Post actions</h3>
+  <p>The quiet action strip under forum posts and comments — muted links in
+    a row; buttons only when an action is destructive:</p>
+  <pre><code>&lt;p class="mote-row mote-muted" style="gap: 1rem; margin-block: 0"&gt;
+  &lt;a href="#top"&gt;♥ 38&lt;/a&gt;
+  &lt;a href="#top"&gt;Quote&lt;/a&gt;
+  &lt;a href="#top"&gt;Reply&lt;/a&gt;
+  &lt;a class="mote-push" href="#top"&gt;Report&lt;/a&gt;
+&lt;/p&gt;
+</code></pre>
+  <h3>Growing input</h3>
+  <p>Fields keep intrinsic width by design — but in a toolbar a promo or URL
+    field should eat the remaining space. One page rule, token-safe:</p>
+  <pre><code>&lt;form class="mote-row"&gt;
+  &lt;input class="grow" type="text" placeholder="Promo code"&gt;
+  &lt;button type="submit"&gt;Apply&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;style&gt;
+  .grow { flex: 1; min-width: 8rem; }
+&lt;/style&gt;
+</code></pre>
+  <h3>Prominent search</h3>
+  <p>Help-center and docs heroes want a big obvious search box — the
+    canonical form plus one width rule:</p>
+  <pre><code>&lt;form class="mote-row" role="search" style="justify-content: center"&gt;
+  &lt;label class="mote-sr-only" for="q"&gt;Search&lt;/label&gt;
+  &lt;input id="q" type="search" placeholder="How can we help?"
+    style="width: min(100%, 30rem)"&gt;
+  &lt;button type="submit"&gt;Search&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
   <h2 id="tokens">Tokens</h2>
   <p>Every knob in the library is a custom property. Page CSS that reads these
     re-themes automatically — check for a token before writing a value. The
@@ -1352,8 +1462,59 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       <tr><td><code>--mote-table-max</code></td><td>60vh</td><td><code>.mote-table-scroll</code> panel cap; sticky header engages once the wrapper scrolls</td></tr>
       <tr><td><code>--mote-hero-offset</code></td><td>12rem</td><td><code>.mote-hero</code> — header/footer clearance</td></tr>
       <tr><td><code>--mote-rail-top</code></td><td>auto (4.75rem with a sticky header)</td><td><code>.mote-doc</code> rails; set only for wrapped shells</td></tr>
+      <tr><td><code>--mote-stack-gap</code></td><td>1.25rem</td><td><code>.mote-stack</code> — the vertical rhythm</td></tr>
+      <tr><td><code>--mote-grid-gap</code></td><td>1.25rem</td><td><code>.mote-grid</code>, <code>.mote-grid-sparse</code></td></tr>
+      <tr><td><code>--mote-band-pad</code></td><td>4rem</td><td><code>.mote-band</code> — 1rem for thin strips</td></tr>
     </tbody>
   </table>
+
+  <h2 id="gallery">Gallery</h2>
+  <p>Every element, every state — the long tail the sections above don't
+    show: all input types, footnoted tables, sample output. Rendered by the
+    two stylesheets and nothing else.</p>
+
+  <h3>The complete form</h3>
+  <form onsubmit="return false">
+    <fieldset>
+      <legend>A plain, honest form</legend>
+      <p><label for="g-name">Name</label>
+        <input id="g-name" type="text" placeholder="Ada Lovelace"></p>
+      <p><label for="g-email">Email</label>
+        <input id="g-email" type="email" placeholder="ada@example.com"></p>
+      <p><label for="g-flavor">Flavor</label>
+        <select id="g-flavor"><option>Oat</option><option selected>Sage</option><option>Plum</option></select></p>
+      <p><label for="g-color">Favorite color</label>
+        <input id="g-color" type="color" value="#6f5486"></p>
+      <p><label for="g-story">Story</label>
+        <textarea id="g-story" placeholder="Once upon a page…"></textarea></p>
+      <p><label><input type="checkbox" checked> Subscribe to the newsletter</label></p>
+      <p><label><input type="radio" name="g-size" checked> Cozy</label>
+        <label><input type="radio" name="g-size"> Roomier</label></p>
+      <p><label for="g-file">Receipt</label>
+        <input id="g-file" type="file"></p>
+      <p><label for="g-date">Date</label>
+        <input id="g-date" type="date"></p>
+      <p><button type="submit">Send it</button>
+        <button type="reset">Start over</button></p>
+    </fieldset>
+  </form>
+
+  <h3>Footnoted table</h3>
+  <table>
+    <caption>Token cost of the cozy feel</caption>
+    <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Usage</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-bg</code></td><td>#faf9f7</td><td>#1c1a17</td><td>Page background</td></tr>
+      <tr><td><code>--mote-surface</code></td><td>#f1eee7</td><td>#262320</td><td>Cards, code blocks</td></tr>
+      <tr><td><code>--mote-fg</code></td><td>#2b2924</td><td>#eae6de</td><td>Body text</td></tr>
+      <tr><td><code>--mote-accent</code></td><td>#6f5486</td><td>#b8a1ca</td><td>Links, buttons, focus</td></tr>
+    </tbody>
+    <tfoot><tr><td>Total</td><td colspan="3">4 lines of variables to re-theme everything</td></tr></tfoot>
+  </table>
+
+  <h3>Sample output</h3>
+  <p>Press <kbd>Esc</kbd> to close dialogs. The ratio <code>0Oo 1lI</code>
+    stays legible in <samp>Commit Mono</samp>.</p>
 
   <h2 id="fonts">Fonts</h2>
   <p>mote declares font <em>stacks</em> only — it embeds nothing and requires nothing.
@@ -1392,6 +1553,16 @@ npm install @fontsource-variable/inter @fontsource/commit-mono
 </main>
 
 <script>
+  // Header scroll hints: data-nav drives the directional fades
+  const pills = document.querySelector('header nav ul');
+  const syncNav = () => pills.parentElement.dataset.nav =
+    (pills.scrollLeft > 1 ? 'start ' : '') +
+    (pills.scrollLeft + pills.clientWidth < pills.scrollWidth - 1 ? 'end' : '');
+  pills.addEventListener('scroll', syncNav, { passive: true });
+  addEventListener('resize', syncNav);
+  syncNav();
+  document.fonts?.ready.then(syncNav);
+
   // Theme toggle: auto -> light -> dark -> auto
   const root = document.documentElement;
   const btn = document.getElementById('theme-toggle');
