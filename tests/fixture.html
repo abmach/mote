@@ -139,9 +139,12 @@
       src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="--mote-avatar-radius: 0">
     <p>Day <span id="t-tabular" class="mote-tabular">23</span> of the month</p>
 
-    <div class="mote-doc" style="grid-template-columns: 1fr">
+    <div id="t-doc-shell" class="mote-doc">
       <header id="t-doc-header">Doc shell header</header>
-      <main>Doc shell main</main>
+      <nav aria-label="Fixture guide"><h2>Guide</h2><ul><li><a href="#t-doc-main">Main</a></li></ul></nav>
+      <main id="t-doc-main">Doc shell main</main>
+      <aside id="t-doc-aside"><h2>Context</h2><p>Doc shell aside</p></aside>
+      <footer id="t-doc-footer">Doc shell footer</footer>
     </div>
 
     <!-- Print helpers, avatar, band pad -->
@@ -162,6 +165,8 @@
 
   <script>
     'use strict';
+    const printQuery = matchMedia('print');
+    const runAssertions = () => {
     const gcs = (el) => getComputedStyle(el);
     const gcsP = (el, sel) => getComputedStyle(el, sel);
     const ok = () => '';
@@ -182,6 +187,18 @@
       try { const msg = fn(); out.push({ name, pass: !msg, msg: msg || '' }); }
       catch (e) { out.push({ name, pass: false, msg: e.message }); }
     }
+
+    if (printQuery.matches) {
+      t('.mote-print-only shows on paper', () =>
+        eq(gcs($('t-printonly')).display, 'block', 'display'));
+      t('.mote-no-print hides on paper', () =>
+        eq(gcs($('t-noprint')).display, 'none', 'display'));
+      t('scrollable tables expand for print', () => {
+        const s = gcs($('t-scroll'));
+        return eq(s.maxHeight, 'none', 'max-height') &&
+          eq(s.overflow, 'visible', 'overflow');
+      });
+    } else {
 
     // ---- Two-tier principle: actions and markers are gated ----
     t('plain badge stays accent inside error ancestor', () =>
@@ -328,6 +345,7 @@
       gcs($('t-nav')).backgroundImage.includes('linear-gradient')
         ? ok() : fail('no hairline layer'));
     t('nav fades mark the overflow side at rest', () => {
+      hintUl.scrollLeft = 0;
       syncHints();
       return ($('t-nav').dataset.nav || '').includes('end')
         && gcsP($('t-nav'), '::after').opacity === '1'
@@ -362,6 +380,15 @@
     // ---- v0.10 additions ----
     t('doc-shell header yields to its track (min-width: 0)', () =>
       eq(gcs($('t-doc-header')).minWidth, '0px', 'min-width'));
+    if (matchMedia('(width < 50rem)').matches) {
+      t('narrow doc shell keeps the footer after main and aside', () => {
+        const main = $('t-doc-main').getBoundingClientRect();
+        const aside = $('t-doc-aside').getBoundingClientRect();
+        const footer = $('t-doc-footer').getBoundingClientRect();
+        return footer.top >= main.bottom && footer.top >= aside.bottom
+          ? ok() : fail(`footer top ${footer.top} before content bottom ${Math.max(main.bottom, aside.bottom)}`);
+      });
+    }
     t('avatar radius is a token (square covers)', () =>
       eq(gcs($('t-avatar-sq')).borderRadius, '0px', 'radius'));
     t('default avatars stay round', () =>
@@ -391,8 +418,11 @@
 
     // ---- Grids ----
     const tracks = (el) => gcs(el).gridTemplateColumns.split(' ').filter(v => v !== '0px' && v !== '').length;
-    t('grid auto-fills multiple tracks', () =>
-      tracks($('t-grid')) >= 2 ? ok() : fail('tracks: ' + gcs($('t-grid')).gridTemplateColumns));
+    t('grid auto-fills available tracks', () => {
+      const expected = innerWidth >= 600 ? 2 : 1;
+      return tracks($('t-grid')) >= expected
+        ? ok() : fail(`tracks: ${gcs($('t-grid')).gridTemplateColumns}`);
+    });
     t('sparse grid collapses empty tracks', () =>
       eq(tracks($('t-grid-sparse')), 1, 'tracks'));
     t('--mote-grid-gap tunes grids', () =>
@@ -413,9 +443,11 @@
       document.documentElement.dataset.theme = '';
       return neq(light, dark, 'backgrounds');
     });
+    }
 
     // ---- Render ----
     const body = $('results-body');
+    body.replaceChildren();
     const failed = out.filter(r => !r.pass);
     for (const r of out) {
       const tr = document.createElement('tr');
@@ -433,6 +465,11 @@
     document.title = failed.length
       ? 'FAIL — ' + failed.length + ' check' + (failed.length > 1 ? 's' : '')
       : 'PASS — ' + out.length + ' checks';
+    };
+    window.addEventListener('load', runAssertions);
+    window.addEventListener('beforeprint', runAssertions);
+    window.addEventListener('afterprint', runAssertions);
+    printQuery.addEventListener('change', runAssertions);
   </script>
 </body>
 </html>

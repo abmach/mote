@@ -239,9 +239,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <code>.mote-table-scroll</code> — the header row sticks, wide tables scroll
     inside the wrapper, never the page. Cap the panel height with
     <code>--mote-table-max</code> (default 60vh); the sticky header engages once
-    the wrapper actually scrolls. Inside the wrapper, cell borders are drawn
-    per side — Chromium paints collapsed borders at the flow position, not
-    with the sticky cell:</p>
+    the wrapper actually scrolls. On paper, the wrapper expands so the full table
+    prints without the screen cap or scrollbar. Inside the wrapper, cell borders
+    are drawn per side — Chromium paints collapsed borders at the flow position,
+    not with the sticky cell:</p>
   <pre><code>&lt;div class="mote-table-scroll"&gt;
   &lt;table&gt;…&lt;/table&gt;
 &lt;/div&gt;
@@ -656,15 +657,19 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     </div>
   </section>
   <h3>Document layout</h3>
-  <p>One class on <code>&lt;body&gt;</code> turns the landmarks you already write into the
+  <p>One class on <code>&#60;body&#62;</code> turns the landmarks you already write into the
     layout: <code>header</code> and <code>footer</code> span the page, a <code>nav</code>
     becomes a sticky left rail, an <code>aside</code> a right rail, and <code>main</code>
-    takes the middle. Everything collapses to a single column under 50rem. No classes
-    on the landmarks themselves:</p>
-  <p>On <code>&lt;body&gt;</code> the shell includes page gutters, a pinned footer and
-    content tracks that absorb wide content (<code>minmax(0, 1fr)</code>) — a wide
-    table scrolls inside <code>main</code>, never the page. The nav rail is a
-    quiet vertical list by default. When a sticky site header (<code>body &gt; header</code>)
+    takes the middle. Everything collapses to a single column under 50rem, keeping
+    the landmarks in source order. No classes on the landmarks themselves:</p>
+  <p>On <code>&#60;body&#62;</code> the shell includes page gutters, a pinned footer and
+    content tracks that absorb wide content (<code>minmax(0, 1fr)</code>). A wide
+    table scrolls inside <code>main</code>, never the page; when a table needs a
+    sticky header or a height cap, wrap it in <code>.mote-table-scroll</code> so
+    that component owns the horizontal scroll instead. The body shell already has
+    page gutters — avoid adding another <code>.mote-container</code> inside
+    <code>main</code> unless that narrower measure is intentional. The nav rail is a
+    quiet vertical list by default. When a sticky site header (<code>body &#62; header</code>)
     exists, the rail top and the scroll padding for anchor jumps derive
     themselves — nothing to set. Set <code>--mote-rail-top</code> only for
     wrapped shells (<code>.mote-header</code>, which the landmark selector cannot
@@ -739,6 +744,19 @@ addEventListener('resize', sync);
 sync();
 document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 </code></pre>
+  <p>On narrow screens, the brand and pushed controls can leave the scrolling nav
+    with very little room. The default keeps everything on one row; when the nav
+    needs a larger viewport, give it its own row with page CSS:</p>
+  <pre><code>@media (width &#60; 40rem) {
+  :where(body &#62; header, .mote-header) .mote-row {
+    row-gap: 0.5rem;
+  }
+  :where(body &#62; header, .mote-header) :where(nav, .mote-nav) {
+    flex-basis: 100%;
+    order: 2;
+  }
+}
+</code></pre>
   <pre><code>&lt;nav aria-label="breadcrumb"&gt;
   &lt;ol&gt;
     &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
@@ -783,7 +801,8 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 
   <h3>Table of contents</h3>
   <p>Right-rail asides and "On this page" navigation, styled semantically
-    like breadcrumbs and pagination:</p>
+    like breadcrumbs and pagination. Inside <code>.mote-doc</code>, put the TOC
+    in the <code>aside</code> to make it the right rail:</p>
   <pre><code>&lt;nav aria-label="toc"&gt;
   &lt;ul&gt;
     &lt;li&gt;&lt;a href="#get-started"&gt;Get started&lt;/a&gt;&lt;/li&gt;
@@ -1063,7 +1082,8 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>.mote-hero</code></td><td>Centers content in the remaining viewport; <code>--mote-hero-offset</code></td></tr>
       <tr><td><code>.mote-band</code></td><td>Full-bleed tinted section; reads <code>--mote-status</code></td></tr>
       <tr><td><code>.mote-stack</code></td><td>Vertical rhythm with gap: children margin-zeroed, fields full width, checkboxes 1em — <code>--mote-stack-gap</code></td></tr>
-      <tr><td><code>.mote-sr-only</code> · <code>.mote-skip-link</code></td><td>Clipped to nothing (clip-path, not display: none); the skip link reveals as a fixed pill on keyboard focus</td></tr>
+      <tr><td><code>.mote-sr-only</code> · <code>.mote-skip-link</code></td><td>Clipped to nothing (clip-path, not display: none); the skip link reveals as a fixed pill whenever it receives focus</td></tr>
+      <tr><td><code>.mote-no-print</code> · <code>.mote-print-only</code></td><td>Hide screen-only content on paper, or show paper-only content</td></tr>
       <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
     </tbody>
   </table>

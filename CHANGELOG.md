@@ -5,6 +5,42 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.1] - 2026-10-24
+
+### Fixed
+
+- **Narrow `.mote-doc` layouts keep landmark order**: the collapsed shell no
+  longer places the footer before `main` when guide and context rails are
+  present.
+- **`.mote-table-scroll` expands on paper**: the optional components file
+  now owns its print override, so loading it can no longer undo the core
+  print behavior.
+- **`.mote-skip-link` reveals on any focus**: programmatic focus now gets
+  the same fixed skip-link pill as keyboard focus, removing a focus-modality
+  dependency from the accessibility helper and regression fixture.
+
+### Changed (tests — round-8 findings)
+
+- The regression fixture now selects an active screen or print-specific
+  assertion suite, rebuilds its results on media changes, and self-checks both
+  paper helpers and printable table expansion.
+
+### Changed (docs — round-8 findings)
+
+- Document-layout guidance now states that the collapsed shell preserves
+  source order, distinguishes `main` overflow from table-wrapper overflow,
+  and calls out the body-level gutter.
+- Header guidance now includes a narrow-screen recipe that gives the nav its
+  own row when the brand and pushed controls leave too little room.
+- The helper map now includes print helpers and a right-rail TOC recipe.
+
+### Evaluation
+
+- Eighth round: ten independent agents built ten new page types against
+  v0.10.0. All ten would use mote again and kept page-level horizontal
+  overflow at zero; the round exposed the collapsed document-order and
+  cross-file print defects fixed in this release.
+
 ## [0.10.0] - 2026-10-23
 
 ### Fixed
@@ -619,6 +655,7 @@ Components:
 [0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0
 [0.9.0]: https://gitlab.com/abmach/mote/compare/v0.8.0...v0.9.0
 [0.9.1]: https://gitlab.com/abmach/mote/compare/v0.9.0...v0.9.1
+[0.10.1]: https://gitlab.com/abmach/mote/compare/v0.10.0...v0.10.1
 [0.10.0]: https://gitlab.com/abmach/mote/compare/v0.9.1...v0.10.0
 [0.7.0]: https://gitlab.com/abmach/mote/compare/v0.6.1...v0.7.0
 [0.6.1]: https://gitlab.com/abmach/mote/compare/v0.6.0...v0.6.1

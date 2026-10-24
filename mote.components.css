@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.10.0 · MIT
+ * v0.10.1 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -390,6 +390,13 @@ nav[aria-label="toc"] a:hover {
   overflow-y: auto;
 }
 
+/* The components file owns this component's print behavior. Keep the
+   override after the screen rule so loading the optional file cannot
+   undo the core print promise. */
+@media print {
+  .mote-table-scroll { max-height: none; overflow: visible; }
+}
+
 /* Chromium paints collapsed borders at the original flow position,
    not with the sticky cell — separate borders belong to the cell. */
 .mote-table-scroll table {
@@ -765,15 +772,13 @@ nav[aria-label="toc"] :is(h2, h3) {
 }
 
 @media (width < 50rem) {
-  .mote-doc:where(:has(> nav)),
-  .mote-doc:where(:has(> aside)),
-  .mote-doc:where(:has(> nav)):where(:has(> aside)) {
-    grid-template-columns: 1fr;
+  .mote-doc {
+    display: flex;
+    flex-direction: column;
   }
 
-  .mote-doc > :is(nav, aside, main) {
-    grid-column: 1 / -1;
-    grid-row: auto;
+  .mote-doc > main {
+    flex: 1 0 auto;
   }
 
   .mote-doc > aside {

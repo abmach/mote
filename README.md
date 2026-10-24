@@ -160,7 +160,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Display text | `.mote-display` — opt-in hero/error-code scale via `--mote-display` |
 | Content rows | `.mote-row` + `.mote-push` — flex row, right-align helper |
 | Stacks | `.mote-stack` — vertical rhythm with `--mote-stack-gap`; fields full width, checkboxes 1em, works on any content |
-| Scrollable tables | `.mote-table-scroll` — sticky `thead`, no page scroll, no margin jump |
+| Scrollable tables | `.mote-table-scroll` — sticky `thead`, no page scroll, no margin jump; expands on paper |
 | Numeric columns | `.mote-num` — right-aligned tabular figures |
 | Tabular figures | `.mote-tabular` — tabular numerals without the right-alignment (day numbers, meta lines) |
 | Sparse grids | `.mote-grid-sparse` — standalone auto-fit variant, collapses empty tracks |
@@ -169,7 +169,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Current table row | `tr[aria-current]` — accent-tinted row, reads over zebra |
 | Footer baseline | `body > footer` — semantic top-border + padding; its `nav` renders as a quiet wrapped row |
 | Screen-reader helper | `.mote-sr-only` — pure hiding, never appears |
-| Skip link | `.mote-skip-link` — sr-only until keyboard focus, then a fixed pill |
+| Skip link | `.mote-skip-link` — sr-only until focused, then a fixed pill |
 | Print helpers | `.mote-no-print` / `.mote-print-only` |
 | Theme-switch guard | `.mote-theme-switch` — prevents Chromium stale-color bug on `data-theme` flips |
 | Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |

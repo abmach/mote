@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.10.0 · MIT
+ * v0.10.1 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -810,7 +810,7 @@ progress, meter {
    Use .mote-skip-link for the accessibility skip link;
    use plain .mote-sr-only to hide things that must never
    appear (radios driving CSS toggles, visually hidden labels). */
-.mote-skip-link:focus-visible {
+.mote-skip-link:focus {
   position: fixed;
   top: 1rem;
   left: 1rem;
@@ -936,7 +936,6 @@ progress, meter {
   /* Opt-in print helpers */
   .mote-no-print { display: none !important; }
   .mote-print-only { display: block; }
-  .mote-table-scroll { max-height: none; overflow: visible; }
 }
 
 @media not print {
