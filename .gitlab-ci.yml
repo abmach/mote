@@ -22,7 +22,15 @@
 # complete its first successful stage within 2 days, or it expires.
 
 stages:
+  - test
   - publish
+
+test-minify:
+  stage: test
+  image: node:24
+  script:
+    - npm install --prefix "$CI_PROJECT_DIR/.tmp/clean-css" --no-save --no-package-lock clean-css@5.3.3
+    - NODE_PATH="$CI_PROJECT_DIR/.tmp/clean-css/node_modules" node tests/minify.cjs
 
 stage-npm:
   stage: publish

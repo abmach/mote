@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.2] - 2026-10-24
+
+### Fixed
+
+- **jsDelivr now minifies `mote.components.css`**: clean-css 5.3.3 could not
+  parse the Baseline 2024 `@starting-style` rules and `allow-discrete`
+  transition values, so the automatic `mote.components.min.css` URL served
+  the unminified source. Narrow ignore guards preserve those modern rules
+  verbatim while allowing jsDelivr's minifier to produce a compact stylesheet.
+
 ## [0.10.1] - 2026-10-24
 
 ### Fixed
@@ -655,6 +665,7 @@ Components:
 [0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0
 [0.9.0]: https://gitlab.com/abmach/mote/compare/v0.8.0...v0.9.0
 [0.9.1]: https://gitlab.com/abmach/mote/compare/v0.9.0...v0.9.1
+[0.10.2]: https://gitlab.com/abmach/mote/compare/v0.10.1...v0.10.2
 [0.10.1]: https://gitlab.com/abmach/mote/compare/v0.10.0...v0.10.1
 [0.10.0]: https://gitlab.com/abmach/mote/compare/v0.9.1...v0.10.0
 [0.7.0]: https://gitlab.com/abmach/mote/compare/v0.6.1...v0.7.0
