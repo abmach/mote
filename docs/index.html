@@ -86,28 +86,34 @@
   <p>The cascade has three layers, each computed from the last: the <strong>base
     palette</strong> feeds <strong>derived tones</strong> (soft tints, hover deepening,
     focus rings — re-derived automatically whenever a base token changes), and
-    <strong>status classes</strong> add a third indirection on top, assigning
-    <code>--mote-status</code> tokens that every note, badge and toast reads with an accent
-    fallback. Override the chain anywhere; everything downstream follows.</p>
+    <strong>status classes</strong> add a third indirection on top. Inheriting content
+    surfaces read the <code>--mote-status</code> tokens with an accent fallback, while
+    gated actions and badges declare their own status. Override the chain anywhere;
+    everything downstream follows.</p>
   <p>Live proof — this card re-themes everything inside it with two inline tokens:</p>
-  <pre><code>&lt;div class="mote-card" style="--mote-accent: #4a7a5b"&gt;
+  <pre><code>&lt;div class="mote-card" style="--mote-accent: #4a7a5b; --mote-on-accent: #ffffff"&gt;
   &lt;h3&gt;Re-themed card&lt;/h3&gt;
   &lt;p&gt;A &lt;a href="#"&gt;link&lt;/a&gt;, a &lt;button type="button"&gt;button&lt;/button&gt; and a
     &lt;span class="mote-badge mote-success"&gt;badge&lt;/span&gt; — all from
     two variables.&lt;/p&gt;
 &lt;/div&gt;
 </code></pre>
-  <div class="mote-card" style="--mote-accent: #4a7a5b">
+  <div class="mote-card" style="--mote-accent: #4a7a5b; --mote-on-accent: #ffffff">
     <h3 style="margin-block-start:0">Re-themed card</h3>
     <p>A <a href="#theming">link</a>, a <button type="button" onclick="return false">button</button> and a
       <span class="mote-badge mote-success">badge</span> — all from two variables.
       The focus ring, hover states and soft tints re-derived automatically.</p>
   </div>
   <pre><code>:root {
-  --mote-accent: #4a7a5b;  /* your brand color */
-  --mote-bg: #fffdf5;      /* your paper */
-  --mote-radius: 6px;      /* your edges */
+  --mote-accent: #4a7a5b;    /* your brand color */
+  --mote-on-accent: #ffffff; /* readable text on accent fills */
+  --mote-bg: #fffdf5;        /* your paper */
+  --mote-radius: 6px;        /* your edges */
 }</code></pre>
+  <p>When replacing <code>--mote-accent</code>, replace <code>--mote-on-accent</code>
+    too: mote cannot infer whether white or dark text has enough contrast on an
+    arbitrary brand color. A separate dark-theme accent may need its own foreground
+    token as well.</p>
   <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Core token reference">
   <table>
     <caption>Core tokens — light and dark values</caption>
@@ -125,6 +131,8 @@
         <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#6f5486;"></span> <code>#6f5486</code></td>
         <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#b8a1ca;"></span> <code>#b8a1ca</code></td>
         <td>Links, buttons, focus, markers</td></tr>
+      <tr><td><code>--mote-on-accent</code></td><td><code>#ffffff</code></td><td><code>#241d28</code></td>
+        <td>Readable text on accent fills</td></tr>
       <tr><td><code>--mote-success</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#4e7d51;"></span> <code>#4e7d51</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#8ab88c;"></span> <code>#8ab88c</code></td><td>Positive semantics</td></tr>
       <tr><td><code>--mote-warning</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#8a6819;"></span> <code>#8a6819</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#d4b465;"></span> <code>#d4b465</code></td><td>Cautious semantics</td></tr>
       <tr><td><code>--mote-error</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#b34d4d;"></span> <code>#b34d4d</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#d98a8a;"></span> <code>#d98a8a</code></td><td>Destructive semantics</td></tr>
@@ -273,8 +281,10 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <code>.mote-table-scroll</code> — the header row sticks, wide tables scroll
     inside the wrapper, never the page. Cap the panel height with
     <code>--mote-table-max</code> (default 60vh); the sticky header engages once
-    the wrapper actually scrolls. On paper, the wrapper expands so the full table
-    prints without the screen cap or scrollbar. Inside the wrapper, cell borders
+    the wrapper actually scrolls. On paper, the wrapper releases the screen height cap
+    and clipping so the complete table is present in the output; a very wide table may
+    still exceed narrow paper, and mote does not shrink an arbitrary matrix. Inside
+    the wrapper, cell borders
     are drawn per side — Chromium paints collapsed borders at the flow position,
     not with the sticky cell:</p>
   <pre><code>&lt;div class="mote-table-scroll"&gt;
@@ -293,15 +303,19 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     or definition lists instead — a card-per-record layout is usually easier to
     scan on a phone.</p>
   <p>Do not render both a table and a card copy and hide one with CSS: duplicated
-    content becomes ambiguous for assistive technology and search. When the table
-    is the only representation, give its scroll region an accessible name and
-    keyboard focus:</p>
+    content becomes ambiguous for assistive technology and search. The same records
+    may appear in a second representation only when it presents genuinely distinct
+    information or serves a different task; otherwise mark the current row inside
+    the table with <code>aria-current</code> and use the row-tint recipe below.
+    When the table is the only representation, give its scroll region an accessible
+    name and keyboard focus:</p>
   <pre><code>&lt;div class="mote-table-scroll" tabindex="0" role="region" aria-label="Product comparison"&gt;
   &lt;table&gt;…&lt;/table&gt;
 &lt;/div&gt;
 </code></pre>
   <p>The wrapper keeps the page still while the table moves. On paper, mote's
-    components file expands the wrapper and prints the complete table.</p>
+    components file removes the wrapper's artificial clipping and height cap; the
+    complete table is present, but a wide matrix may still exceed the paper width.</p>
 
   <p>Mark the current row with <code>aria-current</code> — the same vocabulary
     as nav pills. The tint reads over zebra (the regression fixture asserts
@@ -360,7 +374,7 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 </code></pre>
 
 
-  <h3>Buttons and statuses</h3>
+  <h3 id="buttons-and-statuses">Buttons and statuses</h3>
   <p>All button styles — solid and ghost — are <strong>gated</strong>: the
     status class must sit on the button itself. A themed section — an error
     note, a toast, a page-level <code>body class="mote-error"</code> — never
@@ -417,7 +431,7 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     </p>
   </form>
 
-  <h3>Display text</h3>
+  <h3 id="display-text">Display text</h3>
   <p>Opt-in hero/error-code scale via <code>.mote-display</code> — the body
     heading scale is untouched. Widen per use with the <code>--mote-display</code>
     variable. Display text reads <code>--mote-status</code> so a themed page
@@ -428,11 +442,12 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>
     <span class="mote-display">404</span>
   </p>
-  <h3>Semantic feedback</h3>
+  <h3 id="semantic-feedback">Semantic feedback</h3>
   <p><code>[role="alert"]</code> and <code>[role="status"]</code> are styled
-    as semantic feedback — they read <code>--mote-status</code> with
-    error/info fallbacks, so a status class on the element or an ancestor
-    tints them:</p>
+    as semantic feedback. They read <code>--mote-status</code> when one is
+    present; otherwise <code>role="alert"</code> falls back to the error color
+    and <code>role="status"</code> falls back to the info color. A status class
+    on the element or an ancestor sets their text color:</p>
   <pre><code>&lt;p role="alert" class="mote-error"&gt;Invalid email&lt;/p&gt;
 &lt;p role="status"&gt;Saved&lt;/p&gt;
 </code></pre>
@@ -610,6 +625,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 </code></pre>
   <p>The live examples above are anchored — in Chromium and Safari they open next to their
     buttons; in Firefox they open centered.</p>
+  <p>Anchored popovers keep a 0.45rem gap from their trigger. Override that separation
+    in page CSS when a surface needs more breathing room:</p>
+  <pre><code>[popover].mote-tooltip {
+  margin: 0.75rem;
+}
+</code></pre>
+  <p>The margin remains part of the anchored placement and its flip fallback.</p>
 
   <h2 id="layout">Layout</h2>
   <p>Layout pieces from <code>mote.components.css</code> — default modern CSS,
@@ -680,10 +702,62 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
       Give the nav its own row on narrow screens when it needs more room, and
       keep primary actions outside the scrolling region.</li>
   </ul>
-  <p>A narrow toolbar can be one page rule:</p>
+  <p>A narrow toolbar can be one page rule. Make <code>.mote-row</code> the
+    toolbar owner so each label is a direct flex item:</p>
+  <pre><code>&#60;div class="mote-row filter-bar"&#62;
+  &#60;label&#62;Search
+    &#60;input type="search" name="q"&#62;
+  &#60;/label&#62;
+  &#60;label&#62;Status
+    &#60;select name="status"&#62;
+      &#60;option&#62;Active&#60;/option&#62;
+    &#60;/select&#62;
+  &#60;/label&#62;
+  &#60;button type="button"&#62;Apply&#60;/button&#62;
+&#60;/div&#62;
+</code></pre>
+  <p>This handles direct controls and controls wrapped in labels:</p>
   <pre><code>@media (max-width: 30rem) {
-  .filter-bar > :where(input, select, button) {
+  .filter-bar > :where(input, select, button),
+  .filter-bar > label {
     flex: 1 1 100%;
+  }
+
+  .filter-bar > label :where(input, select) {
+    width: 100%;
+  }
+}
+</code></pre>
+  <p>The first rule gives direct controls and labels a full row; the second
+    makes a control inside a label fill that label. <code>.mote-row</code> wraps
+    controls, but it does not make them full-width by itself. The page rule owns
+    that choice; nested wrappers need their own selector.</p>
+  <p>A sticky toolbar beneath a site header needs a matching offset. Use
+    <code>.mote-row</code> for the toolbar's wrapping layout and
+    <code>.toolbar</code> for its sticky placement; <code>.toolbar</code> is a
+    page-owned class here, not a class mote ships:</p>
+  <pre><code>&#60;div class="mote-row toolbar"&#62;
+  &#60;label&#62;Search
+    &#60;input type="search" name="q"&#62;
+  &#60;/label&#62;
+  &#60;button type="button"&#62;Filter&#60;/button&#62;
+&#60;/div&#62;
+</code></pre>
+  <p>The sticky top offset must match the header's actual bottom edge so the
+    toolbar does not overlap it. Header height depends on its content, so keep
+    the value page-owned and tune it for the one-row and two-row layouts:</p>
+  <pre><code>:root {
+  --toolbar-top: 4.75rem;
+}
+
+.toolbar {
+  position: sticky;
+  top: var(--toolbar-top);
+}
+
+@media (max-width: 40rem) {
+  :root {
+    --toolbar-top: 7.5rem;
   }
 }
 </code></pre>
@@ -823,8 +897,10 @@ sync();
 document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 </code></pre>
   <p>On narrow screens, the brand and pushed controls can leave the scrolling nav
-    with very little room. The default keeps everything on one row; when the nav
-    needs a larger viewport, give it its own row with page CSS:</p>
+    with very little room. For a long navigation, apply the own-row rule below
+    at widths under 40rem and keep primary actions outside the scrolling region.
+    The one-row fallback suits short navigation; its cut pill is the overflow
+    signal when JavaScript is not used:</p>
   <pre><code>@media (width &#60; 40rem) {
   :where(body &#62; header, .mote-header) .mote-row {
     row-gap: 0.5rem;
@@ -970,10 +1046,10 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       deciding your layout.</p>
   </div>
 
-  <h3>Badges</h3>
+  <h3 id="badges">Badges</h3>
   <p>Badges are content markers — they declare their own status, never
-    inherit from context (same gating as buttons). A plain
-    <code>.mote-badge</code> is always accent-tinted; a status class on
+    inherit from context (same gating as <a href="#buttons-and-statuses">buttons</a>).
+    A plain <code>.mote-badge</code> is always accent-tinted; a status class on
     the badge itself provides the tint:</p>
   <pre><code>&lt;span class="mote-badge"&gt;accent&lt;/span&gt;
 &lt;span class="mote-badge mote-success"&gt;success&lt;/span&gt;
@@ -1014,7 +1090,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     <img class="mote-avatar" style="--mote-avatar: 6rem" src="https://api.dicebear.com/9.x/notionists/svg?seed=Mote" alt="Hero portrait at 6rem">
   </p>
 
-  <h3>Skeletons and spinners</h3>
+  <h3 id="skeletons-and-spinners">Skeletons and spinners</h3>
   <pre><code>&lt;div class="mote-skeleton" style="height:1rem;width:60%"&gt;&lt;/div&gt;
 &lt;div class="mote-skeleton" style="height:1rem;width:40%"&gt;&lt;/div&gt;
 
@@ -1055,7 +1131,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     </div>
   </div>
 
-  <h3>Toasts</h3>
+  <h3 id="toasts">Toasts</h3>
   <p>A styled <code>popover</code> pinned to the corner. Showing it takes one line — the
     browser handles stacking, Esc, and light-dismiss:</p>
   <p>Use <code>popover="manual"</code> for toasts — auto popovers light-dismiss on any
@@ -1097,19 +1173,29 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>Escape hatches for what semantics cannot express — the helpers, plus the
     status classes every status-consuming component reads:</p>
   <h3>Status classes</h3>
-  <p>Statuses are pure token assignments. <code>mote-success</code>, <code>mote-warning</code>,
-    <code>mote-error</code>, <code>mote-info</code> and <code>mote-muted</code> set the
-    <code>--mote-status</code> and <code>--mote-status-soft</code> variables and nothing else —
-    components consume the tokens and fall back to the accent color when no status is present:</p>
-  <p>Two more classes control <em>inheritance</em> — status tokens cascade, so
-    a badge inside <code>.mote-error</code> inherits the brick tint.
-    <code>.mote-default</code> forces the accent down the tree ("keep this
-    plum regardless of context"); <code>.mote-reset</code> clears the inherited
-    status so each element's own classes decide:</p>
-  <pre><code>&lt;span class="mote-badge mote-default"&gt;forced plum&lt;/span&gt;
-&lt;div class="mote-reset"&gt;
-  &lt;span class="mote-badge"&gt;fell back to accent&lt;/span&gt;
-&lt;/div&gt;
+  <p><code>.mote-success</code>, <code>.mote-warning</code>, <code>.mote-error</code>
+    and <code>.mote-info</code> are pure token assignments: they set the
+    <code>--mote-status</code> and <code>--mote-status-soft</code> variables and
+    nothing else. <code>.mote-muted</code> also dims text directly and carries the
+    neutral status tokens. Status-consuming surfaces read those tokens; most
+    fall back to accent. See <a href="#semantic-feedback">Semantic feedback</a>
+    for the role-specific error/info fallbacks:</p>
+  <p>Status tokens cascade through inheriting content surfaces. Buttons and badges
+    are <strong>gated</strong>: they declare their own status and never inherit an
+    ancestor's tint — see <a href="#badges">Badges</a> and
+    <a href="#buttons-and-statuses">Buttons and statuses</a>.</p>
+  <p>Two more classes control <em>inheritance</em> for the surfaces that consume
+    those tokens. <code>.mote-default</code> sets an explicit accent status for
+    inheriting surfaces in that subtree ("keep this plum in this section"); gated
+    controls still use their own status classes. <code>.mote-reset</code> clears
+    the inherited status so the surface falls back to accent:</p>
+  <pre><code>&#60;div class="mote-error"&#62;
+  &#60;div class="mote-note"&#62;Inherits the brick status.&#60;/div&#62;
+
+  &#60;div class="mote-reset"&#62;
+    &#60;div class="mote-note"&#62;Falls back to accent.&#60;/div&#62;
+  &#60;/div&#62;
+&#60;/div&#62;
 </code></pre>
   <pre><code>/* the status contract */
 .mote-success {
@@ -1117,28 +1203,32 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   --mote-status-soft: var(--mote-success-soft);
 }
 
-/* base components only read the tokens */
-.mote-badge {
+/* inheriting surfaces only read the tokens */
+.mote-note {
   color: var(--mote-status, var(--mote-accent-deep));
   background: var(--mote-status-soft, var(--mote-accent-soft));
 }
 </code></pre>
-  <p>No specificity to fight: restyle a status once and every note, badge and toast follows.
+  <p>No specificity to fight: restyle a status once and every inheriting content
+    surface follows. Gated buttons and badges follow their own status class.
     Or set the variable inline — <code>style="--mote-status: rebeccapurple"</code> — on any
     status-consuming element.</p>
   <p>Status classes are token carriers, not text colors: a plain
     <code>mote-success</code> on a paragraph does not recolor its text.
     For tinted text, write <code>color: var(--mote-success)</code> in
     your page CSS — the tokens are yours to read.</p>
-  <p>More than badges read the tokens. Each consumer now shows every variant
-    exactly once, in its own section — follow the map:</p>
+  <p>Several content surfaces read the tokens. Common status-consuming surfaces
+    are listed below; each link points to its documented section:</p>
   <table>
-    <thead><tr><th>Consumer</th><th>Variants shown at</th></tr></thead>
+    <thead><tr><th>Consumer</th><th>Documented at</th></tr></thead>
     <tbody>
       <tr><td>Notes</td><td><a href="#notes">Helpers — Notes and callouts</a></td></tr>
-      <tr><td>Badges (gated)</td><td><a href="#components">Components — Badges</a> — declare their own status</td></tr>
-      <tr><td>Toasts</td><td><a href="#components">Components — Toasts</a></td></tr>
-      <tr><td>Spinners</td><td><a href="#components">Components — Skeletons and spinners</a></td></tr>
+      <tr><td>Display text</td><td><a href="#display-text">Elements — Display text</a></td></tr>
+      <tr><td>Semantic feedback</td><td><a href="#semantic-feedback">Elements — Semantic feedback</a> — alert falls back to error; status falls back to info</td></tr>
+      <tr><td>Badges (gated)</td><td><a href="#badges">Components — Badges</a> — declare their own status</td></tr>
+      <tr><td>Toast edges (inheriting)</td><td><a href="#toasts">Components — Toasts</a> — read the status token for their top border</td></tr>
+      <tr><td>Spinners</td><td><a href="#skeletons-and-spinners">Components — Skeletons and spinners</a></td></tr>
+      <tr><td>Bands</td><td><a href="#layout">Layout — Hero and bands</a></td></tr>
       <tr><td>Blockquote rules</td><td><a href="#elements">Elements — Lists and block content</a></td></tr>
       <tr><td>Progress and meter</td><td><a href="#elements">Elements — Progress and meter</a></td></tr>
       <tr><td>Summary markers</td><td><a href="#details">Details and accordions</a></td></tr>
@@ -1200,9 +1290,25 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 </code></pre>
   <h3>Tables, disclosures, and page breaks</h3>
   <p>With <code>mote.components.css</code>, <code>.mote-table-scroll</code>
-    expands on paper: the height cap and horizontal scrollbar disappear, and
-    the complete table prints. Keep important tables intact with a small page
-    rule:</p>
+    removes the screen height cap and clipping on paper. This guarantees that the
+    complete table is present without artificial clipping; it does not guarantee
+    that an arbitrary wide matrix fits narrow paper.</p>
+  <p>For a document or dedicated print output containing a dense matrix,
+    landscape paper may be clearer than forcing many columns into portrait.
+    This <code>@page</code> rule applies to the whole printed document:</p>
+  <pre><code>@page {
+  size: landscape;
+  margin: 12mm;
+}
+</code></pre>
+  <p>For a document that mixes portrait and landscape sections, keep the landscape
+    matrix in a separate print document rather than applying this rule to every
+    page.</p>
+  <p>Check the generated PDF. Reducing type and padding can fit more columns but
+    may force words to break; when many columns cannot remain legible, use the
+    semantic record layout from <a href="#narrow-tables">Narrow screens: scroll or
+    transform</a> instead of forcing the matrix onto the page.</p>
+  <p>Keep important tables intact with a small page rule:</p>
   <pre><code>@media print {
   .receipt, tr, figure { break-inside: avoid; }
 }

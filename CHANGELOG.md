@@ -5,6 +5,29 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.10.4] - 2026-10-25
+
+### Fixed (docs — round-10 findings)
+
+- **Status inheritance now matches badge gating in the documentation**: the
+  status section no longer claims that a badge inherits an ancestor's status,
+  and the `.mote-reset` example now uses an inheriting `.mote-note` surface.
+  The badge section links back to the gating rules.
+
+### Changed (docs — round-10 findings)
+
+- Clarified that `.mote-table-scroll` guarantees the complete table is present
+  without artificial clipping on paper, not that every matrix fits narrow
+  paper. Added an opt-in, document-wide landscape recipe and guidance to check
+  generated PDFs for legibility.
+- Expanded the responsive-toolbar recipe to cover label-wrapped controls and
+  documented a page-owned sticky-toolbar offset for one- and two-row headers.
+- Documented the default anchored-popover gap, the `--mote-accent` /
+  `--mote-on-accent` override pair, own-row navigation for long narrow headers,
+  and the boundary between complementary representations and duplicated records.
+
 ## [0.10.3] - 2026-10-25
 
 ### Fixed
@@ -696,6 +719,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.4...HEAD
+[0.10.4]: https://gitlab.com/abmach/mote/compare/v0.10.3...v0.10.4
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
 [0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0
 [0.9.0]: https://gitlab.com/abmach/mote/compare/v0.8.0...v0.9.0

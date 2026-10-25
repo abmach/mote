@@ -132,7 +132,7 @@ conversation history can produce a real page, not a demo.>
 
 ## Archetype pool
 
-Thirty used across rounds 5–7 — do not repeat. Track additions here.
+Sixty used across rounds 5–10 — do not repeat. Track additions here.
 
 **Used (round 5):** pricing, blog post, login, 404, settings, dashboard,
 knowledge-base, landing, release-notes, contact.
@@ -140,19 +140,23 @@ knowledge-base, landing, release-notes, contact.
 inbox, photo gallery, profile, FAQ help-center, poll, playlist.
 **Used (round 7):** chat, job board, calendar, recipe, transactions,
 course lesson, search results, team, hotel booking, podcast episode.
+**Used (round 8):** event registration, comparison/review, docs version
+landing, migration guide, wiki edit history, support ticket queue,
+appointment scheduling, invoice/receipt, legal/terms, book chapter.
+**Used (round 9):** cookbook index, offline/print-first document,
+real-estate listing, app-store page, spec comparison, member onboarding,
+community guidelines, archive/tag index, download checksums, API reference.
+**Used (round 10):** notification settings, admin user table, achievement
+profile, form-builder preview, release timeline, community directory,
+embeddable support widget, transit departures, match scorecard,
+accessibility statement.
 
-**Candidates (unexercised):** event registration, comparison/review
-site, documentation landing with version switcher, changelog-adjacent
-migration guide, wiki page with edit history, support ticket queue,
-appointment scheduling, invoice/receipt, legal/terms long-form, book
-chapter with footnotes, interactive cookbook index, real-estate
-listing, app store page, comparison table-heavy spec sheet, member
-onboarding wizard, community guidelines with callouts, archive/tag
-index, sitemap-style directory, offline/print-first document, embed
-widget demo page, download page with checksums, api reference (table +
-toc heavy), settings-notifications with switches, admin user table
-(actions column), badge-heavy gamification profile, embeddable form
-builder preview, changelog timeline with bands.
+**Candidates (unexercised):** airport check-in counter status board, warehouse
+inventory exception report, volunteer shift signup, parcel tracking
+timeline, digital museum collection record, nonprofit donation campaign,
+library catalog search, property-maintenance request form,
+emergency-preparedness checklist, tax-document organizer, cybersecurity
+incident bulletin, music album discography.
 
 ## Aggregate structure (EVALUATION-R<N>.md)
 

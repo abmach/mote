@@ -25,7 +25,7 @@ Source on [GitLab](https://gitlab.com/abmach/mote) · mirrored on [GitHub](https
 
 - **Semantic HTML is the API.** mote styles elements by what they *are* — headings, forms, `dialog`, `menu` — not by the classes they wear. Zero classes are required; optional classes exist as opt-in conveniences for statuses, components, and helpers.
 - **The platform before the library.** Interactive components ride on native features: `popover`, `dialog`, `<details name>`, `:user-invalid`. Where the browser can do it, mote never ships JavaScript to do it worse.
-- **Tokens all the way down.** Every color, radius, shadow, font and status is a `--mote-*` custom property, and derived tones are computed with `color-mix()`. Status classes set tokens and nothing else — one override re-skins every note, badge and toast. Re-theme by overriding variables, never by fighting selectors.
+- **Tokens all the way down.** Every color, radius, shadow, font and status is a `--mote-*` custom property, and derived tones are computed with `color-mix()`. Status classes set tokens and nothing else — one override re-skins inheriting content surfaces, while gated actions and badges declare their own status. Re-theme by overriding variables, never by fighting selectors.
 - **Weightless by default.** `mote.css` styles your elements; `mote.components.css` is opt-in and CSS-only. You ship zero bytes of library JavaScript, ever.
 - **Framework-agnostic.** It's just CSS — plain HTML, Svelte, Vue, React, HTMX, PHP, your CMS, anything.
 - **Cozy, and unobtrusive about it.** Warm neutrals, soft edges, generous rhythm — styling that never shouts. Automatic light/dark, AA+ contrast, visible focus, reduced-motion respected.
@@ -60,11 +60,14 @@ Everything is a variable. Override the ones you care about:
 
 ```css
 :root {
-  --mote-accent: #4a7a5b;   /* your brand color */
-  --mote-bg: #fffdf5;       /* your paper */
-  --mote-radius: 6px;       /* your edges */
+  --mote-accent: #4a7a5b;    /* your brand color */
+  --mote-on-accent: #ffffff; /* readable text on accent fills */
+  --mote-bg: #fffdf5;        /* your paper */
+  --mote-radius: 6px;        /* your edges */
 }
 ```
+
+When replacing `--mote-accent`, replace `--mote-on-accent` too. mote cannot infer whether white or dark text has enough contrast on an arbitrary brand color; a separate dark-theme accent may need its own foreground token.
 
 ### The token cascade
 
@@ -72,7 +75,7 @@ Values flow in layers, each computed from the last — retune a base token and e
 
 1. **Base palette** — the raw tokens: `--mote-bg`, `--mote-fg`, `--mote-accent`, the four semantics, fonts, radii, shadows. Light values live in `:root`; dark values swap in via `prefers-color-scheme` or `data-theme`.
 2. **Derived tones** — computed from the base with `color-mix()`: `--mote-accent-deep` (hover deepening), `--mote-accent-soft`, the four `--mote-*-soft` tints, `--mote-focus-ring`, `--mote-border-strong`. They can never go stale — change `--mote-accent` and every tint, ring and hover shade follows.
-3. **Status indirection** — status classes assign `--mote-status` / `--mote-status-soft` and nothing else. Components read them with accent fallbacks: `color: var(--mote-status, var(--mote-accent-deep))`.
+3. **Status indirection** — status classes assign `--mote-status` / `--mote-status-soft` and nothing else. Inheriting surfaces read them with accent fallbacks: `color: var(--mote-status, var(--mote-accent-deep))`; gated buttons and badges declare their own status.
 
 The consequence: theming is a handful of variable overrides, and an inline tweak (`style="--mote-status: …"`) slots into the same chain at any level.
 
@@ -139,7 +142,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | `.mote-container` | Centered page wrapper: `width: min(100% - 3rem, 70rem)` |
 | `.mote-muted` | Dimmed secondary text (also a neutral status) |
 | `.mote-note` + status class | Tinted message surfaces |
-| `.mote-success` · `.mote-warning` · `.mote-error` · `.mote-info` | Pure status tokens: they only set `--mote-status` / `--mote-status-soft`, so one override re-skins every note, badge and toast |
+| `.mote-success` · `.mote-warning` · `.mote-error` · `.mote-info` | Pure status tokens: they only set `--mote-status` / `--mote-status-soft`, so one override re-skins inheriting content surfaces; gated actions and badges use their own status |
 
 ## Components
 
@@ -172,7 +175,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Skip link | `.mote-skip-link` — sr-only until focused, then a fixed pill |
 | Print helpers | `.mote-no-print` / `.mote-print-only` |
 | Theme-switch guard | `.mote-theme-switch` — prevents Chromium stale-color bug on `data-theme` flips |
-| Status inheritance control | `.mote-default` (force accent) · `.mote-reset` (clear inherited status) |
+| Status inheritance control | `.mote-default` (set inherited accent status tokens for inheriting surfaces) · `.mote-reset` (clear inherited status) |
 | Hero offset | `--mote-hero-offset` (default 12rem) — space for header/footer in `.mote-hero` |
 | Table max height | `--mote-table-max` (default 60vh) — `.mote-table-scroll` panel cap |
 | Stack gap | `--mote-stack-gap` (default 1.25rem) — `.mote-stack` vertical rhythm |
