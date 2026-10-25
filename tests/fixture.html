@@ -81,6 +81,18 @@
       <input id="t-stack-input" type="text">
     </div>
 
+    <!-- Definition lists: direct and grouped semantic structures -->
+    <div class="mote-card" style="max-width: 32rem">
+      <dl id="t-dl-direct">
+        <dt>Direct term</dt><dd>Direct value</dd>
+        <dt>Second direct term</dt><dd>Second direct value</dd>
+      </dl>
+      <dl id="t-dl-grouped">
+        <div><dt>Grouped term</dt><dd>Grouped value</dd></div>
+        <div><dt>Second grouped term</dt><dd>Second grouped value</dd></div>
+      </dl>
+    </div>
+
     <!-- Tables -->
     <div id="t-scroll" class="mote-table-scroll">
       <table id="t-table-in-scroll">
@@ -116,6 +128,10 @@
       <button id="t-dense" type="button" style="--mote-control-pad: 0.1rem">Dense</button>
     </form>
     <label id="t-label-cb"><input type="checkbox"> pointer label</label>
+    <fieldset id="t-fieldset" style="max-width: 20rem">
+      <legend>Upload</legend>
+      <input id="t-file-fieldset" type="file" aria-label="Fixture file">
+    </fieldset>
 
     <!-- Nav scroll -->
     <div id="t-navwrap" style="width: 220px; display: flex; gap: 1rem">
@@ -253,6 +269,67 @@
     t('stack keeps sr-only controls at 1px', () =>
       eq(gcs($('t-stack-sr')).width, '1px', 'width'));
 
+    // ---- Definition lists ----
+    const definitionPairs = (list) => {
+      const terms = [...list.querySelectorAll('dt')];
+      const values = [...list.querySelectorAll('dd')];
+      if (terms.length === 0 || terms.length !== values.length) return [];
+      return terms.map((term, index) => ({
+        term: term.getBoundingClientRect(),
+        value: values[index].getBoundingClientRect()
+      }));
+    };
+    const alignedDefinitionList = (list) => {
+      const pairs = definitionPairs(list);
+      if (pairs.length === 0) return false;
+      const first = pairs[0];
+      return pairs.every(({term, value}) =>
+        Math.abs(term.top - value.top) < 1 &&
+        Math.abs(term.left - first.term.left) < 1 &&
+        Math.abs(value.left - first.value.left) < 1 &&
+        term.right <= value.left + 1
+      );
+    };
+    t('definition-list probes have matched term and description counts', () => {
+      for (const id of ['t-dl-direct', 't-dl-grouped']) {
+        const list = $(id);
+        const terms = list.querySelectorAll('dt').length;
+        const descriptions = list.querySelectorAll('dd').length;
+        if (terms !== descriptions) {
+          return fail(`${id} has ${terms} terms and ${descriptions} descriptions`);
+        }
+      }
+      return ok();
+    });
+    t('grouped definition wrappers contain one term and one description', () => {
+      const groups = [...$('t-dl-grouped').children];
+      const valid = groups.every(group => {
+        const terms = [...group.children].filter(child => child.tagName === 'DT').length;
+        const descriptions = [...group.children].filter(child => child.tagName === 'DD').length;
+        return terms === 1 && descriptions === 1;
+      });
+      return valid ? ok() : fail('a grouped definition wrapper has the wrong child counts');
+    });
+    t('direct definition children alternate terms and descriptions', () => {
+      const children = [...$('t-dl-direct').children];
+      const valid = children.length > 0 && children.every((child, index) =>
+        child.tagName === (index % 2 === 0 ? 'DT' : 'DD')
+      );
+      return valid ? ok() : fail('direct definition children are not alternating term/description pairs');
+    });
+    t('direct definition terms and values share aligned rows', () =>
+      alignedDefinitionList($('t-dl-direct')) ? ok()
+        : fail('direct term/value pairs are not aligned'));
+    t('grouped definition terms and values share aligned rows', () =>
+      alignedDefinitionList($('t-dl-grouped')) ? ok()
+        : fail('grouped term/value pairs are not aligned'));
+    t('definition values stay inside their list', () => {
+      const list = $('t-dl-grouped').getBoundingClientRect();
+      return definitionPairs($('t-dl-grouped')).every(({value}) =>
+        value.right <= list.right + 1
+      ) ? ok() : fail('a definition value escapes its list');
+    });
+
     // ---- Tables ----
     t('aria-current row beats zebra on odd rows', () =>
       neq(gcs($('t-row3')).backgroundColor, gcs($('t-row1')).backgroundColor, 'backgrounds'));
@@ -316,6 +393,24 @@
     t('file input matches text input height', () =>
       Math.abs($('t-file').getBoundingClientRect().height - $('t-text').getBoundingClientRect().height) < 1
         ? ok() : fail('heights differ'));
+    t('fieldsets may shrink below intrinsic content width', () =>
+      eq(gcs($('t-fieldset')).minInlineSize, '0px', 'min-inline-size'));
+    t('file inputs stay inside their fieldset', () => {
+      const fieldset = $('t-fieldset').getBoundingClientRect();
+      const file = $('t-file-fieldset').getBoundingClientRect();
+      return file.right <= fieldset.right + 1
+        ? ok() : fail(`file right ${file.right} exceeds fieldset right ${fieldset.right}`);
+    });
+    t('fieldsets stay inside their parent main', () => {
+      const fieldset = $('t-fieldset');
+      const fieldsetRect = fieldset.getBoundingClientRect();
+      const parentRect = fieldset.parentElement.getBoundingClientRect();
+      return fieldset.parentElement.tagName === 'MAIN' &&
+        fieldsetRect.left >= parentRect.left - 1 &&
+        fieldsetRect.right <= parentRect.right + 1
+        ? ok()
+        : fail(`fieldset edges ${fieldsetRect.left}-${fieldsetRect.right} exceed main ${parentRect.left}-${parentRect.right}`);
+    });
     t('button matches input height', () =>
       Math.abs($('t-button').getBoundingClientRect().height - $('t-text').getBoundingClientRect().height) < 1
         ? ok() : fail('heights differ'));

@@ -5,6 +5,41 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.3] - 2026-10-25
+
+### Fixed
+
+- **Definition lists keep grouped terms and descriptions aligned**: valid
+  grouped definition-list markup no longer turns each grouping wrapper into an
+  alternating grid cell. Terms and descriptions share aligned columns within
+  each list when direct children alternate one term and one description; grouped
+  wrappers support one term and one description per group; fixture-pinned.
+- **Form fieldsets no longer force narrow pages sideways**: fieldsets may shrink
+  below their intrinsic content width, and file inputs stay within their
+  container; fixture-pinned.
+
+### Changed (docs — round-9 findings)
+
+- Added responsive-composition guidance for grids, toolbars, and narrow header
+  navigation, including a page-owned toolbar recipe; wide reference tables now
+  use contained scroll regions instead of widening the page.
+- Documented the choice between a contained scrolling table and a semantic
+  record layout for narrow screens.
+- Added a dedicated print-and-paper section covering screen/paper helpers,
+  table expansion, disclosures, and page-break rules.
+- Added a long-form reading recipe with a companion table of contents and
+  numbered references with backlinks.
+- Documented direct and grouped definition-list structures.
+
+### Evaluation
+
+- Ninth round: ten independent agents built ten new page types against
+  v0.10.2. All ten would use mote again, and every final page kept
+  page-level horizontal overflow at zero. The round exposed the grouped
+  definition-list defect and the documentation gaps fixed here. Narrow
+  documentation verification also exposed the fieldset/file-input overflow
+  fixed above.
+
 ## [0.10.2] - 2026-10-24
 
 ### Fixed
@@ -665,6 +700,7 @@ Components:
 [0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0
 [0.9.0]: https://gitlab.com/abmach/mote/compare/v0.8.0...v0.9.0
 [0.9.1]: https://gitlab.com/abmach/mote/compare/v0.9.0...v0.9.1
+[0.10.3]: https://gitlab.com/abmach/mote/compare/v0.10.2...v0.10.3
 [0.10.2]: https://gitlab.com/abmach/mote/compare/v0.10.1...v0.10.2
 [0.10.1]: https://gitlab.com/abmach/mote/compare/v0.10.0...v0.10.1
 [0.10.0]: https://gitlab.com/abmach/mote/compare/v0.9.1...v0.10.0

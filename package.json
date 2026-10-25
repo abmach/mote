@@ -1,6 +1,9 @@
 {
   "name": "mote.css",
-  "version": "0.10.2",
+  "version": "0.10.3",
+  "bugs": {
+    "url": "https://gitlab.com/abmach/mote/-/issues"
+  },
   "description": "A mote of styling for plain HTML \u2014 tiny, semantic, class-optional CSS with zero dependencies and no build step.",
   "style": "mote.css",
   "files": [

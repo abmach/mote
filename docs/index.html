@@ -108,6 +108,7 @@
   --mote-bg: #fffdf5;      /* your paper */
   --mote-radius: 6px;      /* your edges */
 }</code></pre>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Core token reference">
   <table>
     <caption>Core tokens — light and dark values</caption>
     <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Used for</th></tr></thead>
@@ -135,6 +136,7 @@
       <tr><td><code>--mote-transition</code></td><td colspan="2"><code>150ms ease</code></td><td>Hover/focus timing</td></tr>
     </tbody>
   </table>
+  </div>
   <p>The accent is deliberately plum: it is the one hue family that collides with none of the
     four semantic colors, so a link never looks like a status.</p>
 
@@ -225,7 +227,39 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <a href="#notes">Notes and callouts</a>: <code>.mote-note</code> is the box
     component; the tinted rule above is the quote treatment.</p>
 
-  <h3>Tables</h3>
+  <h3 id="definition-lists">Definition lists</h3>
+  <p>Definition lists align terms and descriptions in two columns without classes.
+    Both direct <code>dt</code>/<code>dd</code> children and valid grouping wrappers
+    keep the same aligned rows:</p>
+  <pre><code>&lt;dl&gt;
+  &lt;dt&gt;Format&lt;/dt&gt;
+  &lt;dd&gt;CSS&lt;/dd&gt;
+  &lt;dt&gt;Dependencies&lt;/dt&gt;
+  &lt;dd&gt;None&lt;/dd&gt;
+&lt;/dl&gt;
+
+&lt;!-- group each term with its description --&gt;
+&lt;dl&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Format&lt;/dt&gt;
+    &lt;dd&gt;CSS&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Dependencies&lt;/dt&gt;
+    &lt;dd&gt;None&lt;/dd&gt;
+  &lt;/div&gt;
+&lt;/dl&gt;
+</code></pre>
+  <p>For mote's two-column layout, direct children alternate one term with one
+    description. The grouping div is structural, not another visual row: use
+    one term and one description per wrapper. Both structures then keep terms
+    in one column and descriptions in the other.</p>
+  <dl>
+    <div><dt>Format</dt><dd>CSS</dd></div>
+    <div><dt>Dependencies</dt><dd>None</dd></div>
+  </dl>
+
+  <h3 id="tables">Tables</h3>
   <p>Numeric figures align automatically — mote sets
     <code>font-variant-numeric: tabular-nums</code> on every <code>td</code>.
     Right-align a whole column with the opt-in <code>.mote-num</code> class on
@@ -252,6 +286,23 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   &lt;table&gt;…&lt;/table&gt;
 &lt;/div&gt;
 </code></pre>
+  <h4 id="narrow-tables">Narrow screens: scroll or transform</h4>
+  <p>Choose the representation before the breakpoint. Keep a comparison or data
+    matrix as one semantic table and let its wrapper own sideways scrolling.
+    For independent records that people read one at a time, use semantic articles
+    or definition lists instead — a card-per-record layout is usually easier to
+    scan on a phone.</p>
+  <p>Do not render both a table and a card copy and hide one with CSS: duplicated
+    content becomes ambiguous for assistive technology and search. When the table
+    is the only representation, give its scroll region an accessible name and
+    keyboard focus:</p>
+  <pre><code>&lt;div class="mote-table-scroll" tabindex="0" role="region" aria-label="Product comparison"&gt;
+  &lt;table&gt;…&lt;/table&gt;
+&lt;/div&gt;
+</code></pre>
+  <p>The wrapper keeps the page still while the table moves. On paper, mote's
+    components file expands the wrapper and prints the complete table.</p>
+
   <p>Mark the current row with <code>aria-current</code> — the same vocabulary
     as nav pills. The tint reads over zebra (the regression fixture asserts
     it on both parities):</p>
@@ -614,6 +665,33 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 &lt;/div&gt;
 </code></pre>
 
+  <h3 id="responsive-composition">Responsive composition</h3>
+  <p>mote's structural helpers already adapt to the available width;
+    <code>.mote-grid</code> reflows its tracks and <code>.mote-row</code> wraps.
+    Page composition still decides what deserves a full row on a phone. Use a
+    deliberate page rule instead of scattering utility classes:</p>
+  <ul>
+    <li><strong>Card grids:</strong> let <code>.mote-grid</code> choose the track
+      count. Tune <code>--mote-grid-min</code>; do not pin a column count.</li>
+    <li><strong>Toolbars:</strong> <code>.mote-row</code> wraps, but controls keep
+      their intrinsic widths. Stack them deliberately when each control needs
+      the full width.</li>
+    <li><strong>Header navigation:</strong> long pill rows scroll horizontally.
+      Give the nav its own row on narrow screens when it needs more room, and
+      keep primary actions outside the scrolling region.</li>
+  </ul>
+  <p>A narrow toolbar can be one page rule:</p>
+  <pre><code>@media (max-width: 30rem) {
+  .filter-bar > :where(input, select, button) {
+    flex: 1 1 100%;
+  }
+}
+</code></pre>
+  <p>The complete header recipe is in <a href="#header-navigation">Header and
+    navigation</a>. For wide data, choose between an internal scroll region and
+    a record layout in <a href="#narrow-tables">Narrow screens: scroll or
+    transform</a>.</p>
+
   <h3>Hero and bands</h3>
   <p>Two helpers for focused layouts:</p>
   <p><code>.mote-hero</code> centers content in the remaining viewport height —
@@ -707,7 +785,7 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
     <footer class="mote-muted" style="padding:0.4rem 0.8rem">© mote</footer>
   </div>
 
-  <h3>Header and navigation</h3>
+  <h3 id="header-navigation">Header and navigation</h3>
   <p>Direct children of <code>&lt;body&gt;</code> get these styles from landmarks
     alone. The classes exist for one case landmarks cannot express — a shell
     wrapped in a <code>&lt;div&gt;</code>, where <code>body &gt; header</code> cannot
@@ -1083,7 +1161,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>.mote-band</code></td><td>Full-bleed tinted section; reads <code>--mote-status</code></td></tr>
       <tr><td><code>.mote-stack</code></td><td>Vertical rhythm with gap: children margin-zeroed, fields full width, checkboxes 1em — <code>--mote-stack-gap</code></td></tr>
       <tr><td><code>.mote-sr-only</code> · <code>.mote-skip-link</code></td><td>Clipped to nothing (clip-path, not display: none); the skip link reveals as a fixed pill whenever it receives focus</td></tr>
-      <tr><td><code>.mote-no-print</code> · <code>.mote-print-only</code></td><td>Hide screen-only content on paper, or show paper-only content</td></tr>
+      <tr><td><code>.mote-no-print</code> · <code>.mote-print-only</code></td><td>Hide screen-only content on paper, or show paper-only content — see <a href="#print">Print and paper</a></td></tr>
       <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
     </tbody>
   </table>
@@ -1110,6 +1188,30 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>In centered sections a note stretches full width; for a callout-sized
     box: <code>style="width: fit-content; margin-inline: auto"</code>.</p>
 
+  <h2 id="print">Print and paper</h2>
+  <p>mote prints on a light paper palette in either theme. Use the print helpers
+    when the screen and the page need different content, then add page CSS for
+    the document-specific parts such as orientation and page breaks.</p>
+  <h3>Screen-only and paper-only content</h3>
+  <p><code>.mote-no-print</code> removes screen chrome from paper.
+    <code>.mote-print-only</code> stays hidden on screen and appears on paper:</p>
+  <pre><code>&lt;nav class="mote-no-print"&gt;Site navigation&lt;/nav&gt;
+&lt;div class="mote-print-only"&gt;Printed at the visitor’s request&lt;/div&gt;
+</code></pre>
+  <h3>Tables, disclosures, and page breaks</h3>
+  <p>With <code>mote.components.css</code>, <code>.mote-table-scroll</code>
+    expands on paper: the height cap and horizontal scrollbar disappear, and
+    the complete table prints. Keep important tables intact with a small page
+    rule:</p>
+  <pre><code>@media print {
+  .receipt, tr, figure { break-inside: avoid; }
+}
+</code></pre>
+  <p>A closed <code>details</code> element does not guarantee that its hidden
+    content reaches paper. If a manual must print every disclosure, open them
+    in a <code>beforeprint</code> handler and restore their previous state in
+    <code>afterprint</code>. Print helpers live in the helper map, but this
+    section keeps the complete workflow together.</p>
   <h2 id="patterns">Patterns</h2>
   <p>Compositions that span multiple sections — each piece is documented
     above; these show how they fit together. Copy, paste, adjust.</p>
@@ -1137,12 +1239,14 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 &lt;/body&gt;
 </code></pre>
 
-  <h3>Article page</h3>
+  <h3 id="article-page">Article page</h3>
   <p>A narrow reading-measure article with breadcrumb, byline, tags,
     and an author box — <code>--mote-container-max</code> narrows the
     column (<a href="#layout">Simple page</a>,
     <a href="#components">badges as links</a>,
     <a href="#components">media objects</a>):</p>
+  <p>For a companion TOC and numbered references, continue with
+    <a href="#long-form-reading">Long-form reading with notes</a>.</p>
   <pre><code>&lt;main class="mote-container" style="--mote-container-max: 42rem"&gt;
   &lt;nav aria-label="breadcrumb"&gt;
     &lt;ol&gt;&lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href="/blog"&gt;Blog&lt;/a&gt;&lt;/li&gt;
@@ -1170,6 +1274,68 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 &lt;/main&gt;
 </code></pre>
 
+  <h3 id="long-form-reading">Long-form reading with notes</h3>
+  <p>A chapter can pair a narrow reading column with a companion table of
+    contents and numbered references. mote styles the semantic navigation and
+    links; one page rule owns the grid and sticky rail. Keep the TOC label
+    lowercase so the <code>toc</code> selector applies:</p>
+  <pre><code>&lt;style&gt;
+.reading-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 42rem) minmax(12rem, 16rem);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+.reading-column { grid-column: 1; }
+.reading-toc {
+  grid-column: 2;
+  grid-row: 1;
+  position: sticky;
+  top: 5rem;
+}
+@media (max-width: 50rem) {
+  .reading-layout { grid-template-columns: 1fr; }
+  .reading-column, .reading-toc { grid-column: 1; grid-row: auto; }
+  .reading-toc { position: static; }
+}
+&lt;/style&gt;
+
+&lt;main class="mote-container"&gt;
+  &lt;div class="reading-layout"&gt;
+    &lt;nav class="reading-toc" aria-label="toc"&gt;
+      &lt;p&gt;&lt;strong&gt;On this page&lt;/strong&gt;&lt;/p&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#argument"&gt;Argument&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#notes-heading"&gt;Notes&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+    &lt;article class="reading-column"&gt;
+      &lt;header&gt;
+        &lt;h1&gt;The Hour Before the Boats&lt;/h1&gt;
+        &lt;p class="mote-muted"&gt;Chapter 4 · 8 min read&lt;/p&gt;
+      &lt;/header&gt;
+      &lt;section id="argument"&gt;
+        &lt;h2&gt;Argument&lt;/h2&gt;
+        &lt;p&gt;The harbor changed before dawn&lt;sup&gt;
+          &lt;a href="#note-1" id="ref-1"&gt;1&lt;/a&gt;
+        &lt;/sup&gt;&lt;/p&gt;
+      &lt;/section&gt;
+      &lt;section aria-labelledby="notes-heading"&gt;
+        &lt;h2 id="notes-heading"&gt;Notes&lt;/h2&gt;
+        &lt;ol&gt;
+          &lt;li id="note-1"&gt;
+            &lt;p&gt;The tide table records the first light.&lt;/p&gt;
+            &lt;a href="#ref-1"&gt;Back to reference 1&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/section&gt;
+    &lt;/article&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+</code></pre>
+  <p>The narrow layout keeps the TOC before the article in source order and
+    stacks it above the prose. The paired anchors make the reference and
+    backlink explicit without adding JavaScript.</p>
   <h3>Settings form</h3>
   <p>A sidebar shell with grouped nav, stacked form, validation,
     and destructive actions — <code>.mote-doc</code> +
@@ -1477,6 +1643,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     is covered in <a href="#helpers">Helpers — status classes</a>.</p>
 
   <h3>Palette <span class="mote-muted">(light / dark)</span></h3>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Palette tokens">
   <table>
     <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
     <tbody>
@@ -1496,8 +1663,10 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>--mote-focus-ring</code></td><td>accent 32% ring</td><td><code>:focus-visible</code> everywhere</td></tr>
     </tbody>
   </table>
+  </div>
 
   <h3>Type, shape and motion</h3>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Type, shape, and motion tokens">
   <table>
     <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
     <tbody>
@@ -1515,8 +1684,10 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>--mote-chevron</code></td><td>data-URI arrow</td><td><code>select</code> marker</td></tr>
     </tbody>
   </table>
+  </div>
 
   <h3>Layout and density <span class="mote-muted">(inline defaults — set per use)</span></h3>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Layout and density tokens">
   <table>
     <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
     <tbody>
@@ -1534,6 +1705,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>--mote-band-pad</code></td><td>4rem</td><td><code>.mote-band</code> — 1rem for thin strips</td></tr>
     </tbody>
   </table>
+  </div>
 
   <h2 id="gallery">Gallery</h2>
   <p>Every element, every state — the long tail the sections above don't
@@ -1567,6 +1739,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   </form>
 
   <h3>Footnoted table</h3>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Token cost of the cozy feel">
   <table>
     <caption>Token cost of the cozy feel</caption>
     <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Usage</th></tr></thead>
@@ -1578,6 +1751,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     </tbody>
     <tfoot><tr><td>Total</td><td colspan="3">4 lines of variables to re-theme everything</td></tr></tfoot>
   </table>
+  </div>
 
   <h3>Sample output</h3>
   <p>Press <kbd>Esc</kbd> to close dialogs. The ratio <code>0Oo 1lI</code>
@@ -1600,6 +1774,7 @@ npm install @fontsource-variable/inter @fontsource/commit-mono
   <p>Modern evergreen browsers. The core needs <code>color-mix()</code>: Chrome/Edge 111+,
     Firefox 113+, Safari 16.2+. Component niceties ride on Baseline 2024 platform features and
     degrade gracefully:</p>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Browser feature support">
   <table>
     <thead><tr><th>Feature</th><th>Used for</th><th>Fallback</th></tr></thead>
     <tbody>
@@ -1611,6 +1786,7 @@ npm install @fontsource-variable/inter @fontsource/commit-mono
       <tr><td><code>details::details-content</code> + <code>interpolate-size</code></td><td>Accordion open/close animation</td><td>Instant toggle</td></tr>
     </tbody>
   </table>
+  </div>
 
   <hr>
   <p class="mote-muted">mote.css · MIT ·

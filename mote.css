@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.10.2 · MIT
+ * v0.10.3 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -285,9 +285,12 @@ li::marker {
 
 dl {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 0.4rem 1.5rem;
 }
+
+/* Grouping wrappers are structural, not grid items. */
+dl > div { display: contents; }
 
 dt { font-weight: 600; }
 
@@ -418,7 +421,9 @@ label {
   cursor: pointer;
 }
 
+/* Fieldsets default to min-content and can force a narrow page sideways. */
 fieldset {
+  min-inline-size: 0;
   padding: 1rem 1.2rem;
   border: var(--mote-border-width) solid var(--mote-border);
   border-radius: var(--mote-radius);
@@ -484,7 +489,9 @@ select[multiple] {
   height: 2.4rem;
 }
 
+/* Native file controls have a wide intrinsic size; keep them inside their parent. */
 [type="file"] {
+  max-width: 100%;
   padding: var(--mote-control-pad, 0.5rem) var(--mote-control-pad-inline, 0.75rem);
   background: none;
   border-style: dashed;
