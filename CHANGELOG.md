@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.6] - 2026-10-26
+
+### Added (docs)
+
+- **The documentation page is navigable again**: a contents rail on wide
+  screens lists every section and subsection and marks the one in view, and on
+  narrow screens it folds into a one-line "On this page" bar under the header.
+  Every section and subsection heading is now deep-linkable, the header strip
+  is the complete section index, and a "Back to top" link closes the page.
+  The rail is screen chrome: on paper the shell collapses to one column, the
+  outline does not print, and the shell's inner scroll no longer clips wide
+  tables.
+
 ## [0.10.5] - 2026-10-25
 
 ### Fixed (docs — round-11 findings)
@@ -759,7 +772,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.5...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.6...HEAD
+[0.10.6]: https://gitlab.com/abmach/mote/compare/v0.10.5...v0.10.6
 [0.10.5]: https://gitlab.com/abmach/mote/compare/v0.10.4...v0.10.5
 [0.10.4]: https://gitlab.com/abmach/mote/compare/v0.10.3...v0.10.4
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0

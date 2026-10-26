@@ -14,9 +14,67 @@
     /* Inline code must never widen the page: a long token breaks instead.
        Code inside a pre block keeps scrolling, as mote.css intends. */
     :not(pre) > code { overflow-wrap: break-word; }
+
+    /* The spinner's ring rotates past its own box; give the demo line
+       room so the shell's inner scroll never gains a stray 4px. */
+    main p:has(.mote-spinner) { padding-inline-end: 0.5rem; }
+
+    /* Contents rail: the page outline. The section in view is marked,
+       and the rail keeps that entry in sight while it scrolls. */
+    nav[aria-label="toc"] > details > summary {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--mote-muted);
+    }
+    nav[aria-label="toc"] > details > ul > li > a {
+      color: var(--mote-fg);
+      font-weight: 600;
+    }
+    nav[aria-label="toc"] a[aria-current="location"] {
+      color: var(--mote-accent-deep);
+      background: var(--mote-accent-soft);
+      border-radius: var(--mote-radius-sm);
+      font-weight: 600;
+    }
+    header nav a[aria-current="location"] {
+      background: var(--mote-accent-soft);
+      color: var(--mote-accent-deep);
+    }
+
+    /* Narrow screens: the rail becomes a compact outline above the
+       content; the header strip stays the persistent section index. */
+    @media (width < 50rem) {
+      /* One gutter, not two: the shell already pads the page, and the
+         container would narrow the measure a second time. */
+      body.mote-doc { padding-inline: 0; }
+      body.mote-doc > header { order: -2; }
+      body.mote-doc > aside { order: -1; }
+      /* Narrow screens: the rail is the section index — a one-line bar
+         under the header — so the header keeps just the brand and the
+         theme control. An opened outline scrolls with the page. */
+      body.mote-doc header .mote-nav { display: none; }
+      body.mote-doc > aside {
+        position: sticky;
+        top: var(--mote-rail-top, 1rem);
+        z-index: 5;
+      }
+      body.mote-doc > aside:has(details[open]) { position: static; }
+      body.mote-doc > aside details { margin-block: 0; padding: 0.35rem 0.6rem; }
+      /* A jump must clear the header and the rail bar under it. */
+      html:where(:has(body > header)) { scroll-padding-block-start: 7rem; }
+    }
+
+    /* Print: the contents rail is screen chrome, and the shell's inner
+       scroll must not clip wide tables on paper. */
+    @media print {
+      body.mote-doc { display: block; padding-inline: 0; }
+      body.mote-doc > main { overflow: visible; }
+    }
   </style>
 </head>
-<body>
+<body class="mote-doc">
 <a class="mote-skip-link" href="#top">Skip to content</a>
 
 <header class="mote-header">
@@ -24,15 +82,21 @@
     <a href="https://gitlab.com/abmach/mote" class="mote-brand">mote.css</a>
     <nav class="mote-nav" aria-label="Sections">
       <ul>
+        <li><a href="#principles">Principles</a></li>
         <li><a href="#get-started">Start</a></li>
         <li><a href="#theming">Theming</a></li>
         <li><a href="#elements">Elements</a></li>
+        <li><a href="#details">Details</a></li>
         <li><a href="#popovers">Popovers</a></li>
         <li><a href="#layout">Layout</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#helpers">Helpers</a></li>
+        <li><a href="#print">Print</a></li>
         <li><a href="#patterns">Patterns</a></li>
         <li><a href="#tokens">Tokens</a></li>
         <li><a href="#gallery">Gallery</a></li>
-        <li><a href="#components">Components</a></li>
+        <li><a href="#fonts">Fonts</a></li>
+        <li><a href="#support">Support</a></li>
         <li><a href="https://github.com/abmach/mote">GitHub</a></li>
       </ul>
     </nav>
@@ -231,7 +295,7 @@ toggle.addEventListener('click', () =&gt; {
     The <a href="#gallery">gallery</a> at the end of this page renders the
     complete set.</p>
 
-  <h3>Typography</h3>
+  <h3 id="typography">Typography</h3>
   <h1>Heading 1</h1>
   <h2>Heading 2</h2>
   <h3>Heading 3</h3>
@@ -248,7 +312,7 @@ toggle.addEventListener('click', () =&gt; {
   inline &lt;code&gt;code&lt;/code&gt;, and &lt;kbd&gt;Ctrl&lt;/kbd&gt;+&lt;kbd&gt;K&lt;/kbd&gt;.&lt;/p&gt;
 </code></pre>
 
-  <h3>Lists and block content</h3>
+  <h3 id="lists-and-block-content">Lists and block content</h3>
   <ul>
     <li>Unordered lists</li>
     <li>With <a href="#elements">links</a></li>
@@ -388,7 +452,7 @@ toggle.addEventListener('click', () =&gt; {
 &lt;/table&gt;
 </code></pre>
 
-  <h3>Forms</h3>
+  <h3 id="forms">Forms</h3>
   <p>Labels, inputs, selects, checkboxes, radios and buttons inherit the cozy surface.
     Invalid fields show a brick border once the user interacts with them (<code>:user-invalid</code>).</p>
   <p>Timing is the browser's: text and email fields can fail as soon as you leave
@@ -459,7 +523,7 @@ toggle.addEventListener('click', () =&gt; {
   <p>
     <a class="mote-btn" href="#elements">Get started</a>
   </p>
-  <h3>Live form demo</h3>
+  <h3 id="live-form-demo">Live form demo</h3>
   <p>The controls above, assembled — type an invalid email and blur to see
     <code>:user-invalid</code> in action:</p>
   <form onsubmit="event.preventDefault()">
@@ -524,7 +588,7 @@ toggle.addEventListener('click', () =&gt; {
 &lt;/form&gt;
 </code></pre>
 
-  <h3>Progress and meter</h3>
+  <h3 id="progress-and-meter">Progress and meter</h3>
   <p>Progress bars and meters take the accent by default and follow the status
     classes — every variant:</p>
   <pre><code>&lt;progress value="70" max="100"&gt;70%&lt;/progress&gt;
@@ -552,7 +616,7 @@ toggle.addEventListener('click', () =&gt; {
     <code>progress { width: 100% }</code> in your page styles when you want a
     full-width bar.</p>
 
-  <h3>Dialogs</h3>
+  <h3 id="dialogs">Dialogs</h3>
   <p>Native <code>&lt;dialog&gt;</code> gets a soft surface, a dimmed blurred backdrop, and —
     with the components file — a gentle entrance animation. Opening a <em>modal</em> takes one
     line of JavaScript:</p>
@@ -698,11 +762,11 @@ toggle.addEventListener('click', () =&gt; {
     values case-sensitively — copy the exact lowercase
     (<code>"breadcrumb"</code>, <code>"pagination"</code>, <code>"toc"</code>).</p>
 
-  <h3>Simple page</h3>
+  <h3 id="simple-page">Simple page</h3>
   <p>Most pages need nothing more than a sticky header and a centered column —
-    exactly the layout of the page you are reading. The header bar and its pill
-    nav style themselves from landmarks; the classes on the inner div are the
-    layout: <code>.mote-container</code> adds the gutters, <code>.mote-row</code> flexes,
+    the layout of the page you are reading, plus the contents rail beside it.
+    The header bar and its pill nav style themselves from landmarks; the classes
+    on the inner div are the layout: <code>.mote-container</code> adds the gutters, <code>.mote-row</code> flexes,
     <code>.mote-brand</code> quiets the wordmark, <code>.mote-push</code> right-aligns
     the last control:</p>
   <pre><code>&lt;body&gt;
@@ -830,7 +894,7 @@ toggle.addEventListener('click', () =&gt; {
     a record layout in <a href="#narrow-tables">Narrow screens: scroll or
     transform</a>.</p>
 
-  <h3>Hero and bands</h3>
+  <h3 id="hero-and-bands">Hero and bands</h3>
   <p>Two helpers for focused layouts:</p>
   <p><code>.mote-hero</code> centers content in the remaining viewport height —
     error pages, login screens, empty states. The offset clears a header and
@@ -872,7 +936,7 @@ toggle.addEventListener('click', () =&gt; {
       <small class="mote-muted">Accent tint by default — a status class re-tints the band.</small>
     </div>
   </section>
-  <h3>Document layout</h3>
+  <h3 id="document-layout">Document layout</h3>
   <p>One class on <code>&#60;body&#62;</code> turns the landmarks you already write into the
     layout: <code>header</code> and <code>footer</code> span the page, a <code>nav</code>
     becomes a sticky left rail, an <code>aside</code> a right rail, and <code>main</code>
@@ -995,7 +1059,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     </ol>
   </nav>
 
-  <h3>Pagination</h3>
+  <h3 id="pagination">Pagination</h3>
   <p>Same idea as breadcrumbs — a semantic label, no class. mote styles the
     link row and the <code>aria-current</code> pill. The current page works
     best as a <code>&lt;span&gt;</code> (you are already there — not a link), but
@@ -1021,7 +1085,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     </ul>
   </nav>
 
-  <h3>Table of contents</h3>
+  <h3 id="table-of-contents">Table of contents</h3>
   <p>Right-rail asides and "On this page" navigation, styled semantically
     like breadcrumbs and pagination. Inside <code>.mote-doc</code>, put the TOC
     in the <code>aside</code> to make it the right rail:</p>
@@ -1041,7 +1105,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   </nav>
 
 
-  <h3>Card grids</h3>
+  <h3 id="card-grids">Card grids</h3>
   <p>One class; columns are computed from the container — as many 16rem cards as fit.
     <code>auto-fill</code> made column-count utilities obsolete:</p>
   <p>For wider or narrower tracks, set <code>--mote-grid-min</code>:
@@ -1072,7 +1136,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <h2 id="components">Components</h2>
   <p>From <code>mote.components.css</code> — opt-in, CSS-only, built on the platform.</p>
 
-  <h3>Cards</h3>
+  <h3 id="cards">Cards</h3>
   <pre><code>&lt;article class="mote-card"&gt;
   &lt;h3&gt;Card title&lt;/h3&gt;
   &lt;p&gt;A soft surface for grouped content.&lt;/p&gt;
@@ -1138,7 +1202,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     keeps a pill inside a heading readable, while small contexts (footer
     small print) still scale down with the em side.</p>
 
-  <h3>Avatars</h3>
+  <h3 id="avatars">Avatars</h3>
   <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem);
     corners via <code>--mote-avatar-radius</code> (default 999px — round for
     people; square cover art and favicons set it to 0):</p>
@@ -1182,7 +1246,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <pre><code>.dot { min-height: 0; width: 0.45rem; height: 0.45rem; border-radius: 50%; }
 </code></pre>
 
-  <h3>Media objects</h3>
+  <h3 id="media-objects">Media objects</h3>
   <p>Avatar or icon beside body — forum posts, comments, chat, author boxes.
     <code>.mote-media</code> flexes the row; the last child grows. Rows align
     to flex-start — long content never stretches the avatar row:</p>
@@ -1240,7 +1304,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <h2 id="helpers">Helpers</h2>
   <p>Escape hatches for what semantics cannot express — the helpers, plus the
     status classes every status-consuming component reads:</p>
-  <h3>Status classes</h3>
+  <h3 id="status-classes">Status classes</h3>
   <p><code>.mote-success</code>, <code>.mote-warning</code>, <code>.mote-error</code>
     and <code>.mote-info</code> are pure token assignments: they set the
     <code>--mote-status</code> and <code>--mote-status-soft</code> variables and
@@ -1355,13 +1419,13 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>mote prints on a light paper palette in either theme. Use the print helpers
     when the screen and the page need different content, then add page CSS for
     the document-specific parts such as orientation and page breaks.</p>
-  <h3>Screen-only and paper-only content</h3>
+  <h3 id="screen-only-and-paper-only-content">Screen-only and paper-only content</h3>
   <p><code>.mote-no-print</code> removes screen chrome from paper.
     <code>.mote-print-only</code> stays hidden on screen and appears on paper:</p>
   <pre><code>&lt;nav class="mote-no-print"&gt;Site navigation&lt;/nav&gt;
 &lt;div class="mote-print-only"&gt;Printed at the visitor’s request&lt;/div&gt;
 </code></pre>
-  <h3>Tables, disclosures, and page breaks</h3>
+  <h3 id="tables-disclosures-and-page-breaks">Tables, disclosures, and page breaks</h3>
   <p>With <code>mote.components.css</code>, <code>.mote-table-scroll</code>
     removes the screen height cap and clipping on paper. This guarantees that the
     complete table is present without artificial clipping; it does not guarantee
@@ -1395,7 +1459,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>Compositions that span multiple sections — each piece is documented
     above; these show how they fit together. Copy, paste, adjust.</p>
 
-  <h3>Error page</h3>
+  <h3 id="error-page">Error page</h3>
   <p>A full-height centered page with a themed giant code, search, and
     quiet CTAs — <code>body class="mote-error"</code> tints everything
     except the actions (<a href="#theming">theming</a>,
@@ -1515,7 +1579,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>The narrow layout keeps the TOC before the article in source order and
     stacks it above the prose. The paired anchors make the reference and
     backlink explicit without adding JavaScript.</p>
-  <h3>Settings form</h3>
+  <h3 id="settings-form">Settings form</h3>
   <p>A sidebar shell with grouped nav, stacked form, validation,
     and destructive actions — <code>.mote-doc</code> +
     <code>.mote-stack</code> + gated buttons
@@ -1561,7 +1625,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 &lt;/body&gt;
 </code></pre>
 
-  <h3>Card grid with covers</h3>
+  <h3 id="card-grid-with-covers">Card grid with covers</h3>
   <p>The flush-media recipe applied to a real grid — cover photos edge-to-edge,
     titles and metadata pinned to the bottom
     (<a href="#components">Cards</a>,
@@ -1580,7 +1644,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 &lt;/div&gt;
 </code></pre>
 
-  <h3>Login page</h3>
+  <h3 id="login-page">Login page</h3>
   <p>A focused auth screen — <code>.mote-hero</code> centers the card in the
     viewport, the card resets alignment so labels read normally inside the
     centered hero, <code>.mote-stack</code> stretches fields, and
@@ -1607,7 +1671,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;/main&gt;
 &lt;/body&gt;
 </code></pre>
-  <h3>Marketing hero</h3>
+  <h3 id="marketing-hero">Marketing hero</h3>
   <p><code>.mote-hero</code> fills the viewport — right for 404s and logins,
     wrong for marketing, where the CTA must sit above the fold. A marketing
     hero is a plain centered section; the closing call-to-action band is
@@ -1631,7 +1695,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;/section&gt;
 &lt;/main&gt;
 </code></pre>
-  <h3>Stat row</h3>
+  <h3 id="stat-row">Stat row</h3>
   <p>A stats strip — cards in a grid, display-scale numbers with a per-use
     <code>--mote-display</code>, muted labels:</p>
   <pre><code>&lt;div class="mote-grid"&gt;
@@ -1649,7 +1713,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;/article&gt;
 &lt;/div&gt;
 </code></pre>
-  <h3>Billing toggle</h3>
+  <h3 id="billing-toggle">Billing toggle</h3>
   <p>The pricing-page idiom, CSS-only: hidden radios steer the prices with
     <code>:checked ~</code> selectors. The radios must precede, as siblings,
     every element they steer — they sit bare in <code>main</code>, not in a
@@ -1685,7 +1749,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;/section&gt;
 &lt;/main&gt;
 </code></pre>
-  <h3>Display pull-quote</h3>
+  <h3 id="display-pull-quote">Display pull-quote</h3>
   <p>Editorial pull-quote — compose <code>blockquote</code> with
     <code>.mote-display</code> on the quoted paragraph: the rule tints from the
     blockquote, the attribution stays body-scale:</p>
@@ -1696,14 +1760,14 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;cite&gt;— Every magazine, ever&lt;/cite&gt;
 &lt;/blockquote&gt;
 </code></pre>
-  <h3>Row hover</h3>
+  <h3 id="row-hover">Row hover</h3>
   <p>mote ships zebra striping; attention-on-hover stays a page opinion.
     One token-reading rule covers both themes:</p>
   <pre><code>tbody tr:hover {
   background: var(--mote-accent-soft);
 }
 </code></pre>
-  <h3>Feedback row</h3>
+  <h3 id="feedback-row">Feedback row</h3>
   <p>The end-of-article "was this helpful?" — a row, a solid and a ghost
     button, a pushed support link:</p>
   <pre><code>&lt;p class="mote-row" style="margin-block-start:3rem"&gt;
@@ -1713,7 +1777,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;a class="mote-push" href="/support"&gt;Get support&lt;/a&gt;
 &lt;/p&gt;
 </code></pre>
-  <h3>Toolbar row</h3>
+  <h3 id="toolbar-row">Toolbar row</h3>
   <p>Filter and action bars — a search, a select, quiet actions, a pushed
     count — one <code>.mote-row</code>. Controls keep intrinsic widths and
     equal heights:</p>
@@ -1726,7 +1790,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;span class="mote-muted mote-push"&gt;12 of 48 shown&lt;/span&gt;
 &lt;/form&gt;
 </code></pre>
-  <h3>Result rows</h3>
+  <h3 id="result-rows">Result rows</h3>
   <p>Poll results, skill bars, quota meters — label, bar, figure rows that
     align across different label lengths. A small grid does what a flex row
     can't:</p>
@@ -1747,7 +1811,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;span class="mote-num"&gt;25.0%&lt;/span&gt;
 &lt;/div&gt;
 </code></pre>
-  <h3>Price line</h3>
+  <h3 id="price-line">Price line</h3>
   <p>Product pricing — display scale for the number, a muted compare-at
     strike, plain-text stars. One inline <code>--mote-display</code> keeps
     the price huge without hijacking the whole line:</p>
@@ -1756,7 +1820,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 &lt;/p&gt;
 &lt;p class="mote-muted" style="margin-block-start:0"&gt;★★★★★ 4.6 — 312 reviews&lt;/p&gt;
 </code></pre>
-  <h3>Post actions</h3>
+  <h3 id="post-actions">Post actions</h3>
   <p>The quiet action strip under forum posts and comments — muted links in
     a row; buttons only when an action is destructive:</p>
   <pre><code>&lt;p class="mote-row mote-muted" style="gap: 1rem; margin-block: 0"&gt;
@@ -1766,7 +1830,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;a class="mote-push" href="#top"&gt;Report&lt;/a&gt;
 &lt;/p&gt;
 </code></pre>
-  <h3>Growing input</h3>
+  <h3 id="growing-input">Growing input</h3>
   <p>Fields keep intrinsic width by design — but in a toolbar a promo or URL
     field should eat the remaining space. One page rule, token-safe:</p>
   <pre><code>&lt;form class="mote-row"&gt;
@@ -1778,7 +1842,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   .grow { flex: 1; min-width: 8rem; }
 &lt;/style&gt;
 </code></pre>
-  <h3>Prominent search</h3>
+  <h3 id="prominent-search">Prominent search</h3>
   <p>Help-center and docs heroes want a big obvious search box — the
     canonical form plus one width rule:</p>
   <pre><code>&lt;form class="mote-row" role="search" style="justify-content: center"&gt;
@@ -1788,7 +1852,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;button type="submit"&gt;Search&lt;/button&gt;
 &lt;/form&gt;
 </code></pre>
-  <h3>Grouped messages</h3>
+  <h3 id="grouped-messages">Grouped messages</h3>
   <p>Consecutive chat or comment messages from the same sender: repeat
     <code>.mote-media</code> with an <code>aria-hidden</code> spacer the width of
     the avatar, so follow-ups align under the text rather than the face:</p>
@@ -1801,7 +1865,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;div&gt;Follow-up from the same sender…&lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
-  <h3>Weekend columns</h3>
+  <h3 id="weekend-columns">Weekend columns</h3>
   <p>Calendar grids: the zebra and the <code>tr[aria-current]</code> tint
     paint on the row, so column shading must be a <code>background-image</code>
     layered over the row color — a plain cell background would cover the
@@ -1821,7 +1885,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     status contract (<code>--mote-status</code> / <code>--mote-status-soft</code>)
     is covered in <a href="#helpers">Helpers — status classes</a>.</p>
 
-  <h3>Palette <span class="mote-muted">(light / dark)</span></h3>
+  <h3 id="palette">Palette <span class="mote-muted">(light / dark)</span></h3>
   <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Palette tokens">
   <table>
     <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
@@ -1844,7 +1908,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   </table>
   </div>
 
-  <h3>Type, shape and motion</h3>
+  <h3 id="type-shape-and-motion">Type, shape and motion</h3>
   <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Type, shape, and motion tokens">
   <table>
     <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
@@ -1865,7 +1929,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   </table>
   </div>
 
-  <h3>Layout and density <span class="mote-muted">(inline defaults — set per use)</span></h3>
+  <h3 id="layout-and-density">Layout and density <span class="mote-muted">(inline defaults — set per use)</span></h3>
   <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Layout and density tokens">
   <table>
     <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
@@ -1891,7 +1955,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     show: all input types, footnoted tables, sample output. Rendered by the
     two stylesheets and nothing else.</p>
 
-  <h3>The complete form</h3>
+  <h3 id="the-complete-form">The complete form</h3>
   <form onsubmit="return false">
     <fieldset>
       <legend>A plain, honest form</legend>
@@ -1917,7 +1981,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     </fieldset>
   </form>
 
-  <h3>Footnoted table</h3>
+  <h3 id="footnoted-table">Footnoted table</h3>
   <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Token cost of the cozy feel">
   <table>
     <caption>Token cost of the cozy feel</caption>
@@ -1932,7 +1996,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   </table>
   </div>
 
-  <h3>Sample output</h3>
+  <h3 id="sample-output">Sample output</h3>
   <p>Press <kbd>Esc</kbd> to close dialogs. The ratio <code>0Oo 1lI</code>
     stays legible in <samp>Commit Mono</samp>.</p>
 
@@ -1971,8 +2035,118 @@ npm install @fontsource-variable/inter @fontsource/commit-mono
   <p class="mote-muted">mote.css · MIT ·
     <a href="https://gitlab.com/abmach/mote">GitLab</a> ·
     <a href="https://github.com/abmach/mote">GitHub</a> ·
+    <a href="#top">Back to top</a> ·
     styled by two CSS files and zero lines of library JavaScript.</p>
 </main>
+
+<aside class="mote-no-print">
+  <nav aria-label="toc">
+    <details class="docs-toc" open>
+      <summary>On this page</summary>
+      <ul>
+        <li><a href="#principles">Principles</a></li>
+        <li><a href="#get-started">Get started</a></li>
+        <li><a href="#theming">Theming</a>
+          <ul>
+          <li><a href="#brand-themes">Brand themes</a></li>
+          <li><a href="#dark-mode">Dark mode</a></li>
+          </ul>
+        </li>
+        <li><a href="#elements">Elements</a>
+          <ul>
+          <li><a href="#typography">Typography</a></li>
+          <li><a href="#lists-and-block-content">Lists and block content</a></li>
+          <li><a href="#definition-lists">Definition lists</a></li>
+          <li><a href="#tables">Tables</a></li>
+          <li><a href="#forms">Forms</a></li>
+          <li><a href="#buttons-and-statuses">Buttons and statuses</a></li>
+          <li><a href="#live-form-demo">Live form demo</a></li>
+          <li><a href="#display-text">Display text</a></li>
+          <li><a href="#semantic-feedback">Semantic feedback</a></li>
+          <li><a href="#progress-and-meter">Progress and meter</a></li>
+          <li><a href="#dialogs">Dialogs</a></li>
+          </ul>
+        </li>
+        <li><a href="#details">Details and accordions</a></li>
+        <li><a href="#popovers">Popovers: tooltips and menus</a></li>
+        <li><a href="#layout">Layout</a>
+          <ul>
+          <li><a href="#simple-page">Simple page</a></li>
+          <li><a href="#responsive-composition">Responsive composition</a></li>
+          <li><a href="#hero-and-bands">Hero and bands</a></li>
+          <li><a href="#document-layout">Document layout</a></li>
+          <li><a href="#header-navigation">Header and navigation</a></li>
+          <li><a href="#pagination">Pagination</a></li>
+          <li><a href="#table-of-contents">Table of contents</a></li>
+          <li><a href="#card-grids">Card grids</a></li>
+          </ul>
+        </li>
+        <li><a href="#components">Components</a>
+          <ul>
+          <li><a href="#cards">Cards</a></li>
+          <li><a href="#badges">Badges</a></li>
+          <li><a href="#avatars">Avatars</a></li>
+          <li><a href="#skeletons-and-spinners">Skeletons and spinners</a></li>
+          <li><a href="#media-objects">Media objects</a></li>
+          <li><a href="#toasts">Toasts</a></li>
+          </ul>
+        </li>
+        <li><a href="#helpers">Helpers</a>
+          <ul>
+          <li><a href="#status-classes">Status classes</a></li>
+          <li><a href="#notes">Notes and callouts</a></li>
+          </ul>
+        </li>
+        <li><a href="#print">Print and paper</a>
+          <ul>
+          <li><a href="#screen-only-and-paper-only-content">Screen-only and paper-only content</a></li>
+          <li><a href="#tables-disclosures-and-page-breaks">Tables, disclosures, and page breaks</a></li>
+          </ul>
+        </li>
+        <li><a href="#patterns">Patterns</a>
+          <ul>
+          <li><a href="#error-page">Error page</a></li>
+          <li><a href="#article-page">Article page</a></li>
+          <li><a href="#long-form-reading">Long-form reading with notes</a></li>
+          <li><a href="#settings-form">Settings form</a></li>
+          <li><a href="#card-grid-with-covers">Card grid with covers</a></li>
+          <li><a href="#login-page">Login page</a></li>
+          <li><a href="#marketing-hero">Marketing hero</a></li>
+          <li><a href="#stat-row">Stat row</a></li>
+          <li><a href="#billing-toggle">Billing toggle</a></li>
+          <li><a href="#display-pull-quote">Display pull-quote</a></li>
+          <li><a href="#row-hover">Row hover</a></li>
+          <li><a href="#feedback-row">Feedback row</a></li>
+          <li><a href="#toolbar-row">Toolbar row</a></li>
+          <li><a href="#result-rows">Result rows</a></li>
+          <li><a href="#price-line">Price line</a></li>
+          <li><a href="#post-actions">Post actions</a></li>
+          <li><a href="#growing-input">Growing input</a></li>
+          <li><a href="#prominent-search">Prominent search</a></li>
+          <li><a href="#grouped-messages">Grouped messages</a></li>
+          <li><a href="#weekend-columns">Weekend columns</a></li>
+          </ul>
+        </li>
+        <li><a href="#tokens">Tokens</a>
+          <ul>
+          <li><a href="#palette">Palette (light / dark)</a></li>
+          <li><a href="#type-shape-and-motion">Type, shape and motion</a></li>
+          <li><a href="#layout-and-density">Layout and density (inline defaults — set per use)</a></li>
+          </ul>
+        </li>
+        <li><a href="#gallery">Gallery</a>
+          <ul>
+          <li><a href="#the-complete-form">The complete form</a></li>
+          <li><a href="#footnoted-table">Footnoted table</a></li>
+          <li><a href="#sample-output">Sample output</a></li>
+          </ul>
+        </li>
+        <li><a href="#fonts">Fonts</a></li>
+        <li><a href="#support">Browser support</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
 
 <script>
   // Header scroll hints: data-nav drives the directional fades
@@ -2017,6 +2191,80 @@ npm install @fontsource-variable/inter @fontsource/commit-mono
   fireToast('toast-btn-error', 'docs-toast-error');
   fireToast('toast-btn-info', 'docs-toast-info');
   fireToast('toast-btn-muted', 'docs-toast-muted');
+
+  // Contents rail: mark the section in view and keep it in sight
+  const tocNav = document.querySelector('body > aside nav[aria-label="toc"]');
+  const tocDetails = tocNav?.querySelector('details');
+  const tocLinks = tocNav ? [...tocNav.querySelectorAll('a[href^="#"]')] : [];
+  const tocTargets = tocLinks
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+  const sectionOf = new Map();
+  for (const li of tocNav?.querySelectorAll(':scope > details > ul > li') ?? []) {
+    const top = li.querySelector(':scope > a')?.getAttribute('href').slice(1);
+    if (!top) continue;
+    sectionOf.set(top, top);
+    for (const sub of li.querySelectorAll(':scope > ul > li > a'))
+      sectionOf.set(sub.getAttribute('href').slice(1), top);
+  }
+  const rail = document.querySelector('body > aside');
+  const pillLinks = [...document.querySelectorAll('header nav a[href^="#"]')];
+  let tocOffsets = [];
+  let activeId = null;
+
+  const measureToc = () => {
+    tocOffsets = tocTargets.map(h => ({ id: h.id, top: h.getBoundingClientRect().top + scrollY }));
+  };
+
+  const markCurrent = id => {
+    if (id === activeId) return;
+    activeId = id;
+    for (const a of tocLinks) {
+      if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'location');
+      else a.removeAttribute('aria-current');
+    }
+    const section = sectionOf.get(id);
+    for (const p of pillLinks) {
+      if (section && p.getAttribute('href') === '#' + section) p.setAttribute('aria-current', 'location');
+      else p.removeAttribute('aria-current');
+    }
+    const link = tocLinks.find(a => a.getAttribute('href') === '#' + id);
+    if (link && rail && rail.scrollHeight > rail.clientHeight) {
+      const lr = link.getBoundingClientRect();
+      const rr = rail.getBoundingClientRect();
+      if (lr.top < rr.top) rail.scrollTop -= rr.top - lr.top + 8;
+      else if (lr.bottom > rr.bottom) rail.scrollTop += lr.bottom - rr.bottom + 8;
+    }
+  };
+
+  let tocPending = false;
+  const syncToc = () => {
+    tocPending = false;
+    const y = scrollY + 120;
+    let current = null;
+    for (const o of tocOffsets) {
+      if (o.top <= y) current = o.id;
+      else break;
+    }
+    markCurrent(current);
+  };
+  addEventListener('scroll', () => {
+    if (tocPending) return;
+    tocPending = true;
+    requestAnimationFrame(syncToc);
+  }, { passive: true });
+  const remeasure = () => { measureToc(); syncToc(); };
+  addEventListener('resize', remeasure);
+  document.fonts?.ready.then(remeasure);
+  new ResizeObserver(remeasure).observe(document.querySelector('main'));
+  measureToc();
+  syncToc();
+
+  // Narrow screens: the outline folds into a one-line summary.
+  const narrow = matchMedia('(width < 50rem)');
+  const syncTocDetails = () => { if (tocDetails) tocDetails.open = !narrow.matches; };
+  narrow.addEventListener('change', syncTocDetails);
+  syncTocDetails();
 </script>
 </body>
 </html>
