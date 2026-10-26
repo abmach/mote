@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
   <link rel="stylesheet" href="../mote.css">
   <link rel="stylesheet" href="../mote.components.css">
+  <style>
+    /* Inline code must never widen the page: a long token breaks instead.
+       Code inside a pre block keeps scrolling, as mote.css intends. */
+    :not(pre) > code { overflow-wrap: break-word; }
+  </style>
 </head>
 <body>
 <a class="mote-skip-link" href="#top">Skip to content</a>
@@ -114,6 +119,43 @@
     too: mote cannot infer whether white or dark text has enough contrast on an
     arbitrary brand color. A separate dark-theme accent may need its own foreground
     token as well.</p>
+
+  <h3 id="brand-themes">Brand themes</h3>
+  <p>A brand needs more than one declaration. mote's own palette rules are more
+    specific than a plain <code>:root</code> override, so a lone
+    <code>:root { --mote-accent: … }</code> is superseded in automatic dark
+    mode and on paper. Restate the brand in every state it can appear in — and
+    always pair the accent with its foreground token:</p>
+  <pre><code>:root {
+  --mote-accent: #4a7a5b;      /* brand in light and automatic light mode */
+  --mote-on-accent: #ffffff;
+}
+
+:root[data-theme="dark"] {
+  --mote-accent: #8fc7a1;      /* brand in forced dark mode */
+  --mote-on-accent: #10231a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mote-accent: #8fc7a1;    /* brand in automatic dark mode */
+    --mote-on-accent: #10231a;
+  }
+}
+
+@media print {
+  :root,
+  :root[data-theme="dark"],
+  :root:not([data-theme="light"]) {
+    --mote-accent: #4a7a5b;    /* brand on paper */
+    --mote-on-accent: #ffffff;
+  }
+}</code></pre>
+  <p>Those selectors match mote's own palette rules, so your values win by
+    order — override only the tokens you need and every derived tone
+    re-derives from the accent you set. The <code>@media print</code> block is
+    the one most pages forget: mote prints on a light paper palette, so without
+    it paper keeps mote's accent instead of yours.</p>
   <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Core token reference">
   <table>
     <caption>Core tokens — light and dark values</caption>
@@ -167,15 +209,19 @@ document.documentElement.classList.remove('mote-theme-switch'));
 transition: none !important;
 }
 </code></pre>
-  <p>The toggle on this page is seven lines of JavaScript, including the
-    <code>.mote-theme-switch</code> helper that prevents the stale-color bug:</p>
+  <p>The toggle on this page is a few lines of JavaScript, including the
+    <code>.mote-theme-switch</code> helper that prevents the stale-color bug.
+    It also writes the current state into the button label — keep that line if
+    your toggle shows which state is active:</p>
   <pre><code>const root = document.documentElement;
 const states = ['', 'light', 'dark'];
+const toggle = document.querySelector('#theme-toggle');
 let i = 0;
-document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
+toggle.addEventListener('click', () =&gt; {
   root.classList.add('mote-theme-switch');
   i = (i + 1) % states.length;
   root.dataset.theme = states[i];
+  toggle.textContent = 'Theme: ' + (states[i] || 'auto');
   requestAnimationFrame(() =&gt; root.classList.remove('mote-theme-switch'));
 });
 </code></pre>
@@ -345,6 +391,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <h3>Forms</h3>
   <p>Labels, inputs, selects, checkboxes, radios and buttons inherit the cozy surface.
     Invalid fields show a brick border once the user interacts with them (<code>:user-invalid</code>).</p>
+  <p>Timing is the browser's: text and email fields can fail as soon as you leave
+    them, while Chromium marks a required <code>&#60;select&#62;</code> invalid on a
+    submit attempt rather than on blur.</p>
   <p>Fields keep their intrinsic width — for stacked forms, add
     <code>input, select, textarea { width: 100% }</code> in your page styles;
     inline forms are equally valid, so mote does not decide for you.</p>
@@ -499,6 +548,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   <p>Meters keep their native zone coloring (green/yellow/red from
     <code>low</code>/<code>high</code>/<code>optimum</code>) in some engines; the
     status class tints the gauge wherever the engine honors it.</p>
+  <p>A native <code>&#60;progress&#62;</code> keeps its intrinsic width — set
+    <code>progress { width: 100% }</code> in your page styles when you want a
+    full-width bar.</p>
 
   <h3>Dialogs</h3>
   <p>Native <code>&lt;dialog&gt;</code> gets a soft surface, a dimmed blurred backdrop, and —
@@ -625,13 +677,17 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 </code></pre>
   <p>The live examples above are anchored — in Chromium and Safari they open next to their
     buttons; in Firefox they open centered.</p>
-  <p>Anchored popovers keep a 0.45rem gap from their trigger. Override that separation
-    in page CSS when a surface needs more breathing room:</p>
+  <p>Anchored popovers sit below their trigger, centered on it, and flip above it when
+    they would overflow the viewport. mote separates them with a 0.45rem margin.
+    Chromium adds its own offset to the popover's placement, so the visible
+    separation there is a little larger than the margin. Override it in page CSS
+    when a surface needs more breathing room:</p>
   <pre><code>[popover].mote-tooltip {
   margin: 0.75rem;
 }
 </code></pre>
-  <p>The margin remains part of the anchored placement and its flip fallback.</p>
+  <p>The margin belongs to the anchored placement, so it travels with the popover when
+    the browser flips it.</p>
 
   <h2 id="layout">Layout</h2>
   <p>Layout pieces from <code>mote.components.css</code> — default modern CSS,
@@ -744,8 +800,13 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
 &#60;/div&#62;
 </code></pre>
   <p>The sticky top offset must match the header's actual bottom edge so the
-    toolbar does not overlap it. Header height depends on its content, so keep
-    the value page-owned and tune it for the one-row and two-row layouts:</p>
+    toolbar does not overlap it. Header height depends on its content — and on
+    how many rows it takes at that width — so keep the value page-owned and
+    measure it rather than estimating: scroll the page and read the header's
+    bottom edge in the console</p>
+  <pre><code>document.querySelector('header').getBoundingClientRect().bottom
+</code></pre>
+  <p>Use that value for the layout you are in:</p>
   <pre><code>:root {
   --toolbar-top: 4.75rem;
 }
@@ -761,6 +822,9 @@ document.querySelector('#theme-toggle').addEventListener('click', () =&gt; {
   }
 }
 </code></pre>
+  <p>Those numbers are examples for one header, not defaults: a one-row and a
+    two-row header need two different offsets, and a two-row header can be
+    taller than any fixed sample. Measure every width you ship.</p>
   <p>The complete header recipe is in <a href="#header-navigation">Header and
     navigation</a>. For wide data, choose between an internal scroll region and
     a record layout in <a href="#narrow-tables">Narrow screens: scroll or
@@ -900,7 +964,11 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     with very little room. For a long navigation, apply the own-row rule below
     at widths under 40rem and keep primary actions outside the scrolling region.
     The one-row fallback suits short navigation; its cut pill is the overflow
-    signal when JavaScript is not used:</p>
+    signal when JavaScript is not used.</p>
+  <p><strong>This rule is page CSS — copy it into your own stylesheet.</strong>
+    mote does not ship it. It gives the navigation its own line in the header;
+    the default bar already contains a long nav, by scrolling its pill row
+    inside the bar.</p>
   <pre><code>@media (width &#60; 40rem) {
   :where(body &#62; header, .mote-header) .mote-row {
     row-gap: 0.5rem;
@@ -1217,21 +1285,26 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     <code>mote-success</code> on a paragraph does not recolor its text.
     For tinted text, write <code>color: var(--mote-success)</code> in
     your page CSS — the tokens are yours to read.</p>
-  <p>Several content surfaces read the tokens. Common status-consuming surfaces
-    are listed below; each link points to its documented section:</p>
+  <p>Two rules cover the whole status system. <strong>Inheriting surfaces</strong>
+    take the nearest status in the tree; <strong>gated surfaces</strong> declare
+    their own and never inherit an ancestor's tint. To steer inheritance,
+    <code>.mote-default</code> pins accent status for a subtree and
+    <code>.mote-reset</code> clears the inherited one:</p>
   <table>
-    <thead><tr><th>Consumer</th><th>Documented at</th></tr></thead>
+    <thead><tr><th>Consumer</th><th>Mode</th><th>Documented at</th></tr></thead>
     <tbody>
-      <tr><td>Notes</td><td><a href="#notes">Helpers — Notes and callouts</a></td></tr>
-      <tr><td>Display text</td><td><a href="#display-text">Elements — Display text</a></td></tr>
-      <tr><td>Semantic feedback</td><td><a href="#semantic-feedback">Elements — Semantic feedback</a> — alert falls back to error; status falls back to info</td></tr>
-      <tr><td>Badges (gated)</td><td><a href="#badges">Components — Badges</a> — declare their own status</td></tr>
-      <tr><td>Toast edges (inheriting)</td><td><a href="#toasts">Components — Toasts</a> — read the status token for their top border</td></tr>
-      <tr><td>Spinners</td><td><a href="#skeletons-and-spinners">Components — Skeletons and spinners</a></td></tr>
-      <tr><td>Bands</td><td><a href="#layout">Layout — Hero and bands</a></td></tr>
-      <tr><td>Blockquote rules</td><td><a href="#elements">Elements — Lists and block content</a></td></tr>
-      <tr><td>Progress and meter</td><td><a href="#elements">Elements — Progress and meter</a></td></tr>
-      <tr><td>Summary markers</td><td><a href="#details">Details and accordions</a></td></tr>
+      <tr><td>Notes</td><td>Inheriting</td><td><a href="#notes">Helpers — Notes and callouts</a></td></tr>
+      <tr><td>Display text</td><td>Inheriting</td><td><a href="#display-text">Elements — Display text</a></td></tr>
+      <tr><td>Semantic feedback</td><td>Inheriting</td><td><a href="#semantic-feedback">Elements — Semantic feedback</a> — alert falls back to error; status falls back to info</td></tr>
+      <tr><td>Cards</td><td>Inheriting</td><td><a href="#components">Components — Cards</a></td></tr>
+      <tr><td>Bands</td><td>Inheriting</td><td><a href="#layout">Layout — Hero and bands</a></td></tr>
+      <tr><td>Blockquote rules</td><td>Inheriting</td><td><a href="#elements">Elements — Lists and block content</a></td></tr>
+      <tr><td>Progress and meter</td><td>Inheriting</td><td><a href="#elements">Elements — Progress and meter</a></td></tr>
+      <tr><td>Spinners</td><td>Inheriting</td><td><a href="#skeletons-and-spinners">Components — Skeletons and spinners</a></td></tr>
+      <tr><td>Summary markers</td><td>Inheriting</td><td><a href="#details">Details and accordions</a></td></tr>
+      <tr><td>Toast edges</td><td>Inheriting</td><td><a href="#toasts">Components — Toasts</a> — read the status token for their top border</td></tr>
+      <tr><td>Buttons — solid and ghost</td><td>Gated</td><td><a href="#buttons-and-statuses">Elements — Buttons and statuses</a></td></tr>
+      <tr><td>Badges</td><td>Gated</td><td><a href="#badges">Components — Badges</a></td></tr>
     </tbody>
   </table>
 

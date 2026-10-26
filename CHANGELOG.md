@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.5] - 2026-10-25
+
+### Fixed (docs — round-11 findings)
+
+- **A lone `:root` brand override no longer looks like it works**: the theming
+  section now carries a complete brand recipe — base, explicit dark,
+  automatic dark, and print — because mote's own palette rules outrank a plain
+  `:root` declaration in automatic dark mode and on paper. Every state pairs
+  `--mote-accent` with `--mote-on-accent`.
+- **The anchored-popover separation is now described as measured**: the popover
+  section states the 0.45rem margin and Chromium's own offset to the popover's
+  placement, instead of promising a gap the browser does not produce.
+- The status reference is now one table: every status-consuming surface carries
+  an *Inheriting* or *Gated* mode, and the missing Cards row is in.
+- The theme-toggle snippet now writes the current state into the button label.
+- The own-row narrow-navigation recipe is labeled as page CSS, so it is no
+  longer read as a rule mote ships.
+- The sticky-toolbar section now explains how to measure the header's real
+  bottom edge instead of copying a sample offset; the console expression lives
+  in a code block, so the documentation page keeps its width on narrow screens.
+- Added the native `<progress>` width note and the native validity-timing note
+  for required selects.
+
+### Added (tests)
+
+- Narrow-header containment coverage for both documented header shapes
+  (`body > header nav` and `.mote-header` + `.mote-nav`): the nav yields space,
+  stays inside its row and the viewport, and its pill row scrolls instead of
+  widening the page.
+- Anchored-popover coverage: the 0.45rem separation margin, placement below
+  the trigger with horizontal centering, and the viewport-edge flip.
+
+### Evaluation
+
+- Eleventh round: ten independent agents built ten new page types against
+  v0.10.4. All ten would use mote again; every final page kept page-level
+  horizontal overflow at zero at 1280px and 390px, and no library failure was
+  confirmed. The round surfaced the documentation gaps fixed here and left the
+  anchored-popover promise uncovered — the new fixture checks cover it now.
+
 ## [0.10.4] - 2026-10-25
 
 ### Fixed (docs — round-10 findings)
@@ -719,7 +759,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.4...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.5...HEAD
+[0.10.5]: https://gitlab.com/abmach/mote/compare/v0.10.4...v0.10.5
 [0.10.4]: https://gitlab.com/abmach/mote/compare/v0.10.3...v0.10.4
 [0.3.0]: https://gitlab.com/abmach/mote/compare/v0.2.1...v0.3.0
 [0.8.0]: https://gitlab.com/abmach/mote/compare/v0.7.0...v0.8.0

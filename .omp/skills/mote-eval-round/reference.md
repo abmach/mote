@@ -132,7 +132,7 @@ conversation history can produce a real page, not a demo.>
 
 ## Archetype pool
 
-Sixty used across rounds 5–10 — do not repeat. Track additions here.
+Seventy used across rounds 5–11 — do not repeat. Track additions here.
 
 **Used (round 5):** pricing, blog post, login, 404, settings, dashboard,
 knowledge-base, landing, release-notes, contact.
@@ -150,13 +150,13 @@ community guidelines, archive/tag index, download checksums, API reference.
 profile, form-builder preview, release timeline, community directory,
 embeddable support widget, transit departures, match scorecard,
 accessibility statement.
+**Used (round 11):** airport check-in counter status board, warehouse
+inventory exception report, volunteer shift signup, parcel tracking timeline,
+digital museum collection record, nonprofit donation campaign, library
+catalog search, property-maintenance request form, cybersecurity incident
+bulletin, emergency-preparedness checklist.
 
-**Candidates (unexercised):** airport check-in counter status board, warehouse
-inventory exception report, volunteer shift signup, parcel tracking
-timeline, digital museum collection record, nonprofit donation campaign,
-library catalog search, property-maintenance request form,
-emergency-preparedness checklist, tax-document organizer, cybersecurity
-incident bulletin, music album discography.
+**Candidates (unexercised):** tax-document organizer, music album discography.
 
 ## Aggregate structure (EVALUATION-R<N>.md)
 
@@ -185,6 +185,15 @@ then stop for discussion.
 - **Gathering**: read all ten `report-*.md` in one `read` call (multi-
   path); the read tool elides middles on very large batches — read the
   artifact for elided ranges before synthesizing.
+- **JavaScript allowlists must match the docs**: when a brief needs a
+  documented JavaScript workflow (for example, `beforeprint` / `afterprint`
+  to print closed `<details>` content), include that workflow in the shared
+  contract. A contract that excludes the documented solution cannot turn
+  the resulting limitation into a library finding.
+- **Print verification**: use the underlying page's native
+  `emulateMediaType('print')`, not a higher-level wrapper emulation option;
+  generate and inspect PDFs for paper claims; isolate browser sessions when
+  concurrent PDF generation could capture another page.
 - **Conventions**: `EVALUATION-R<N>.md` is deleted only when the round's
   fixes ship; the round takes no fix actions until the user says so.
 - **Fix-phase reminders** (for after the user approves): docs edits are

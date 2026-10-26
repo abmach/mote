@@ -143,6 +143,31 @@
       </ul></nav>
     </div>
 
+    <!-- Narrow header probe: class shape (wrapped shell) -->
+    <div class="mote-header" id="t-class-header" style="position: static">
+      <div class="mote-container mote-row">
+        <span class="t-probe-brand">Wide wordmark probe</span>
+        <nav class="mote-nav" aria-label="Class-shape probe">
+          <ul id="t-class-nav-ul">
+            <li><a href="#results">Alpha</a></li>
+            <li><a href="#results">Bravo</a></li>
+            <li><a href="#results">Charlie</a></li>
+            <li><a href="#results">Delta</a></li>
+            <li><a href="#results">Echo</a></li>
+            <li><a href="#results">Foxtrot</a></li>
+            <li><a href="#results">Golf</a></li>
+            <li><a href="#results">Hotel</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Anchored popover probe -->
+    <p>
+      <button id="t-anchor-btn" type="button" style="anchor-name: --t-anchor">Anchor</button>
+      <span id="t-anchor-pop" popover class="mote-tooltip" style="position-anchor: --t-anchor">Anchored tip</span>
+    </p>
+
     <!-- Grids -->
     <div id="t-grid" class="mote-grid probe-grid"><article class="mote-card">one</article></div>
     <div id="t-grid-sparse" class="mote-grid-sparse probe-grid"><article class="mote-card">one</article></div>
@@ -171,11 +196,33 @@
     <section id="t-band-strip" class="mote-band" style="--mote-band-pad: 1rem">Strip</section>
   </main>
 
+  <!-- Narrow header probe: semantic shape (direct child of body).
+       role="presentation" keeps this probe from adding a second banner landmark. -->
+  <header id="t-semantic-header" class="mote-no-print" role="presentation" style="position: static">
+    <div class="mote-container mote-row">
+      <span class="t-probe-brand">Wide wordmark probe</span>
+      <nav aria-label="Semantic probe">
+        <ul id="t-semantic-nav-ul">
+          <li><a href="#results">Alpha</a></li>
+          <li><a href="#results">Bravo</a></li>
+          <li><a href="#results">Charlie</a></li>
+          <li><a href="#results">Delta</a></li>
+          <li><a href="#results">Echo</a></li>
+          <li><a href="#results">Foxtrot</a></li>
+          <li><a href="#results">Golf</a></li>
+          <li><a href="#results">Hotel</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
   <footer>
     <div class="mote-container">
       <nav aria-label="footer">
         <ul id="t-footer-nav"><li><a href="#results">GitLab</a></li><li><a href="#results">npm</a></li></ul>
       </nav>
+      <button id="t-anchor-flip-btn" type="button" class="mote-no-print" style="anchor-name: --t-anchor-flip">Flip probe</button>
+      <span id="t-anchor-flip-pop" popover class="mote-tooltip" style="position-anchor: --t-anchor-flip">Flip tip</span>
     </div>
   </footer>
 
@@ -471,6 +518,73 @@
     t('overflowing nav actually scrolls', () =>
       $('t-nav-ul').scrollWidth > $('t-nav-ul').clientWidth
         ? ok() : fail('scrollWidth ' + $('t-nav-ul').scrollWidth + ' not wider'));
+
+    // ---- Narrow headers (v0.10.5): both documented shapes ----
+    const headerShapes = [
+      { shape: 'class-shape', id: 't-class-header', ul: 't-class-nav-ul' },
+      { shape: 'semantic', id: 't-semantic-header', ul: 't-semantic-nav-ul' }
+    ];
+    for (const probe of headerShapes) {
+      t(`${probe.shape} header nav yields space (min-width: 0)`, () =>
+        eq(gcs($(probe.id).querySelector('nav')).minWidth, '0px', 'min-width'));
+      t(`${probe.shape} header nav stays inside its row`, () => {
+        const nav = $(probe.id).querySelector('nav').getBoundingClientRect();
+        const row = $(probe.id).querySelector('.mote-row').getBoundingClientRect();
+        return nav.left >= row.left - 1 && nav.right <= row.right + 1
+          ? ok() : fail(`nav ${nav.left}-${nav.right} outside row ${row.left}-${row.right}`);
+      });
+      t(`${probe.shape} header row stays inside the viewport`, () => {
+        const row = $(probe.id).querySelector('.mote-row').getBoundingClientRect();
+        return row.right <= document.documentElement.clientWidth + 1
+          ? ok() : fail(`row right ${row.right} exceeds viewport ${document.documentElement.clientWidth}`);
+      });
+    }
+    if (matchMedia('(width < 40rem)').matches) {
+      for (const probe of headerShapes) {
+        t(`${probe.shape} header scrolls its pill row instead of widening`, () => {
+          const ul = $(probe.ul);
+          return ul.scrollWidth > ul.clientWidth
+            ? ok() : fail(`scrollWidth ${ul.scrollWidth} not wider than ${ul.clientWidth}`);
+        });
+      }
+    }
+
+    // ---- Anchored popovers (v0.10.5) ----
+    const anchored = CSS.supports('anchor-name: --mote-a');
+    t('anchored popover keeps a 0.45rem separation margin', () => {
+      if (!anchored) return ok();
+      const expected = (parseFloat(gcs(document.documentElement).fontSize) * 0.45).toFixed(1) + 'px';
+      return eq(gcs($('t-anchor-pop')).marginTop, expected, 'margin-top');
+    });
+    t('anchored popover opens below its trigger, centered on it', () => {
+      if (!anchored) return ok();
+      const btn = $('t-anchor-btn');
+      const pop = $('t-anchor-pop');
+      const scrollY = window.scrollY;
+      btn.scrollIntoView({ block: 'center', behavior: 'instant' });
+      pop.showPopover();
+      const br = btn.getBoundingClientRect();
+      const pr = pop.getBoundingClientRect();
+      pop.hidePopover();
+      window.scrollTo({ top: scrollY, behavior: 'instant' });
+      const drift = Math.abs((pr.left + pr.width / 2) - (br.left + br.width / 2));
+      return pr.top > br.bottom && drift < 2
+        ? ok() : fail(`popover top ${pr.top.toFixed(2)} vs trigger bottom ${br.bottom.toFixed(2)}, center drift ${drift.toFixed(2)}px`);
+    });
+    t('anchored popover flips above a trigger at the viewport edge', () => {
+      if (!anchored) return ok();
+      const btn = $('t-anchor-flip-btn');
+      const pop = $('t-anchor-flip-pop');
+      const scrollY = window.scrollY;
+      btn.scrollIntoView({ block: 'end', behavior: 'instant' });
+      pop.showPopover();
+      const br = btn.getBoundingClientRect();
+      const pr = pop.getBoundingClientRect();
+      pop.hidePopover();
+      window.scrollTo({ top: scrollY, behavior: 'instant' });
+      return pr.bottom <= br.top + 1
+        ? ok() : fail(`popover bottom ${pr.bottom.toFixed(2)} vs trigger top ${br.top.toFixed(2)}`);
+    });
 
     // ---- v0.10 additions ----
     t('doc-shell header yields to its track (min-width: 0)', () =>
