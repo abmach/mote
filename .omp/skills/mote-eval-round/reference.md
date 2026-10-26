@@ -155,8 +155,12 @@ inventory exception report, volunteer shift signup, parcel tracking timeline,
 digital museum collection record, nonprofit donation campaign, library
 catalog search, property-maintenance request form, cybersecurity incident
 bulletin, emergency-preparedness checklist.
+**Used (round 12):** tax-document organizer, restaurant menu, weather forecast,
+sports fixture schedule, pet adoption listing, museum exhibition guide, map
+directions, workout plan, university thesis repository, government benefits
+application guide.
 
-**Candidates (unexercised):** tax-document organizer, music album discography.
+**Candidates (unexercised):** music album discography.
 
 ## Aggregate structure (EVALUATION-R<N>.md)
 

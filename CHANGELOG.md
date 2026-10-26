@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.7] - 2026-10-26
+
+### Fixed (docs — round-12 findings)
+
+- The contents rail now includes the identified “Narrow screens: scroll or
+  transform” subsection. A regression check keeps the rail's links synchronized
+  with every identified `h2`–`h4` heading in the docs page.
+
+### Added (docs — round-12 findings)
+
+- Added copy-ready recipes for narrow definition lists, dense tables that
+  become phone-readable records, and headers that give navigation its own row.
+- Added a narrow-page TOC recipe that places the TOC before `main` in source
+  order; on narrow screens, the shell's column layout preserves that relative
+  order visually, native focus order follows DOM order, and the contents
+  disclosure starts closed.
+- Added the complete disclosure print workflow: it opens every panel, removes
+  exclusive-group names while printing, and restores the original state.
+- Clarified that `.mote-doc` paper layout is page-owned, while mote ships the
+  light paper palette and table expansion.
+
 ## [0.10.6] - 2026-10-26
 
 ### Added (docs)
@@ -772,7 +793,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.6...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.7...HEAD
+[0.10.7]: https://gitlab.com/abmach/mote/compare/v0.10.6...v0.10.7
 [0.10.6]: https://gitlab.com/abmach/mote/compare/v0.10.5...v0.10.6
 [0.10.5]: https://gitlab.com/abmach/mote/compare/v0.10.4...v0.10.5
 [0.10.4]: https://gitlab.com/abmach/mote/compare/v0.10.3...v0.10.4
