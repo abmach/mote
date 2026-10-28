@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.10.7 · MIT
+ * v0.10.8 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -166,6 +166,15 @@ a:where(.mote-badge):hover {
   backdrop-filter: blur(10px);
   border-block-end: var(--mote-border-width) solid var(--mote-border);
   padding-block: 0.7rem;
+}
+
+/* On paper the bar must not repeat over every sheet: a sticky header is
+   screen chrome, and the browser paints it on each page it can. Pages that
+   want a running head re-apply position: sticky in their own print CSS. */
+@media print {
+  :where(body > header, .mote-header) {
+    position: static;
+  }
 }
 
 /* Long navs scroll inside the bar — they never wrap to a second line

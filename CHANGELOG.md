@@ -5,7 +5,57 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.10.8] - 2026-10-28
+
+### Fixed (components — round-13 findings)
+
+- The sticky site header goes static on paper, so it no longer repeats over
+  every printed page. A page that wants a running head re-applies
+  `position: sticky` in its own print CSS.
+
+### Fixed (docs — round-13 findings)
+
+- The phone-record recipe keeps one label column for the whole table
+  (`--records-label`, 7rem by default) instead of a fixed 6rem track, so
+  longer labels no longer wrap and every record's labels line up. The label
+  keeps `text-align: start`, so a right-aligned numeric column no longer
+  drags the label away from its value.
+- The phone-record recipe now covers `<caption>` and row headers
+  (`th[scope="row"]`), and its print guard restores the table, the hidden
+  header row and the caption: the phone layout hides the header, so a print
+  rule that only reverted `display` would have printed a table with no
+  columns.
+- The phone-record recipe now states that the transform branch does not need
+  `.mote-table-scroll`, and that a table serving both branches must release
+  the panel cap in the narrow query (`--mote-table-max: none`) — the shipped
+  60vh cap otherwise crops the records it contains.
+- Status on a table row now has a documented page rule, and the status
+  reference states that progress and meter inherit a status while badges and
+  buttons are gated.
+- Small clarifications: an exclusive `<details name>` group spans the whole
+  document; badge scale follows the surrounding font size, not the body;
+  definition lists need one column in a narrow rail; a left-rail contents
+  list is a `nav` before `main`; Chromium repeats `tfoot` totals across page
+  breaks; `.mote-card-media` sizes a direct `img` or `video` child.
+
+### Added (docs — round-13 findings)
+
+- A reusable-dialog example: one `<dialog>` filled from the trigger before
+  `showModal()`. mote ships no JavaScript and the docs keep saying so.
+
+### Tests
+
+- The published phone-record recipe is pinned by a docs-source check
+  (`tests/docs-recipes.cjs`), which also fails if a code sample leaks a live
+  tag into the page.
+- The regression fixture asserts that mote's sticky header is sticky on
+  screen and static on paper.
+
+### Evaluation
+
+- Thirteenth round: ten independent agents built ten new page types against
+  v0.10.7. All ten would use mote again; no library failure was confirmed.
+  The round surfaced the recipe, print and documentation gaps fixed here.
 
 ## [0.10.7] - 2026-10-26
 
@@ -793,7 +843,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.7...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.8...HEAD
+[0.10.8]: https://gitlab.com/abmach/mote/compare/v0.10.7...v0.10.8
 [0.10.7]: https://gitlab.com/abmach/mote/compare/v0.10.6...v0.10.7
 [0.10.6]: https://gitlab.com/abmach/mote/compare/v0.10.5...v0.10.6
 [0.10.5]: https://gitlab.com/abmach/mote/compare/v0.10.4...v0.10.5

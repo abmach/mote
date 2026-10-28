@@ -216,6 +216,14 @@
     </div>
   </header>
 
+  <!-- Sticky header probe: the wrapped-shell class variant, inside a small
+       scroll box so the sticky bar stays inside the fixture's own probes. -->
+  <div style="height: 3rem; overflow: auto;">
+    <header id="t-sticky-header" class="mote-header" role="presentation">
+      <div class="mote-container mote-row"><span>Sticky header probe</span></div>
+    </header>
+  </div>
+
   <footer>
     <div class="mote-container">
       <nav aria-label="footer">
@@ -261,6 +269,8 @@
         return eq(s.maxHeight, 'none', 'max-height') &&
           eq(s.overflow, 'visible', 'overflow');
       });
+      t('sticky site header goes static on paper', () =>
+        eq(gcs($('t-sticky-header')).position, 'static', 'position'));
     } else {
 
     // ---- Two-tier principle: actions and markers are gated ----
@@ -642,6 +652,8 @@
       eq(gcs($('t-printonly')).display, 'none', 'display'));
     t('.mote-no-print stays visible on screen', () =>
       neq(gcs($('t-noprint')).display, 'none', 'display'));
+    t('sticky site header is sticky on screen', () =>
+      eq(gcs($('t-sticky-header')).position, 'sticky', 'position'));
 
     // ---- Theme flip ----
     t('data-theme flips the palette', () => {

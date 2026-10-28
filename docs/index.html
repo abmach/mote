@@ -398,7 +398,9 @@ toggle.addEventListener('click', () =&gt; {
 &lt;/style&gt;</code></pre>
   <p>The same recipe works for grouped definition lists because mote keeps each
     grouping wrapper structural. Use a page-specific class so unrelated lists
-    keep their default two-column alignment.</p>
+    keep their default two-column alignment. In a narrow rail — the
+    reference <code>aside</code> of the document shell is about 250px — the
+    two columns get cramped; stack that one list with the recipe above.</p>
 
   <h3 id="tables">Tables</h3>
   <p>Numeric figures align automatically — mote sets
@@ -471,12 +473,26 @@ toggle.addEventListener('click', () =&gt; {
 &lt;/table&gt;
 
 &lt;style&gt;
+/* One label column for every record: widen it once when a label is longer. */
+.records {
+  --records-label: 7rem;
+}
 @media (width &lt; 40rem) {
   .records,
   .records tbody,
   .records tr,
   .records td {
     display: block;
+  }
+  .records tbody th[scope="row"] {
+    display: block;
+    font-weight: 600;
+    padding-block-end: 0.25rem;
+  }
+  .records caption {
+    display: block;
+    width: 100%;
+    text-align: start;
   }
   .records thead {
     position: absolute;
@@ -493,7 +509,7 @@ toggle.addEventListener('click', () =&gt; {
   }
   .records td {
     display: grid;
-    grid-template-columns: 6rem minmax(0, 1fr);
+    grid-template-columns: var(--records-label) minmax(0, 1fr);
     gap: 0.5rem;
     padding-block: 0.25rem;
     border: 0;
@@ -502,17 +518,78 @@ toggle.addEventListener('click', () =&gt; {
     content: attr(data-label);
     color: var(--mote-muted);
     font-weight: 600;
+    text-align: start;
+  }
+}
+
+/* Paper keeps the table a table: undo the phone layout, the hidden
+   header and the block caption before anything prints. */
+@media print {
+  .records,
+  .records tbody,
+  .records tr,
+  .records td,
+  .records tbody th[scope="row"] {
+    display: revert;
+  }
+  .records thead {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+  .records caption {
+    display: table-caption;
+  }
+  .records tr {
+    margin-block-end: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
   }
 }
 &lt;/style&gt;</code></pre>
   <p>Keep the semantic table as the only representation. If each record needs a
     different phone layout, prefer articles or definition lists instead of
     adding increasingly specific table transformations.</p>
+  <p>Three details of this recipe are load-bearing. The label column is one
+    knob for the whole table — <code>--records-label</code>, 7rem by default —
+    so every record's labels line up with each other; widen it once when a
+    label is longer than the default. The label keeps
+    <code>text-align: start</code>, so a right-aligned numeric column does
+    not drag the label to the far edge away from its value. And the print
+    guard restores the table, its header row and its caption: the phone
+    layout hides the header, so a print rule that only reverted
+    <code>display</code> would print a table with no columns.</p>
+  <p>The transform branch does not need <code>.mote-table-scroll</code> —
+    records no longer scroll sideways. When one table serves both branches,
+    keep the wrapper for the wide matrix and release its height cap in the
+    narrow query, or the panel crops the records it now contains. Name the
+    wrapper and release the cap by that name — no selector magic needed:</p>
+  <pre><code>&lt;div class="mote-table-scroll records-panel"&gt;
+ &lt;table class="records"&gt;…&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+@media (width &lt; 40rem) {
+ .records-panel {
+    --mote-table-max: none;
+ }
+}
+&lt;/style&gt;</code></pre>
 
   <p>Mark the current row with <code>aria-current</code> — the same vocabulary
     as nav pills. The tint reads over zebra (the regression fixture asserts
     it on both parities):</p>
   <pre><code>&lt;tr aria-current="true"&gt;…&lt;/tr&gt;
+</code></pre>
+  <p>Status classes are token carriers: a status on a table row sets the
+    row's tokens but paints nothing by itself. One page rule makes the row
+    show the status it declares:</p>
+  <pre><code>tr:is(.mote-success, .mote-warning, .mote-error, .mote-info) &gt; td {
+  background: var(--mote-status-soft);
+}
 </code></pre>
   <p>Captions center by default; a quiet left-aligned caption is one page
     rule: <code>caption { text-align: start }</code>.</p>
@@ -723,10 +800,34 @@ toggle.addEventListener('click', () =&gt; {
     <form method="dialog"><button>Close</button></form>
   </dialog>
 
+  <p>One dialog can serve many items: fill its fields from the trigger
+    before opening it, then close it with <code>form method="dialog"</code>.
+    The wiring is the page's own code — mote ships none.</p>
+  <pre><code>&lt;dialog id="lot-dialog"&gt;
+  &lt;form method="dialog"&gt;
+    &lt;h3&gt;Place a bid&lt;/h3&gt;
+    &lt;label&gt;Amount &lt;input type="number" name="amount" min="45" step="0.50"&gt;&lt;/label&gt;
+    &lt;button&gt;Confirm&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;
+
+&lt;script&gt;
+  const dialog = document.querySelector('#lot-dialog');
+  document.querySelectorAll('[data-bid-for]').forEach(button =&gt; {
+    button.onclick = () =&gt; {
+      dialog.querySelector('input[name="amount"]').min = button.dataset.min;
+      dialog.showModal();
+    };
+  });
+&lt;/script&gt;</code></pre>
+
   <h2 id="details">Details and accordions</h2>
   <p>Single <code>&lt;details&gt;</code> elements are soft cards. Give a group of siblings the
     same <code>name</code> and the browser turns them into an <strong>exclusive accordion</strong> —
     one open at a time, no JavaScript. Try it:</p>
+  <p>An exclusive group spans the whole document: two disclosures that
+    share a <code>name</code> close each other even when they sit in
+    different cards. Give unrelated panels distinct names.</p>
   <pre><code>&lt;details name="faq"&gt;
   &lt;summary&gt;Does it need a build step?&lt;/summary&gt;
   &lt;p&gt;No.&lt;/p&gt;
@@ -1239,6 +1340,11 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     keep that source order on every width; the shell will not reorder it for
     you. Mark navigational chrome that should not print with
     <code>.mote-no-print</code>.</p>
+  <p>The recipe above uses the <code>aside</code> so the contents become the
+    right rail. A left-rail contents list is a different arrangement: put a
+    <code>nav</code> directly before <code>main</code> in the source — the
+    shell keeps it as the left rail on wide screens and above the content on
+    narrow ones — and keep the reference material in the <code>aside</code>.</p>
 
   <h3 id="card-grids">Card grids</h3>
   <p>One class; columns are computed from the container — as many 16rem cards as fit.
@@ -1294,7 +1400,9 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     card pattern that ships as a class: <code>.mote-card-media</code> pulls
     the media edge-to-edge and matches the card radius:</p>  <p><code>.mote-card</code> and <code>.mote-media</code> don't merge —
     the card's column direction wins over the media row. Nest the media
-    inside the card.</p>
+    inside the card. The class sizes a direct <code>img</code> or
+    <code>video</code> child; a non-image cover block needs its own
+    <code>aspect-ratio</code> and padding.</p>
   <pre><code>&lt;article class="mote-card"&gt;
   &lt;div class="mote-card-media"&gt;
     &lt;img src="cover.jpg" alt=""&gt;
@@ -1337,7 +1445,9 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   </p>
   <p>Badges never grow past body scale — <code>min(0.8em, 0.8rem)</code>
     keeps a pill inside a heading readable, while small contexts (footer
-    small print) still scale down with the em side.</p>
+    small print) still scale down with the em side. The cap is relative to
+    the surrounding font size, not to the body: inside a table (0.95em) or a
+    small metadata strip the badge scales down with its context.</p>
 
   <h3 id="avatars">Avatars</h3>
   <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem);
@@ -1488,7 +1598,10 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     your page CSS — the tokens are yours to read.</p>
   <p>Two rules cover the whole status system. <strong>Inheriting surfaces</strong>
     take the nearest status in the tree; <strong>gated surfaces</strong> declare
-    their own and never inherit an ancestor's tint. To steer inheritance,
+    their own and never inherit an ancestor's tint. Progress and meter are
+    inheriting surfaces: a bar inside a themed row takes that row's status
+    unless it carries its own class, while a badge or button in the same
+    row never does. To steer inheritance,
     <code>.mote-default</code> pins accent status for a subtree and
     <code>.mote-reset</code> clears the inherited one:</p>
   <table>
@@ -1599,6 +1712,16 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     may force words to break; when many columns cannot remain legible, use the
     semantic record layout from <a href="#narrow-tables">Narrow screens: scroll or
     transform</a> instead of forcing the matrix onto the page.</p>
+  <p>Chromium repeats a <code>tfoot</code> totals row at the top of each
+    continuation page, where its <code>colspan</code> cells no longer line
+    up with the columns. The data is complete; the repeated row is browser
+    pagination. Keep the totals in <code>tbody</code> when the alignment
+    matters.</p>
+  <p>mote's sticky site header goes static on paper, so it does not repeat
+    over every page. A page that wants a running head re-applies
+    <code>position: sticky</code> in its own print CSS.</p>
+  <p>The phone-record layout keeps the table a table on paper: the recipe's
+    print guard restores the hidden header row and the caption.</p>
   <p>Keep important tables intact with a small page rule:</p>
   <pre><code>@media print {
   .receipt, tr, figure { break-inside: avoid; }

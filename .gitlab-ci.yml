@@ -32,6 +32,7 @@ test-minify:
     - npm install --prefix "$CI_PROJECT_DIR/.tmp/clean-css" --no-save --no-package-lock clean-css@5.3.3
     - NODE_PATH="$CI_PROJECT_DIR/.tmp/clean-css/node_modules" node tests/minify.cjs
     - node tests/docs-outline.cjs
+    - node tests/docs-recipes.cjs
 
 stage-npm:
   stage: publish

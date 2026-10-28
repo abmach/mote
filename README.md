@@ -151,7 +151,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Component | Hook |
 |---|---|
 | Document layout (landmark grid) | `.mote-doc` on `<body>` — `:has()` reads your `header`/`nav`/`main`/`aside`/`footer` |
-| Sticky site header / nav pills | `body > header` — semantic; `.mote-header`/`.mote-nav` only for shells wrapped in a `<div>` |
+| Sticky site header / nav pills | `body > header` — semantic; `.mote-header`/`.mote-nav` only for shells wrapped in a `<div>`; goes static on paper |
 | Semantic buttons (gated) | `class="mote-success"` etc. on the button itself — themed sections never recolor actions |
 | Ghost buttons | `.mote-ghost` — transparent fill; status tints from the button's own class (gated like solids) |
 | Solid button on any element | `.mote-btn` — the full solid recipe for anchors, spans; status classes gated |
