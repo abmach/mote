@@ -157,7 +157,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Solid button on any element | `.mote-btn` — the full solid recipe for anchors, spans; status classes gated |
 | Hero centering | `.mote-hero` — vertically centers content for error/login/empty-state pages |
 | CTA bands | `.mote-band` — full-bleed tinted section; opaque in both themes, reads `--mote-status` |
-| Card cover media | `.mote-card-media` — flush-top cover images with matched radius |
+| Card cover media | `.mote-card-media` — flush-top cover images, video, or direct inline SVG with matched radius |
 | Brand/wordmark | `.mote-brand` — quiet non-nav link for site headers |
 | Media objects | `.mote-media` — avatar/icon beside body (flex, last child grows) |
 | Display text | `.mote-display` — opt-in hero/error-code scale via `--mote-display` |
@@ -170,6 +170,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
 | Table of contents | `nav[aria-label="toc"]` — semantic, no class |
 | Current table row | `tr[aria-current]` — accent-tinted row, reads over zebra |
+| Status table row | `.mote-row-status` + a status class — paints direct cells while preserving background-image layers |
 | Footer baseline | `body > footer` — semantic top-border + padding; its `nav` renders as a quiet wrapped row |
 | Screen-reader helper | `.mote-sr-only` — pure hiding, never appears |
 | Skip link | `.mote-skip-link` — sr-only until focused, then a fixed pill |
@@ -184,6 +185,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
 | Cards | `.mote-card` — normalizes content: alignment reads start even inside centered regions |
+| Card actions | `.mote-card-actions` — bottom-aligns an action row inside a card without owning the row layout |
 | Badges | `.mote-badge` — gated: status from the badge's own class, never inherited; scales with surrounding text but never enlarges with headings |
 | Avatars | `.mote-avatar` |
 | Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |

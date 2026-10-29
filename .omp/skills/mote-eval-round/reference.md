@@ -167,6 +167,10 @@ community sports club directory, construction project progress update, podcast
 sponsorship media kit, community board game session page, software license
 compliance audit, bicycle route planner, film festival programme schedule,
 residential solar installation assessment.
+**Used (round 15):** streaming watchlist, home-renovation quote, EV charging
+availability board, library cultural-events programme, retailer returns center,
+yoga studio class schedule, cruise itinerary, board-game rules appendix,
+building-permit tracker, fashion lookbook.
 
 **Candidates (unexercised):** none currently listed.
 

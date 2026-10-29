@@ -5,6 +5,51 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-10-29
+
+### Added (components — round-15 findings)
+
+- `.mote-card-media` now sizes a direct inline SVG cover while preserving the
+  SVG's own `viewBox` ratio. Nested SVG icons remain unaffected.
+- `.mote-card-actions` bottom-aligns a card action row without owning the
+  row's display, gap, or wrapping.
+- `.mote-row-status` paints a status row's direct cells with
+  `background-color`, preserving semantic row headers and background-image
+  layers. Status classes remain token carriers without the helper.
+
+### Fixed (docs — round-15 findings)
+
+- The phone-record recipe now requires a non-empty `data-label` on every
+  transformed data cell and warns that a missing label renders blank.
+- The recipe states that its breakpoint is an example, that media-query
+  thresholds cannot be parameterized with CSS variables, and that the
+  transform and cap-release queries must use the same chosen threshold.
+- Table documentation now distinguishes page and wrapper scrolling and
+  explains that the 60vh cap does not crop content.
+- Print guidance now includes a practical paper checklist covering content,
+  tables, pagination, forms, and generated-PDF inspection.
+- Card documentation now covers direct inline SVG covers and the
+  `.mote-card-actions` helper.
+
+### Tests
+
+- The regression fixture asserts direct SVG cover sizing and ratio, nested SVG
+  isolation, card-action bottom alignment, status-row painting, background
+  image preservation, and gated badge behavior.
+- Documentation source checks cover the new guidance, reject leaked live
+  tags in copy-ready samples, and pin both the encoded and live SVG card-cover
+  structures, including their wrapper, SVG, rectangle, and circle elements.
+- The fixture's screen-only status and card probes stay off paper through a
+  fixture-local print rule, so the print-emulation PDF remains a focused
+  four-page regression artifact without repurposing `.mote-no-print`.
+
+### Evaluation
+
+- Fifteenth round: ten independent agents built ten new page types against
+  v0.10.9. All ten would use mote again. The final pages had no confirmed
+  library failures; these changes address the recurring authoring friction
+  and documentation gaps surfaced by the round.
+
 ## [0.10.9] - 2026-10-29
 
 ### Fixed (components — round-14 findings)
@@ -885,7 +930,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.9...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.11.0...HEAD
+[0.11.0]: https://gitlab.com/abmach/mote/compare/v0.10.9...v0.11.0
 [0.10.9]: https://gitlab.com/abmach/mote/compare/v0.10.8...v0.10.9
 [0.10.8]: https://gitlab.com/abmach/mote/compare/v0.10.7...v0.10.8
 [0.10.7]: https://gitlab.com/abmach/mote/compare/v0.10.6...v0.10.7

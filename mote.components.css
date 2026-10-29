@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.10.9 · MIT
+ * v0.11.0 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -34,6 +34,13 @@
 
 :where(.mote-card) > :last-child {
   margin-block-end: 0;
+}
+
+/* Bottom-align a card's action row without owning the row's layout.
+   .mote-card is a vertical flex column, so the auto margin consumes the
+   space above the actions. Pair with .mote-row for the row itself. */
+.mote-card-actions {
+  margin-block-start: auto;
 }
 
 /* Band: a full-bleed tinted section — CTA bands, section dividers,
@@ -391,6 +398,25 @@ nav[aria-label="toc"] a:hover {
   width: 100%;
   max-width: none;
   border-radius: inherit;
+}
+
+/* A direct inline SVG is a card cover too. Keep this direct-child only:
+   nested icons must keep their own dimensions. No fixed aspect ratio —
+   the SVG's viewBox determines the rendered height. */
+.mote-card-media > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  border-radius: inherit;
+}
+
+/* Paint a status row's direct cells when the row opts in. Status classes
+   remain token carriers; this helper is the visual step. background-color
+   deliberately preserves any existing background-image layer. */
+tr.mote-row-status:is(.mote-success, .mote-warning, .mote-error, .mote-info)
+  > :is(td, th[scope="row"]) {
+  background-color: var(--mote-status-soft);
 }
 
 /* Scrollable table wrapper: sticky thead, no page scroll, no margin jump */

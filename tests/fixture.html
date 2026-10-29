@@ -10,6 +10,14 @@
     /* Fixture-local layout glue only — never a style assertion target */
     .probe-grid { width: 60rem; max-width: 100%; }
     #t-nav::before, #t-nav::after { transition: none; }
+    @media print {
+      /* These round-15 probes assert screen layout only. Keep them out of
+         the focused paper artifact without repurposing mote-no-print. */
+      #t-status-table, #t-status-reference, #t-badge-info,
+      #t-card-media, #t-card-action-grid, #t-card-actions-alone {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -109,11 +117,48 @@
       <table><tbody><tr><td>x</td></tr></tbody></table>
     </div>
     <table id="t-plain-table"><tbody><tr><td id="t-num" class="mote-num">1,024</td></tr></tbody></table>
+    <table id="t-status-table">
+      <tbody>
+        <tr id="t-row-status" class="mote-row-status mote-warning">
+          <th id="t-row-status-head" scope="row">Warning row</th>
+          <td id="t-row-status-cell">Needs review <span id="t-row-status-nested">nested</span> <span id="t-row-status-badge" class="mote-badge mote-info">info</span></td>
+          <td id="t-row-status-image" style="background-image: linear-gradient(90deg, transparent, rgb(255 0 0 / .1))">Image layer</td>
+        </tr>
+        <tr id="t-row-plain-status" class="mote-warning">
+          <th scope="row">Plain status row</th>
+          <td id="t-row-plain-status-cell">Token only</td>
+        </tr>
+      </tbody>
+    </table>
+    <span id="t-status-reference" class="mote-warning" style="background-color: var(--mote-status-soft)">reference</span>
+    <span id="t-badge-info" class="mote-badge mote-info">info</span>
 
     <!-- Card alignment, hero, media -->
     <div id="t-centered" style="text-align: center">
       <article id="t-card-align" class="mote-card">Aligned card</article>
     </div>
+    <article id="t-card-media" class="mote-card" style="max-width: 24rem">
+      <div id="t-card-media-box" class="mote-card-media">
+        <svg id="t-card-svg" viewBox="0 0 160 100" role="img" aria-label="Cover probe">
+          <rect width="160" height="100" fill="currentColor" opacity=".15"></rect>
+        </svg>
+        <p id="t-card-svg-nested">Nested icon: <svg id="t-card-svg-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" fill="currentColor"></rect></svg></p>
+      </div>
+      <h3 style="margin-block-start:0">Card cover probe</h3>
+    </article>
+    <div id="t-card-action-grid" class="mote-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 40rem">
+      <article class="mote-card">
+        <h3 style="margin-block-start:0">Short card</h3>
+        <p>Short copy.</p>
+        <div id="t-card-actions-short" class="mote-card-actions mote-row"><span>Action</span></div>
+      </article>
+      <article class="mote-card">
+        <h3 style="margin-block-start:0">Long card</h3>
+        <p>Long copy. This card deliberately carries more prose so the action row has to consume the remaining space rather than follow the body text.</p>
+        <div id="t-card-actions-long" class="mote-card-actions mote-row"><span>Action</span></div>
+      </article>
+    </div>
+    <div id="t-card-actions-alone" class="mote-card-actions">Action helper without a row</div>
     <div id="t-hero" class="mote-hero" style="--mote-hero-offset: calc(100svh - 10rem)">Hero probe</div>
     <div id="t-media" class="mote-media"><span>side</span><div id="t-media-body">grows</div></div>
 
@@ -413,10 +458,60 @@
         ? eq(n.fontVariantNumeric, 'tabular-nums', 'numeric variant')
         : fail('text-align: ' + n.textAlign);
     });
+    t('status row helper paints direct cells', () => {
+      const expected = gcs($('t-status-reference')).backgroundColor;
+      return eq(gcs($('t-row-status-cell')).backgroundColor, expected, 'backgrounds') &&
+        eq(gcs($('t-row-status-head')).backgroundColor, expected, 'backgrounds');
+    });
+    t('status row helper leaves nested elements unpainted', () =>
+      eq(gcs($('t-row-status-nested')).backgroundColor, 'rgba(0, 0, 0, 0)', 'backgrounds'));
+    t('status row helper preserves background image layers', () => {
+      const s = gcs($('t-row-status-image'));
+      return s.backgroundImage.includes('linear-gradient') &&
+        s.backgroundColor !== 'rgba(0, 0, 0, 0)'
+        ? ok() : fail(`background: ${s.backgroundColor} / ${s.backgroundImage}`);
+    });
+    t('status classes remain token-only without the row helper', () => {
+      const expected = gcs($('t-status-reference')).backgroundColor;
+      return neq(gcs($('t-row-plain-status-cell')).backgroundColor, expected, 'backgrounds');
+    });
+    t('badges in a status row keep their own gated status', () => {
+      const rowBadge = $('t-row-status-badge');
+      return rowBadge ? eq(gcs(rowBadge).color, gcs($('t-badge-info')).color, 'colors')
+        : fail('status-row badge probe missing');
+    });
 
     // ---- Cards, hero, media ----
     t('card normalizes alignment inside centered parent', () =>
       eq(gcs($('t-card-align')).textAlign, 'start', 'text-align'));
+    t('direct card SVG is a block cover', () => {
+      const s = gcs($('t-card-svg'));
+      return eq(s.display, 'block', 'display') &&
+        eq(s.maxWidth, 'none', 'max-width');
+    });
+    t('direct card SVG fills its media wrapper', () =>
+      eq(Math.round($('t-card-svg').getBoundingClientRect().width),
+        Math.round($('t-card-media-box').getBoundingClientRect().width), 'widths'));
+    t('direct card SVG preserves its viewBox ratio', () => {
+      const r = $('t-card-svg').getBoundingClientRect();
+      return Math.abs((r.width / r.height) - (160 / 100)) < 0.01
+        ? ok() : fail(`ratio: ${r.width / r.height}`);
+    });
+    t('nested card SVG keeps its own dimensions', () => {
+      const r = $('t-card-svg-icon').getBoundingClientRect();
+      return Math.abs(r.width - 16) < 1 && Math.abs(r.height - 16) < 1
+        ? ok() : fail(`dimensions: ${r.width}x${r.height}`);
+    });
+    t('card action helper does not own the row display', () =>
+      eq(gcs($('t-card-actions-alone')).display, 'block', 'display'));
+    t('card action helper keeps row layout', () =>
+      eq(gcs($('t-card-actions-short')).display, 'flex', 'display'));
+    t('card actions align at the grid row bottom', () => {
+      const shortBottom = $('t-card-actions-short').getBoundingClientRect().bottom;
+      const longBottom = $('t-card-actions-long').getBoundingClientRect().bottom;
+      return Math.abs(shortBottom - longBottom) < 1
+        ? ok() : fail(`bottoms differ: ${shortBottom} vs ${longBottom}`);
+    });
     t('hero min-height follows the offset formula', () =>
       eq(gcs($('t-hero')).minHeight, '160px', 'min-height'));
     t('hero centers its content', () =>

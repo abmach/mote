@@ -416,10 +416,15 @@ toggle.addEventListener('click', () =&gt; {
     <code>.mote-table-scroll</code> — the header row sticks, wide tables scroll
     inside the wrapper, never the page. Cap the panel height with
     <code>--mote-table-max</code> (default 60vh); the sticky header engages once
-    the wrapper actually scrolls. On paper, the wrapper releases the screen height cap
-    and clipping so the complete table is present in the output; a very wide table may
-    still exceed narrow paper, and mote does not shrink an arbitrary matrix. Inside
-    the wrapper, cell borders
+    the wrapper actually scrolls. The page and the wrapper have distinct scroll
+    regions: the page may scroll vertically, the wrapper owns horizontal overflow,
+    and the wrapper also scrolls vertically when its content exceeds the cap. A
+    tall table can therefore scroll inside the wrapper before the page reaches
+    it. The content is not cropped; move the pointer or keyboard focus over the
+    wrapper and use its scrollbar or arrow keys. On paper, the wrapper releases
+    the screen height cap and clipping so the complete table is present in the
+    output; a very wide table may still exceed narrow paper, and mote does not
+    shrink an arbitrary matrix. Inside the wrapper, cell borders
     are drawn per side — Chromium paints collapsed borders at the flow position,
     not with the sticky cell:</p>
   <pre><code>&lt;div class="mote-table-scroll"&gt;
@@ -452,8 +457,12 @@ toggle.addEventListener('click', () =&gt; {
     components file removes the wrapper's artificial clipping and height cap; the
     complete table is present, but a wide matrix may still exceed the paper width.</p>
   <p>When one table must become readable records on a phone, transform that
-    same table instead of adding a second, hidden card copy. Put a short label
-    on each data cell, then change the table's visual layout below the chosen
+    same table instead of adding a second, hidden card copy. Every data cell
+    in the transformed branch must have a non-empty <code>data-label</code>. The
+    attribute supplies the visible label when the table becomes records. A
+    missing <code>data-label</code> produces a blank label beside the value;
+    this applies to every transformed <code><td></code>, not only the
+    first column. Then change the table's visual layout below the chosen
     breakpoint. The markup remains one table rather than duplicated content.
     Current Chromium retains the table, row, header, and cell roles in this
     layout; because CSS display changes can affect semantics in other engines,
@@ -466,6 +475,7 @@ toggle.addEventListener('click', () =&gt; {
   &lt;tbody&gt;
     &lt;tr&gt;
       &lt;td data-label="Date"&gt;12 Oct&lt;/td&gt;
+      &lt;td class="mote-num" data-label="Score"&gt;24–18&lt;/td&gt;
       &lt;td data-label="Fixture"&gt;Riverside v Northfield&lt;/td&gt;
       &lt;td data-label="Ground"&gt;Meadow 2&lt;/td&gt;
     &lt;/tr&gt;
@@ -562,6 +572,14 @@ toggle.addEventListener('click', () =&gt; {
   <p>Keep the semantic table as the only representation. If each record needs a
     different phone layout, prefer articles or definition lists instead of
     adding increasingly specific table transformations.</p>
+  <p>The <code>40rem</code> breakpoint in this recipe is an example, not a mote
+    default. Choose the threshold before copying the recipe: a wide desktop
+    matrix may need to remain a table until a narrower width, while a record
+    list can transform earlier. A custom breakpoint cannot be parameterized
+    with a CSS variable inside <code>@media</code>. Copy the recipe and replace
+    the threshold in both the transform query and the cap-release query, keeping
+    them identical. The print-restoration rules remain unchanged regardless of
+    the selected breakpoint.</p>
   <p>Four details of this recipe are load-bearing. The label column is one
     knob for the whole table — <code>--records-label</code>, 7rem by default —
     so every record's labels line up with each other; widen it once when a
@@ -590,7 +608,7 @@ toggle.addEventListener('click', () =&gt; {
     --mote-table-max: none;
  }
 }
-&lt;/style&gt;</code></pre>
+</style></code></pre>
 
   <p>Mark the current row with <code>aria-current</code> — the same vocabulary
     as nav pills. The tint reads over zebra (the regression fixture asserts
@@ -598,15 +616,23 @@ toggle.addEventListener('click', () =&gt; {
   <pre><code>&lt;tr aria-current="true"&gt;…&lt;/tr&gt;
 </code></pre>
   <p>Status classes are token carriers: a status on a table row sets the
-    row's tokens but paints nothing by itself. One page rule makes the row
-    show the status it declares. It includes semantic row headers and uses
-    <code>background-color</code>, so a column's background-image layer —
-    such as the weekend shading below — remains intact:</p>
-  <pre><code>tr:is(.mote-success, .mote-warning, .mote-error, .mote-info)
-  &gt; :is(td, th[scope="row"]) {
+    row's tokens but paints nothing by itself. Add <code>.mote-row-status</code>
+    to paint the row's direct cells with the status it declares. The helper
+    includes semantic row headers and uses <code>background-color</code>, so a
+    column's background-image layer — such as the weekend shading below —
+    remains intact:</p>
+  <pre><code>&lt;tr class="mote-row-status mote-warning"&gt;
+  &lt;th scope="row"&gt;Order 1048&lt;/th&gt;
+  &lt;td&gt;Needs review&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+  <p>The underlying page rule is:</p>
+  <pre><code>tr.mote-row-status:is(.mote-success, .mote-warning, .mote-error, .mote-info)
+  > :is(td, th[scope="row"]) {
   background-color: var(--mote-status-soft);
 }
 </code></pre>
+  <p>Only direct cells are painted. Badges and buttons remain gated and keep
+    their own status instead of inheriting the row's tint.</p>
   <p>Captions center by default; a quiet left-aligned caption is one page
     rule: <code>caption { text-align: start }</code>.</p>
   <table>
@@ -1419,10 +1445,13 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   </div>
   <p>Flush-top media (cover photos, thumbnails) — the one compositional
     card pattern that ships as a class: <code>.mote-card-media</code> pulls
-    the media edge-to-edge and matches the card radius:</p>  <p><code>.mote-card</code> and <code>.mote-media</code> don't merge —
+    the media edge-to-edge and matches the card radius:</p>
+  <p><code>.mote-card</code> and <code>.mote-media</code> don't merge —
     the card's column direction wins over the media row. Nest the media
-    inside the card. The class sizes a direct <code>img</code> or
-    <code>video</code> child; a non-image cover block needs its own
+    inside the card. The class sizes a direct <code>img</code>, <code>video</code>,
+    or inline <code>svg</code> child. A direct SVG keeps its own
+    <code>viewBox</code> aspect ratio; nested SVG icons keep their own
+    dimensions. A non-image cover block needs its own
     <code>aspect-ratio</code> and padding.</p>
   <pre><code>&lt;article class="mote-card"&gt;
   &lt;div class="mote-card-media"&gt;
@@ -1430,7 +1459,15 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   &lt;/div&gt;
   &lt;h3&gt;Card title&lt;/h3&gt;
 &lt;/article&gt;
-</code></pre>
+
+&lt;article class="mote-card"&gt;
+  &lt;div class="mote-card-media"&gt;
+    &lt;svg viewBox="0 0 160 100" role="img" aria-label="Cover artwork"&gt;
+      &lt;rect width="160" height="100" fill="currentColor" opacity=".15"&gt;&lt;/rect&gt;
+    &lt;/svg&gt;
+  &lt;/div&gt;
+  &lt;h3&gt;Card title&lt;/h3&gt;
+&lt;/article&gt;</code></pre>
   <article class="mote-card" style="max-width: 24rem">
     <div class="mote-card-media">
       <img src="https://picsum.photos/seed/mote-cover/480/240" alt="Cover photo example">
@@ -1438,14 +1475,45 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     <h3 style="margin-block-start:0">Card title</h3>
     <p>Media flush to the card edges, radius matched — one class.</p>
   </article>
+  <div class="mote-grid">
+    <article class="mote-card">
+      <div class="mote-card-media">
+        <svg viewBox="0 0 160 100" role="img" aria-label="Abstract cover artwork">
+          <rect width="160" height="100" fill="currentColor" opacity=".15"></rect>
+          <circle cx="80" cy="50" r="30" fill="currentColor" opacity=".35"></circle>
+        </svg>
+      </div>
+      <h3 style="margin-block-start:0">SVG cover</h3>
+      <p>A direct SVG cover fills the media wrapper and keeps its own ratio.</p>
+    </article>
+    <article class="mote-card">
+      <h3 style="margin-block-start:0">Action row</h3>
+      <p>Cards in the same row can have different amounts of copy.</p>
+      <div class="mote-card-actions mote-row">
+        <a class="mote-btn" href="#cards">Open</a>
+        <a href="#cards">Details</a>
+      </div>
+    </article>
+  </div>
   <div class="mote-card">
     <h3 style="margin-block-start:0">Card title</h3>
     <p>A soft surface for grouped content — a border, a whisper of shadow, and nothing else
       deciding your layout.</p>
   </div>
   <p>Cards are vertical flex containers. When cards in one row have different
-    copy lengths, give the action row <code>margin-block-start: auto</code> to
+    copy lengths, put <code>.mote-card-actions</code> on the action row to
     keep those actions aligned at the bottom:</p>
+  <pre><code>&lt;article class="mote-card"&gt;
+  &lt;h3&gt;Card title&lt;/h3&gt;
+  &lt;p&gt;Different amounts of copy…&lt;/p&gt;
+  &lt;div class="mote-card-actions mote-row"&gt;
+    &lt;a class="mote-btn" href="#"&gt;Open&lt;/a&gt;
+    &lt;a href="#"&gt;Details&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+  <p>The helper only supplies <code>margin-block-start: auto</code>. It does
+    not choose a display, gap, or wrapping; <code>.mote-row</code> still owns
+    the action row's layout. Without the helper, the same alignment is:</p>
   <pre><code>.card-actions {
   margin-block-start: auto;
 }</code></pre>
@@ -1662,6 +1730,8 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>.mote-muted</code></td><td>Dimmed secondary text</td></tr>
       <tr><td><code>.mote-note</code> + status class</td><td>Tinted message surfaces — see <a href="#notes">Notes and callouts</a></td></tr>
       <tr><td><code>.mote-row</code></td><td>Flex row with wrapping and a gap</td></tr>
+      <tr><td><code>.mote-card-actions</code></td><td>Bottom-aligns a card action row without owning its display, gap, or wrapping</td></tr>
+      <tr><td><code>.mote-row-status</code></td><td>Paints a status row's direct cells while preserving background-image layers</td></tr>
       <tr><td><code>.mote-push</code></td><td>Right-aligns its element in a row</td></tr>
       <tr><td><code>.mote-brand</code></td><td>Quiet wordmark link: bold, foreground, no underline</td></tr>
       <tr><td><code>.mote-display</code></td><td>Hero/error-code scale, per use via <code>--mote-display</code></td></tr>
@@ -1702,6 +1772,18 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>mote prints on a light paper palette in either theme. Use the print helpers
     when the screen and the page need different content, then add page CSS for
     the document-specific parts such as orientation and page breaks.</p>
+  <div class="mote-note mote-info">
+    <p><strong>Paper checklist</strong></p>
+    <ul>
+      <li>Keep the light paper palette; repeat brand accent overrides for print.</li>
+      <li>Use <code>.mote-no-print</code> for navigation, filters, and interactive-only controls.</li>
+      <li>Use <code>.mote-print-only</code> for paper-only contact details and instructions.</li>
+      <li>Check table completeness, orientation, and browser-dependent repeated headings.</li>
+      <li>Keep records, totals, and disclosure panels together where appropriate with <code>break-inside</code>.</li>
+      <li>Decide whether forms print; prefer a paper-only summary over split controls.</li>
+      <li>Inspect the generated PDF, not only print-media emulation.</li>
+    </ul>
+  </div>
   <h3 id="screen-only-and-paper-only-content">Screen-only and paper-only content</h3>
   <p><code>.mote-no-print</code> removes screen chrome from paper.
     <code>.mote-print-only</code> stays hidden on screen and appears on paper:</p>
