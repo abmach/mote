@@ -184,7 +184,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
 | Cards | `.mote-card` — normalizes content: alignment reads start even inside centered regions |
-| Badges | `.mote-badge` — gated: status from the badge's own class, never inherited; never grows past body scale |
+| Badges | `.mote-badge` — gated: status from the badge's own class, never inherited; scales with surrounding text but never enlarges with headings |
 | Avatars | `.mote-avatar` |
 | Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |
 | Tooltips | `[popover].mote-tooltip` + `popovertarget` button |

@@ -159,8 +159,16 @@ bulletin, emergency-preparedness checklist.
 sports fixture schedule, pet adoption listing, museum exhibition guide, map
 directions, workout plan, university thesis repository, government benefits
 application guide.
+**Used (round 13):** auction lots, film production call sheet, boarding pass,
+conference programme, hardware bill of materials, school report card, council
+agenda, policy benefits guide, laboratory report, music album discography.
+**Used (round 14):** grant application tracker, newsletter signup landing page,
+community sports club directory, construction project progress update, podcast
+sponsorship media kit, community board game session page, software license
+compliance audit, bicycle route planner, film festival programme schedule,
+residential solar installation assessment.
 
-**Candidates (unexercised):** music album discography.
+**Candidates (unexercised):** none currently listed.
 
 ## Aggregate structure (EVALUATION-R<N>.md)
 

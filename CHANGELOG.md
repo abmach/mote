@@ -5,6 +5,48 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.9] - 2026-10-29
+
+### Fixed (components — round-14 findings)
+
+- Scrollable-table header cells now become static on paper. The print
+  override follows the sticky-cell rule, so Chromium can repeat the semantic
+  `<thead>` at the top of continuation pages instead of painting it after the
+  rows.
+
+### Fixed (docs — round-14 findings)
+
+- The phone-record recipe now start-aligns numeric values in its label/value
+  branch, removes generated labels during narrow-viewport print emulation,
+  and resets sticky header cells while restoring the table.
+- The row-status recipe now includes semantic row headers
+  (`th[scope="row"]`) and uses `background-color`, preserving background
+  image layers such as the documented weekend-column shading.
+- The narrow-header recipe now states that it applies to mote's canonical
+  composition, where `.mote-row` owns the header row. Custom flex headers
+  need page-owned rules for their own structure.
+- Print guidance no longer implies that restoring `position: sticky`
+  guarantees a repeated running head; repetition depends on the browser's
+  paged-media implementation and the generated PDF must be inspected.
+- Clarified card flex behavior and bottom-aligned actions, inline SVG media
+  sizing, prose-heavy card-grid density, and badge scaling.
+
+### Tests
+
+- The regression fixture asserts that scrollable-table header cells are
+  static on paper.
+- Docs-source checks pin the phone-record print and numeric-alignment rules,
+  the row-header and background-color contract, and the canonical narrow
+  header row owner.
+
+### Evaluation
+
+- Fourteenth round: ten independent agents built ten new page types against
+  v0.10.8. All ten would use mote again. The builders' final pages had no
+  confirmed failures; remediation confirmed one library-facing print defect in
+  the scrollable-table header, fixed here alongside the documentation gaps
+  surfaced by the round.
+
 ## [0.10.8] - 2026-10-28
 
 ### Fixed (components — round-13 findings)
@@ -843,7 +885,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.8...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.10.9...HEAD
+[0.10.9]: https://gitlab.com/abmach/mote/compare/v0.10.8...v0.10.9
 [0.10.8]: https://gitlab.com/abmach/mote/compare/v0.10.7...v0.10.8
 [0.10.7]: https://gitlab.com/abmach/mote/compare/v0.10.6...v0.10.7
 [0.10.6]: https://gitlab.com/abmach/mote/compare/v0.10.5...v0.10.6

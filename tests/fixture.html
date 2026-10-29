@@ -96,6 +96,7 @@
     <!-- Tables -->
     <div id="t-scroll" class="mote-table-scroll">
       <table id="t-table-in-scroll">
+        <thead><tr><th id="t-scroll-header">Column</th></tr></thead>
         <tbody>
           <tr id="t-row1"><td>one</td></tr>
           <tr id="t-row2"><td>two</td></tr>
@@ -269,6 +270,8 @@
         return eq(s.maxHeight, 'none', 'max-height') &&
           eq(s.overflow, 'visible', 'overflow');
       });
+      t('scrollable table headers go static on paper', () =>
+        eq(gcs($('t-scroll-header')).position, 'static', 'position'));
       t('sticky site header goes static on paper', () =>
         eq(gcs($('t-sticky-header')).position, 'static', 'position'));
     } else {

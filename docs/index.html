@@ -520,6 +520,9 @@ toggle.addEventListener('click', () =&gt; {
     font-weight: 600;
     text-align: start;
   }
+  .records td.mote-num {
+    text-align: start;
+  }
 }
 
 /* Paper keeps the table a table: undo the phone layout, the hidden
@@ -532,12 +535,18 @@ toggle.addEventListener('click', () =&gt; {
   .records tbody th[scope="row"] {
     display: revert;
   }
-  .records thead {
+  .records thead,
+  .records thead th {
     position: static;
+  }
+  .records thead {
     width: auto;
     height: auto;
     overflow: visible;
     clip-path: none;
+  }
+  .records td::before {
+    content: none;
   }
   .records caption {
     display: table-caption;
@@ -553,15 +562,19 @@ toggle.addEventListener('click', () =&gt; {
   <p>Keep the semantic table as the only representation. If each record needs a
     different phone layout, prefer articles or definition lists instead of
     adding increasingly specific table transformations.</p>
-  <p>Three details of this recipe are load-bearing. The label column is one
+  <p>Four details of this recipe are load-bearing. The label column is one
     knob for the whole table — <code>--records-label</code>, 7rem by default —
     so every record's labels line up with each other; widen it once when a
     label is longer than the default. The label keeps
     <code>text-align: start</code>, so a right-aligned numeric column does
-    not drag the label to the far edge away from its value. And the print
-    guard restores the table, its header row and its caption: the phone
-    layout hides the header, so a print rule that only reverted
-    <code>display</code> would print a table with no columns.</p>
+    not drag the label to the far edge away from its value; numeric values
+    also start-align in the record branch, where a label/value grid replaces
+    table-column alignment. The print guard restores the table, its header row
+    and its caption: the phone layout hides the header, so a print rule that
+    only reverted <code>display</code> would print a table with no columns.
+    It also removes the generated labels and resets sticky header cells, so
+    narrow-viewport print emulation and paged output restore the table
+    completely.</p>
   <p>The transform branch does not need <code>.mote-table-scroll</code> —
     records no longer scroll sideways. When one table serves both branches,
     keep the wrapper for the wide matrix and release its height cap in the
@@ -586,9 +599,12 @@ toggle.addEventListener('click', () =&gt; {
 </code></pre>
   <p>Status classes are token carriers: a status on a table row sets the
     row's tokens but paints nothing by itself. One page rule makes the row
-    show the status it declares:</p>
-  <pre><code>tr:is(.mote-success, .mote-warning, .mote-error, .mote-info) &gt; td {
-  background: var(--mote-status-soft);
+    show the status it declares. It includes semantic row headers and uses
+    <code>background-color</code>, so a column's background-image layer —
+    such as the weekend shading below — remains intact:</p>
+  <pre><code>tr:is(.mote-success, .mote-warning, .mote-error, .mote-info)
+  &gt; :is(td, th[scope="row"]) {
+  background-color: var(--mote-status-soft);
 }
 </code></pre>
   <p>Captions center by default; a quiet left-aligned caption is one page
@@ -1215,7 +1231,10 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p><strong>This rule is page CSS — copy it into your own stylesheet.</strong>
     mote does not ship it. It gives the navigation its own line in the header;
     the default bar already contains a long nav, by scrolling its pill row
-    inside the bar.</p>
+    inside the bar. The recipe below applies to mote's canonical header
+    composition, where <code>.mote-row</code> owns the header row. A custom
+    flex header has its own layout owner and needs equivalent page rules for
+    its own structure.</p>
   <pre><code>&lt;header class="mote-header"&gt;
   &lt;div class="mote-container mote-row"&gt;
     &lt;a class="mote-brand" href="/"&gt;Northline&lt;/a&gt;
@@ -1352,7 +1371,9 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     empty grid tracks when there are fewer cards than the container can hold;
     use <code>.mote-grid-sparse</code> when those empty tracks should collapse:</p>
   <p>For wider or narrower tracks, set <code>--mote-grid-min</code>:
-    22rem gives 3-wide pricing; 26rem gives 2-column content:</p>
+    22rem gives 3-wide pricing; 26rem gives 2-column content. The default
+    16rem minimum suits compact cards; prose-heavy cards often need 22–26rem
+    so their text has a comfortable measure:</p>
   <pre><code>&lt;div class="mote-grid" style="--mote-grid-min: 22rem"&gt;
   &lt;!-- 3 columns on any container &gt;= 66rem --&gt;
 &lt;/div&gt;
@@ -1422,6 +1443,12 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     <p>A soft surface for grouped content — a border, a whisper of shadow, and nothing else
       deciding your layout.</p>
   </div>
+  <p>Cards are vertical flex containers. When cards in one row have different
+    copy lengths, give the action row <code>margin-block-start: auto</code> to
+    keep those actions aligned at the bottom:</p>
+  <pre><code>.card-actions {
+  margin-block-start: auto;
+}</code></pre>
 
   <h3 id="badges">Badges</h3>
   <p>Badges are content markers — they declare their own status, never
@@ -1443,11 +1470,9 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     <span class="mote-badge mote-info">info</span>
     <span class="mote-badge mote-muted">muted</span>
   </p>
-  <p>Badges never grow past body scale — <code>min(0.8em, 0.8rem)</code>
-    keeps a pill inside a heading readable, while small contexts (footer
-    small print) still scale down with the em side. The cap is relative to
-    the surrounding font size, not to the body: inside a table (0.95em) or a
-    small metadata strip the badge scales down with its context.</p>
+  <p>Badges use <code>min(0.8em, 0.8rem)</code>: they shrink with smaller
+    surrounding text but never enlarge with headings. Inside a table (0.95em)
+    or a small metadata strip, the badge scales down with its context.</p>
 
   <h3 id="avatars">Avatars</h3>
   <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem);
@@ -1509,6 +1534,14 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <p class="mote-muted">Wrote the first algorithm. Currently inspiring a CSS library.</p>
     </div>
   </div>
+  <p>An inline SVG icon can stand in for an avatar. It does not carry the
+    avatar helper's image styling, so give it a stable square size and keep
+    it from shrinking with one page rule:</p>
+  <pre><code>.club-icon {
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  flex: none;
+}</code></pre>
 
   <h3 id="toasts">Toasts</h3>
   <p>A styled <code>popover</code> pinned to the corner. Showing it takes one line — the
@@ -1718,8 +1751,11 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     pagination. Keep the totals in <code>tbody</code> when the alignment
     matters.</p>
   <p>mote's sticky site header goes static on paper, so it does not repeat
-    over every page. A page that wants a running head re-applies
-    <code>position: sticky</code> in its own print CSS.</p>
+    over every page. A print-specific layout may restore
+    <code>position: sticky</code>, but repetition across pages depends on the
+    browser's paged-media implementation and is not guaranteed. Inspect the
+    generated PDF; use the print engine's page-header mechanism when every
+    page must carry a running head.</p>
   <p>The phone-record layout keeps the table a table on paper: the recipe's
     print guard restores the hidden header row and the caption.</p>
   <p>Keep important tables intact with a small page rule:</p>

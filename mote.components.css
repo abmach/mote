@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.10.8 · MIT
+ * v0.10.9 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -66,8 +66,8 @@
   display: inline-block;
   padding: 0.1rem 0.6rem;
   border-radius: 999px;
-  /* Never past body scale: 0.8em inside a heading balloons,
-     so clamp it — small contexts still scale down. */
+  /* Scale with the surrounding text, but never enlarge with headings:
+     0.8em balloons inside a heading, so cap it at 0.8rem. */
   font-size: min(0.8em, 0.8rem);
   font-weight: 500;
   line-height: 1.4;
@@ -169,8 +169,9 @@ a:where(.mote-badge):hover {
 }
 
 /* On paper the bar must not repeat over every sheet: a sticky header is
-   screen chrome, and the browser paints it on each page it can. Pages that
-   want a running head re-apply position: sticky in their own print CSS. */
+   screen chrome. A print-specific layout may restore sticky positioning,
+   but repeated running heads depend on the browser's paged-media behavior
+   and are not guaranteed by this library. */
 @media print {
   :where(body > header, .mote-header) {
     position: static;
@@ -399,13 +400,6 @@ nav[aria-label="toc"] a:hover {
   overflow-y: auto;
 }
 
-/* The components file owns this component's print behavior. Keep the
-   override after the screen rule so loading the optional file cannot
-   undo the core print promise. */
-@media print {
-  .mote-table-scroll { max-height: none; overflow: visible; }
-}
-
 /* Chromium paints collapsed borders at the original flow position,
    not with the sticky cell — separate borders belong to the cell. */
 .mote-table-scroll table {
@@ -418,6 +412,20 @@ nav[aria-label="toc"] a:hover {
   position: sticky;
   top: 0;
   background: var(--mote-bg);
+}
+
+/* The components file owns this component's print behavior. Keep the
+   override after the sticky-cell rule so paper restores a normal table:
+   Chromium can repeat the semantic thead without sticky positioning. */
+@media print {
+  .mote-table-scroll {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .mote-table-scroll thead th {
+    position: static;
+  }
 }
 
 /* Page footer: the quiet sibling of the site header */
