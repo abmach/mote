@@ -44,6 +44,9 @@ encode real failures.
 
 ## Hard rules
 
+- Read and apply the `## Principles checklist` in the repo's `AGENTS.md`.
+  Evaluation findings never approve new public API: surface proposed
+  additions and require explicit user acceptance before implementation.
 - Builders touch ONLY the scratch directory. Never let them near the
   repo, git, or previous rounds' files.
 - The round reports honestly or it is worthless: praise must be earned,

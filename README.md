@@ -170,7 +170,6 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Pagination | `nav[aria-label="pagination"]` — semantic, no class |
 | Table of contents | `nav[aria-label="toc"]` — semantic, no class |
 | Current table row | `tr[aria-current]` — accent-tinted row, reads over zebra |
-| Status table row | `.mote-row-status` + a status class — paints direct cells while preserving background-image layers |
 | Footer baseline | `body > footer` — semantic top-border + padding; its `nav` renders as a quiet wrapped row |
 | Screen-reader helper | `.mote-sr-only` — pure hiding, never appears |
 | Skip link | `.mote-skip-link` — sr-only until focused, then a fixed pill |
@@ -185,7 +184,6 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
 | Cards | `.mote-card` — normalizes content: alignment reads start even inside centered regions |
-| Card actions | `.mote-card-actions` — bottom-aligns an action row inside a card without owning the row layout |
 | Badges | `.mote-badge` — gated: status from the badge's own class, never inherited; scales with surrounding text but never enlarges with headings |
 | Avatars | `.mote-avatar` |
 | Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |
@@ -195,7 +193,24 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Exclusive accordions | `<details name="group">` — the browser closes siblings |
 | Dialog & popover entrance animations | automatic when the file is loaded |
 
-Full live documentation with copyable markup for everything above: **[docs/index.html](docs/index.html)**.
+Full live documentation with copyable markup for the components and recipes: **[docs/index.html](docs/index.html)**.
+
+## Page-owned recipes
+
+These compositions belong to the page, not mote. Copy the rules you need and name the classes in your markup.
+
+```css
+/* Bottom-align actions in a card; .mote-row still owns the row layout. */
+.mote-card > .card-actions {
+  margin-block-start: auto;
+}
+
+/* Paint a status row's direct cells while preserving background images. */
+tr.status-row:is(.mote-success, .mote-warning, .mote-error, .mote-info)
+  > :is(td, th[scope="row"]) {
+  background-color: var(--mote-status-soft);
+}
+```
 
 ## Browser support
 

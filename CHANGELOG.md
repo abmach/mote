@@ -5,6 +5,24 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2026-10-29
+
+### Removed
+
+- Removed the public `.mote-card-actions` and `.mote-row-status` micro-helpers. Card action rows
+  now use the page-owned `.card-actions` class with
+  `.mote-card > .card-actions { margin-block-start: auto; }`; status rows use
+  the page-owned `.status-row` class with
+  `tr.status-row:is(.mote-success, .mote-warning, .mote-error, .mote-info) > :is(td, th[scope="row"]) { background-color: var(--mote-status-soft); }`.
+- This is a clean cutover: there are no aliases, shims, or replacement mote
+  classes. `.mote-row` continues to own content-row layout.
+
+### Tests
+
+- The minification gate now enforces byte-exact minified budgets of 18,000
+  bytes for `mote.css` and 13,000 bytes for `mote.components.css`. A focused
+  regression proves that an over-budget result fails the gate.
+
 ## [0.11.0] - 2026-10-29
 
 ### Added (components — round-15 findings)
@@ -930,7 +948,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.11.0...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.12.0...HEAD
+[0.12.0]: https://gitlab.com/abmach/mote/compare/v0.11.0...v0.12.0
 [0.11.0]: https://gitlab.com/abmach/mote/compare/v0.10.9...v0.11.0
 [0.10.9]: https://gitlab.com/abmach/mote/compare/v0.10.8...v0.10.9
 [0.10.8]: https://gitlab.com/abmach/mote/compare/v0.10.7...v0.10.8

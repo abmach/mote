@@ -43,8 +43,7 @@ if (!svgSampleArticle) {
     ['live SVG has exactly one direct SVG', liveSvgArticle ? (liveSvgArticle.match(/<svg\b/g) || []).length === 1 : false],
     ['live SVG closes its rect element', liveSvgArticle ? /<rect\b[^>]*><\/rect>/.test(liveSvgArticle) : false],
     ['live SVG closes its circle element', liveSvgArticle ? /<circle\b[^>]*><\/circle>/.test(liveSvgArticle) : false],
-    ['live SVG stays inside its media wrapper', liveSvgArticle ? /<div class="mote-card-media">\s*<svg\b[^>]*>[\s\S]*?<\/svg>\s*<\/div>/.test(liveSvgArticle) : false],
-    ['live docs include the card-actions helper', /<div class="mote-card-actions mote-row">/.test(html)]
+    ['live SVG stays inside its media wrapper', liveSvgArticle ? /<div class="mote-card-media">\s*<svg\b[^>]*>[\s\S]*?<\/svg>\s*<\/div>/.test(liveSvgArticle) : false]
   ];
   const failedSvgSample = svgSampleChecks.filter(([, passed]) => !passed);
   if (failedSvgSample.length) {
@@ -98,32 +97,10 @@ if (!panelBlock || !/--mote-table-max:\s*none/.test(panelBlock)) {
   console.log('PASS docs recipes: the scroll-panel cap release is documented');
 }
 
-const statusBlock = blocks.find((block) => block.includes('tr.mote-row-status:is(.mote-success'));
-if (!statusBlock) {
-  console.error('FAIL docs recipes: row-status recipe not found');
-  process.exitCode = 1;
-} else {
-  const checks = [
-    ['row status includes semantic row headers', /th\[scope="row"\]/.test(statusBlock)],
-    ['row status preserves background-image layers', /background-color:\s*var\(--mote-status-soft\)/.test(statusBlock)],
-    ['row status does not use the background shorthand', !/background:\s*var\(--mote-status-soft\)/.test(statusBlock)],
-    ['row status paints direct cells only', /tr\.mote-row-status[^\{]*>\s*:is\(td,\s*th\[scope="row"\]\)/.test(statusBlock)]
-  ];
-  const failed = checks.filter(([, passed]) => !passed);
-  if (failed.length) {
-    for (const [label] of failed) console.error(`FAIL docs recipes: ${label}`);
-    process.exitCode = 1;
-  } else if (!process.exitCode) {
-    console.log(`PASS docs recipes: ${checks.length} row-status checks`);
-  }
-}
-
 const readmePath = path.resolve(__dirname, '..', 'README.md');
 const readme = fs.readFileSync(readmePath, 'utf8');
 const readmeChecks = [
-  ['README documents direct SVG card covers', /direct inline SVG/.test(readme)],
-  ['README documents card action alignment', /`\.mote-card-actions` — bottom-aligns an action row/.test(readme)],
-  ['README documents status row painting', /`\.mote-row-status` \+ a status class/.test(readme)]
+  ['README documents direct SVG card covers', /direct inline SVG/.test(readme)]
 ];
 const failedReadme = readmeChecks.filter(([, passed]) => !passed);
 if (failedReadme.length) {
@@ -146,8 +123,7 @@ const guidanceChecks = [
   ['the print checklist covers page breaks', /break-inside/.test(html)],
   ['the print checklist covers browser-dependent headings', /browser-dependent repeated headings/.test(html)],
   ['the print checklist covers interactive forms', /prefer a paper-only summary over split controls/.test(html)],
-  ['direct SVG card covers are documented', /or inline <code>svg<\/code> child/.test(html)],
-  ['card action helper is documented', /<code>\.mote-card-actions<\/code> on the action row/.test(html)]
+  ['direct SVG card covers are documented', /or inline <code>svg<\/code> child/.test(html)]
 ];
 const failedGuidance = guidanceChecks.filter(([, passed]) => !passed);
 if (failedGuidance.length) {

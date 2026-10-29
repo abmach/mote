@@ -19,6 +19,9 @@
        room so the shell's inner scroll never gains a stray 4px. */
     main p:has(.mote-spinner) { padding-inline-end: 0.5rem; }
 
+    /* Page-owned recipe: this class is not a mote helper. */
+    .mote-card > .card-actions { margin-block-start: auto; }
+
     /* Contents rail: the page outline. The section in view is marked,
        and the rail keeps that entry in sight while it scrolls. */
     nav[aria-label="toc"] > details > summary {
@@ -615,22 +618,24 @@ toggle.addEventListener('click', () =&gt; {
     it on both parities):</p>
   <pre><code>&lt;tr aria-current="true"&gt;…&lt;/tr&gt;
 </code></pre>
-  <p>Status classes are token carriers: a status on a table row sets the
-    row's tokens but paints nothing by itself. Add <code>.mote-row-status</code>
-    to paint the row's direct cells with the status it declares. The helper
-    includes semantic row headers and uses <code>background-color</code>, so a
-    column's background-image layer — such as the weekend shading below —
-    remains intact:</p>
-  <pre><code>&lt;tr class="mote-row-status mote-warning"&gt;
+  <p>Status classes remain token carriers: a status on a table row sets the
+    row's tokens but paints nothing by itself. The page owns the visual row
+    policy. Choose a class for your markup — here, <code>.status-row</code> —
+    and add it to the row with the status class:</p>
+  <pre><code>&lt;tr class="status-row mote-warning"&gt;
   &lt;th scope="row"&gt;Order 1048&lt;/th&gt;
   &lt;td&gt;Needs review&lt;/td&gt;
 &lt;/tr&gt;</code></pre>
-  <p>The underlying page rule is:</p>
-  <pre><code>tr.mote-row-status:is(.mote-success, .mote-warning, .mote-error, .mote-info)
+  <p>Copy this page rule to paint the row's direct cells with the status it
+    declares:</p>
+  <pre><code>tr.status-row:is(.mote-success, .mote-warning, .mote-error, .mote-info)
   > :is(td, th[scope="row"]) {
   background-color: var(--mote-status-soft);
 }
 </code></pre>
+  <p>The selector preserves semantic row headers and uses
+    <code>background-color</code>, so a column's background-image layer — such
+    as the weekend shading below — remains intact:</p>
   <p>Only direct cells are painted. Badges and buttons remain gated and keep
     their own status instead of inheriting the row's tint.</p>
   <p>Captions center by default; a quiet left-aligned caption is one page
@@ -1489,7 +1494,7 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     <article class="mote-card">
       <h3 style="margin-block-start:0">Action row</h3>
       <p>Cards in the same row can have different amounts of copy.</p>
-      <div class="mote-card-actions mote-row">
+      <div class="card-actions mote-row">
         <a class="mote-btn" href="#cards">Open</a>
         <a href="#cards">Details</a>
       </div>
@@ -1501,22 +1506,20 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       deciding your layout.</p>
   </div>
   <p>Cards are vertical flex containers. When cards in one row have different
-    copy lengths, put <code>.mote-card-actions</code> on the action row to
-    keep those actions aligned at the bottom:</p>
+    copy lengths, keep their actions aligned at the bottom with a page-owned
+    class:</p>
   <pre><code>&lt;article class="mote-card"&gt;
   &lt;h3&gt;Card title&lt;/h3&gt;
   &lt;p&gt;Different amounts of copy…&lt;/p&gt;
-  &lt;div class="mote-card-actions mote-row"&gt;
+  &lt;div class="card-actions mote-row"&gt;
     &lt;a class="mote-btn" href="#"&gt;Open&lt;/a&gt;
     &lt;a href="#"&gt;Details&lt;/a&gt;
   &lt;/div&gt;
 &lt;/article&gt;</code></pre>
-  <p>The helper only supplies <code>margin-block-start: auto</code>. It does
-    not choose a display, gap, or wrapping; <code>.mote-row</code> still owns
-    the action row's layout. Without the helper, the same alignment is:</p>
-  <pre><code>.card-actions {
-  margin-block-start: auto;
-}</code></pre>
+  <p>Your class name can be anything. <code>.mote-row</code> still owns the
+    action row's display, gap, and wrapping; the page rule only supplies
+    <code>margin-block-start: auto</code>:</p>
+  <pre><code>.mote-card > .card-actions { margin-block-start: auto; }</code></pre>
 
   <h3 id="badges">Badges</h3>
   <p>Badges are content markers — they declare their own status, never
@@ -1730,8 +1733,6 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>.mote-muted</code></td><td>Dimmed secondary text</td></tr>
       <tr><td><code>.mote-note</code> + status class</td><td>Tinted message surfaces — see <a href="#notes">Notes and callouts</a></td></tr>
       <tr><td><code>.mote-row</code></td><td>Flex row with wrapping and a gap</td></tr>
-      <tr><td><code>.mote-card-actions</code></td><td>Bottom-aligns a card action row without owning its display, gap, or wrapping</td></tr>
-      <tr><td><code>.mote-row-status</code></td><td>Paints a status row's direct cells while preserving background-image layers</td></tr>
       <tr><td><code>.mote-push</code></td><td>Right-aligns its element in a row</td></tr>
       <tr><td><code>.mote-brand</code></td><td>Quiet wordmark link: bold, foreground, no underline</td></tr>
       <tr><td><code>.mote-display</code></td><td>Hero/error-code scale, per use via <code>--mote-display</code></td></tr>
@@ -1745,6 +1746,8 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
       <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
     </tbody>
   </table>
+  <p>Card-action alignment and status-row painting are page-owned recipes:
+    see <a href="#cards">Cards</a> and <a href="#tables">Tables</a>.</p>
   <h3 id="notes">Notes and callouts</h3>
   <p>Two mechanisms cover note-like surfaces. <code>.mote-note</code> is the
     callout box — the component for info panels, warnings, confirmations. A
