@@ -193,7 +193,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Exclusive accordions | `<details name="group">` — the browser closes siblings |
 | Dialog & popover entrance animations | automatic when the file is loaded |
 
-Full live documentation with copyable markup for the components and recipes: **[docs/index.html](docs/index.html)**.
+Full live documentation starts at **[docs/index.html](docs/index.html)** — a task-oriented map covering setup, semantic elements, layout and components, helpers and print, patterns, and reference.
 
 ## Page-owned recipes
 
@@ -225,7 +225,7 @@ animations become instant, on older engines.
 
 Open [`tests/fixture.html`](tests/fixture.html) in any browser for the regression checks — the title shows PASS or FAIL.
 
-Open [`docs/index.html`](docs/index.html) for the full live documentation — it ends with a gallery of every styled element.
+Open [`docs/index.html`](docs/index.html) for the documentation map; the layout and components page includes the complete visual gallery.
 
 ## License
 

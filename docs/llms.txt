@@ -1,0 +1,28 @@
+# mote.css documentation
+
+> A tiny, semantic, class-optional CSS layer for plain HTML. Each topic below has one canonical HTML page; this file is a discovery map, not a duplicate of the documentation.
+
+## Documentation map
+
+- Overview: https://gitlab.com/abmach/mote/-/raw/main/docs/index.html
+- Getting started: https://gitlab.com/abmach/mote/-/raw/main/docs/getting-started.html
+  - Principles: https://gitlab.com/abmach/mote/-/raw/main/docs/getting-started.html#principles
+  - Get started: https://gitlab.com/abmach/mote/-/raw/main/docs/getting-started.html#get-started
+  - Theming: https://gitlab.com/abmach/mote/-/raw/main/docs/getting-started.html#theming
+- Elements and platform behavior: https://gitlab.com/abmach/mote/-/raw/main/docs/elements.html
+  - Elements: https://gitlab.com/abmach/mote/-/raw/main/docs/elements.html#elements
+  - Details and accordions: https://gitlab.com/abmach/mote/-/raw/main/docs/elements.html#details
+  - Popovers: tooltips and menus: https://gitlab.com/abmach/mote/-/raw/main/docs/elements.html#popovers
+- Layout and components: https://gitlab.com/abmach/mote/-/raw/main/docs/layout-components.html
+  - Layout: https://gitlab.com/abmach/mote/-/raw/main/docs/layout-components.html#layout
+  - Components: https://gitlab.com/abmach/mote/-/raw/main/docs/layout-components.html#components
+  - Gallery: https://gitlab.com/abmach/mote/-/raw/main/docs/layout-components.html#gallery
+- Helpers and print: https://gitlab.com/abmach/mote/-/raw/main/docs/helpers-print.html
+  - Helpers: https://gitlab.com/abmach/mote/-/raw/main/docs/helpers-print.html#helpers
+  - Print and paper: https://gitlab.com/abmach/mote/-/raw/main/docs/helpers-print.html#print
+- Patterns and recipes: https://gitlab.com/abmach/mote/-/raw/main/docs/patterns.html
+  - Patterns: https://gitlab.com/abmach/mote/-/raw/main/docs/patterns.html#patterns
+- Reference: https://gitlab.com/abmach/mote/-/raw/main/docs/reference.html
+  - Tokens: https://gitlab.com/abmach/mote/-/raw/main/docs/reference.html#tokens
+  - Fonts: https://gitlab.com/abmach/mote/-/raw/main/docs/reference.html#fonts
+  - Browser support: https://gitlab.com/abmach/mote/-/raw/main/docs/reference.html#support

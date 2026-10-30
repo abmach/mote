@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout and components — mote.css documentation</title>
+  <meta name="description" content="Build page shells, navigation, grids, cards, media objects, CSS-only components, and explore the complete visual gallery.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
+  <link rel="stylesheet" href="../mote.css">
+  <link rel="stylesheet" href="../mote.components.css">
+  <link rel="stylesheet" href="docs.css">
+  <script src="docs.js" defer></script>
+</head>
+<body class="mote-doc">
+<a class="mote-skip-link" href="#top">Skip to content</a>
+
+<header class="mote-header">
+  <div class="mote-container mote-row">
+    <a href="index.html" class="mote-brand">mote.css</a>
+    <nav class="mote-nav" aria-label="Documentation pages">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="getting-started.html">Start</a></li>
+        <li><a href="elements.html">Elements</a></li>
+        <li><a href="layout-components.html" aria-current="page">Layout</a></li>
+        <li><a href="helpers-print.html">Helpers</a></li>
+        <li><a href="patterns.html">Patterns</a></li>
+        <li><a href="reference.html">Reference</a></li>
+        <li><a href="https://github.com/abmach/mote">GitHub</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle" type="button" class="mote-push">Theme: auto</button>
+  </div>
+</header>
+
+<main class="mote-container" id="top">
+  <h1>Layout and components</h1>
+  <p class="docs-page-intro">Compose pages from landmarks and a small set of CSS-only helpers. The platform supplies the behavior; mote supplies the finish.</p>
+
+<h2 id="layout">Layout</h2>
+  <p>Layout pieces from <code>mote.components.css</code> — default modern CSS,
+    no JavaScript, no column utilities, no breakpoints. The document shell below
+    is the whole story: header, nav, aside and footer flex from plain landmarks,
+    and the sticky translucent header on this very page is the same pattern.
+    The semantic selectors (<code>nav[aria-label]</code>) match their
+    values case-sensitively — copy the exact lowercase
+    (<code>"breadcrumb"</code>, <code>"pagination"</code>, <code>"toc"</code>).</p>
+
+  <h3 id="simple-page">Simple page</h3>
+  <p>Most pages need nothing more than a sticky header and a centered column —
+    the layout of the page you are reading, plus the contents rail beside it.
+    The header bar and its pill nav style themselves from landmarks; the classes
+    on the inner div are the layout: <code>.mote-container</code> adds the gutters, <code>.mote-row</code> flexes,
+    <code>.mote-brand</code> quiets the wordmark, <code>.mote-push</code> right-aligns
+    the last control:</p>
+  <pre><code>&lt;body&gt;
+  &lt;header&gt;
+    &lt;div class="mote-container mote-row"&gt;
+      &lt;a href="/" class="mote-brand"&gt;Brand&lt;/a&gt;
+      &lt;nav&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+      &lt;button type="button" class="mote-push"&gt;Toggle&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+  &lt;main class="mote-container"&gt;
+    &lt;h1&gt;Page title&lt;/h1&gt;
+    &lt;p&gt;Content…&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+</code></pre>
+  <p>Centering stays opt-in because full-bleed pages are equally valid. If your
+    shell is wrapped in a <code>&lt;div&gt;</code> (some frameworks do),
+    <code>.mote-header</code> and <code>.mote-nav</code> bring the same
+    styles to headers the landmark selector cannot see.</p>
+  <p>For a narrower reading column (long-form articles), set
+    <code>--mote-container-max</code> — 42rem is a comfortable measure:</p>
+  <pre><code>&lt;main class="mote-container" style="--mote-container-max: 42rem"&gt;
+</code></pre>
+  <p>A footer after <code>main</code> follows normal flow — fine for long pages.
+    If you want it pinned to the viewport bottom even when content is short,
+    use the document shell below.</p>
+  <p>Right-align content in rows with <code>.mote-push</code>:</p>
+  <pre><code>&lt;div class="mote-row"&gt;
+  &lt;strong&gt;Brand&lt;/strong&gt;
+  &lt;nav&gt;…&lt;/nav&gt;
+  &lt;button class="mote-push"&gt;Toggle&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+
+  <h3 id="responsive-composition">Responsive composition</h3>
+  <p>mote's structural helpers already adapt to the available width;
+    <code>.mote-grid</code> reflows its tracks and <code>.mote-row</code> wraps.
+    Page composition still decides what deserves a full row on a phone. Use a
+    deliberate page rule instead of scattering utility classes:</p>
+  <ul>
+    <li><strong>Card grids:</strong> let <code>.mote-grid</code> choose the track
+      count. Tune <code>--mote-grid-min</code>; do not pin a column count.</li>
+    <li><strong>Toolbars:</strong> <code>.mote-row</code> wraps, but controls keep
+      their intrinsic widths. Stack them deliberately when each control needs
+      the full width.</li>
+    <li><strong>Header navigation:</strong> long pill rows scroll horizontally.
+      Give the nav its own row on narrow screens when it needs more room, and
+      keep primary actions outside the scrolling region.</li>
+  </ul>
+  <p>A narrow toolbar can be one page rule. Make <code>.mote-row</code> the
+    toolbar owner so each label is a direct flex item:</p>
+  <pre><code>&#60;div class="mote-row filter-bar"&#62;
+  &#60;label&#62;Search
+    &#60;input type="search" name="q"&#62;
+  &#60;/label&#62;
+  &#60;label&#62;Status
+    &#60;select name="status"&#62;
+      &#60;option&#62;Active&#60;/option&#62;
+    &#60;/select&#62;
+  &#60;/label&#62;
+  &#60;button type="button"&#62;Apply&#60;/button&#62;
+&#60;/div&#62;
+</code></pre>
+  <p>This handles direct controls and controls wrapped in labels:</p>
+  <pre><code>@media (max-width: 30rem) {
+  .filter-bar > :where(input, select, button),
+  .filter-bar > label {
+    flex: 1 1 100%;
+  }
+
+  .filter-bar > label :where(input, select) {
+    width: 100%;
+  }
+}
+</code></pre>
+  <p>The first rule gives direct controls and labels a full row; the second
+    makes a control inside a label fill that label. <code>.mote-row</code> wraps
+    controls, but it does not make them full-width by itself. The page rule owns
+    that choice; nested wrappers need their own selector.</p>
+  <p>A sticky toolbar beneath a site header needs a matching offset. Use
+    <code>.mote-row</code> for the toolbar's wrapping layout and
+    <code>.toolbar</code> for its sticky placement; <code>.toolbar</code> is a
+    page-owned class here, not a class mote ships:</p>
+  <pre><code>&#60;div class="mote-row toolbar"&#62;
+  &#60;label&#62;Search
+    &#60;input type="search" name="q"&#62;
+  &#60;/label&#62;
+  &#60;button type="button"&#62;Filter&#60;/button&#62;
+&#60;/div&#62;
+</code></pre>
+  <p>The sticky top offset must match the header's actual bottom edge so the
+    toolbar does not overlap it. Header height depends on its content — and on
+    how many rows it takes at that width — so keep the value page-owned and
+    measure it rather than estimating: scroll the page and read the header's
+    bottom edge in the console</p>
+  <pre><code>document.querySelector('header').getBoundingClientRect().bottom
+</code></pre>
+  <p>Use that value for the layout you are in:</p>
+  <pre><code>:root {
+  --toolbar-top: 4.75rem;
+}
+
+.toolbar {
+  position: sticky;
+  top: var(--toolbar-top);
+}
+
+@media (max-width: 40rem) {
+  :root {
+    --toolbar-top: 7.5rem;
+  }
+}
+</code></pre>
+  <p>Those numbers are examples for one header, not defaults: a one-row and a
+    two-row header need two different offsets, and a two-row header can be
+    taller than any fixed sample. Measure every width you ship.</p>
+  <p>The complete header recipe is in <a href="#header-navigation">Header and
+    navigation</a>. For wide data, choose between an internal scroll region and
+    a record layout in <a href="elements.html#narrow-tables">Narrow screens: scroll or
+    transform</a>.</p>
+
+  <h3 id="hero-and-bands">Hero and bands</h3>
+  <p>Two helpers for focused layouts:</p>
+  <p><code>.mote-hero</code> centers content in the remaining viewport height —
+    error pages, login screens, empty states. The offset clears a header and
+    footer; tune it per page with <code>--mote-hero-offset</code> (default 12rem):</p>
+  <pre><code>&lt;main class="mote-container mote-hero"&gt;…&lt;/main&gt;
+
+&lt;!-- taller header/footer: raise the offset --&gt;
+&lt;main class="mote-container mote-hero" style="--mote-hero-offset: 14rem"&gt;…&lt;/main&gt;
+</code></pre>
+  <div class="mote-container mote-hero" style="--mote-hero-offset: calc(100svh - 14rem); border: 1px dashed var(--mote-border); border-radius: var(--mote-radius)">
+    <p class="mote-display" style="--mote-display: 3rem; margin-block:0">404</p>
+    <p style="margin-block:0.5rem 0">The block centers its content; the offset sets the height.</p>
+    <p style="margin-block:0">
+      <a class="mote-btn" href="#top">Back home</a>
+      <a class="mote-ghost" href="#top">Read the docs</a>
+    </p>
+  </div>
+  <p class="mote-muted">Hero scaled to fit this page via the offset — on a real error page the
+    default 12rem gives the block nearly the full viewport.</p>
+  <p><code>.mote-band</code> is a full-bleed tinted section — CTA bands, section
+    dividers, announcement strips. The mix is opaque, so it reads as a
+    deliberate section in both palettes (unlike <code>--mote-accent-soft</code>,
+    which is transparent and can vanish over dark backgrounds). Bands are
+    content surfaces: a status class on the band or an ancestor tints them.
+    The band provides color and breathing room; the container inside provides
+    the gutters. The band itself goes <em>outside</em> the container — a
+    sibling of <code>main</code> — or it bleeds only to the container edge:</p>
+  <pre><code>&lt;section class="mote-band"&gt;
+  &lt;div class="mote-container"&gt;
+    &lt;h2&gt;Ready when you are.&lt;/h2&gt;
+    &lt;p&gt;&lt;a class="mote-btn" href="/signup"&gt;Create account&lt;/a&gt;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+  <section class="mote-band" style="border-radius: var(--mote-radius); padding-block: 1.5rem; margin-block: 1rem">
+    <div class="mote-container" style="text-align:center">
+      <strong>Ready when you are.</strong>
+      <p style="margin-block: 0.5rem"><a class="mote-btn" href="#top">Create account</a></p>
+      <small class="mote-muted">Accent tint by default — a status class re-tints the band.</small>
+    </div>
+  </section>
+  <h3 id="document-layout">Document layout</h3>
+  <p>One class on <code>&#60;body&#62;</code> turns the landmarks you already write into the
+    layout: <code>header</code> and <code>footer</code> span the page, a <code>nav</code>
+    becomes a sticky left rail, an <code>aside</code> a right rail, and <code>main</code>
+    takes the middle. Everything collapses to a single column under 50rem, keeping
+    the landmarks in source order. No classes on the landmarks themselves:</p>
+  <p>On <code>&#60;body&#62;</code> the shell includes page gutters, a pinned footer and
+    content tracks that absorb wide content (<code>minmax(0, 1fr)</code>). A wide
+    table scrolls inside <code>main</code>, never the page; when a table needs a
+    sticky header or a height cap, wrap it in <code>.mote-table-scroll</code> so
+    that component owns the horizontal scroll instead. The body shell already has
+    page gutters — avoid adding another <code>.mote-container</code> inside
+    <code>main</code> unless that narrower measure is intentional. The nav rail is a
+    quiet vertical list by default. When a sticky site header (<code>body &#62; header</code>)
+    exists, the rail top and the scroll padding for anchor jumps derive
+    themselves — nothing to set. Set <code>--mote-rail-top</code> only for
+    wrapped shells (<code>.mote-header</code>, which the landmark selector cannot
+    see) or a custom offset:</p>
+  <pre><code>:root {
+  --mote-rail-top: 4.75rem;  /* wrapped shells only — landmarks do this for you */
+}
+</code></pre>
+  <pre><code>&lt;body class="mote-doc"&gt;
+  &lt;header&gt;Site header&lt;/header&gt;
+  &lt;nav&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="#"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#"&gt;Blog&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;main&gt;
+    &lt;p&gt;Your content.&lt;/p&gt;
+  &lt;/main&gt;
+  &lt;aside&gt;Contextual notes&lt;/aside&gt;
+  &lt;footer&gt;© mote&lt;/footer&gt;
+&lt;/body&gt;
+</code></pre>
+  <p>Live example — the same structure inside a wrapper:</p>
+  <div class="mote-doc" style="border:1px solid var(--mote-border);border-radius:var(--mote-radius);padding:0.8rem;gap:0.8rem">
+    <header style="padding:0.4rem 0.8rem;background:var(--mote-accent-soft);border-radius:var(--mote-radius-sm)">Site header</header>
+    <nav style="padding:0.4rem 0.8rem;background:var(--mote-surface);border-radius:var(--mote-radius-sm)">
+      <ul style="padding:0;margin:0;list-style:none">
+        <li><a href="#layout">Docs</a></li>
+        <li><a href="#layout">Blog</a></li>
+      </ul>
+    </nav>
+    <main style="padding:0.4rem 0.8rem">Your content — this column flexes.</main>
+    <aside class="mote-muted" style="padding:0.4rem 0.8rem;background:var(--mote-surface);border-radius:var(--mote-radius-sm)">Contextual notes</aside>
+    <footer class="mote-muted" style="padding:0.4rem 0.8rem">© mote</footer>
+  </div>
+
+  <h3 id="header-navigation">Header and navigation</h3>
+  <p>Direct children of <code>&lt;body&gt;</code> get these styles from landmarks
+    alone. The classes exist for one case landmarks cannot express — a shell
+    wrapped in a <code>&lt;div&gt;</code>, where <code>body &gt; header</code> cannot
+    reach it:</p>
+  <pre><code>&lt;header class="mote-header"&gt;
+  &lt;nav class="mote-nav"&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="/" aria-current="page"&gt;Home&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+</code></pre>
+  <p>Long navs scroll horizontally inside the bar — a section list of any
+    length keeps the header one line, and the brand and pushed controls
+    keep their place. Under the pills a hairline carries directional fades
+    that bloom toward whichever side holds more content. Pure CSS cannot
+    tell "at the start" from "nothing to scroll", so the fades key off a
+    <code>data-nav</code> attribute kept current by the seven-line snippet
+    below — without it there is no line at all: zero-JS headers keep just
+    the pills, and the cut pill is the overflow signal. With the snippet,
+    the hairline appears only while the nav actually scrolls: a single
+    pill leaves nothing on the line — and on wide viewports, where the
+    pills never overflow, there is nothing to see at all.
+    The snippet's math is direction-agnostic; the gradients flip under
+    <code>[dir="rtl"]</code>. Breadcrumbs need no class at all — mote
+    styles the semantic pattern:</p>
+  <pre><code>const pills = document.querySelector('header nav ul');
+const sync = () => pills.parentElement.dataset.nav =
+  (pills.scrollLeft > 1 ? 'start ' : '') +
+  (pills.scrollLeft + pills.clientWidth < pills.scrollWidth - 1 ? 'end' : '');
+pills.addEventListener('scroll', sync, { passive: true });
+addEventListener('resize', sync);
+sync();
+document.fonts?.ready.then(sync);  // pill widths change when webfonts load
+</code></pre>
+  <p>On narrow screens, the brand and pushed controls can leave the scrolling nav
+    with very little room. For a long navigation, give the navigation its own
+    row and keep primary actions outside the scrolling region. The one-row
+    fallback suits short navigation; its cut pill is the overflow signal when
+    JavaScript is not used.</p>
+  <p><strong>This rule is page CSS — copy it into your own stylesheet.</strong>
+    mote does not ship it. It gives the navigation its own line in the header;
+    the default bar already contains a long nav, by scrolling its pill row
+    inside the bar. The recipe below applies to mote's canonical header
+    composition, where <code>.mote-row</code> owns the header row. A custom
+    flex header has its own layout owner and needs equivalent page rules for
+    its own structure.</p>
+  <pre><code>&lt;header class="mote-header"&gt;
+  &lt;div class="mote-container mote-row"&gt;
+    &lt;a class="mote-brand" href="/"&gt;Northline&lt;/a&gt;
+    &lt;nav class="mote-nav" aria-label="Sections"&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/overview"&gt;Overview&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/fixtures"&gt;Fixtures&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/results"&gt;Results&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+    &lt;a class="mote-btn mote-push" href="/apply"&gt;Apply&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/header&gt;
+
+&lt;style&gt;
+@media (width &lt; 40rem) {
+  :where(body &gt; header, .mote-header) .mote-row {
+    row-gap: 0.5rem;
+  }
+  :where(body &gt; header, .mote-header) :where(nav, .mote-nav) {
+    flex: 1 1 100%;
+    order: 2;
+    min-inline-size: 100%;
+  }
+}
+&lt;/style&gt;</code></pre>
+  <p>The brand and primary action remain on the first row; the navigation gets
+    the second row and keeps its own horizontal scroll behavior. If every label
+    must be visible without scrolling, shorten the navigation or move secondary
+    links into the page body.</p>
+  <pre><code>&lt;nav aria-label="breadcrumb"&gt;
+  &lt;ol&gt;
+    &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span aria-current="page"&gt;Layout&lt;/span&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+</code></pre>
+  <nav aria-label="breadcrumb">
+    <ol>
+      <li><a href="#top">Home</a></li>
+      <li><a href="#top">Docs</a></li>
+      <li><span aria-current="page">Layout</span></li>
+    </ol>
+  </nav>
+
+  <h3 id="pagination">Pagination</h3>
+  <p>Same idea as breadcrumbs — a semantic label, no class. mote styles the
+    link row and the <code>aria-current</code> pill. The current page works
+    best as a <code>&lt;span&gt;</code> (you are already there — not a link), but
+    if you use an <code>&lt;a&gt;</code>, mote keeps the pill state visible on
+    hover:</p>
+  <pre><code>&lt;nav aria-label="pagination"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="#top"&gt;← Prev&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#top" aria-current="page"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#top"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#top"&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#top"&gt;Next →&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+  <nav aria-label="pagination">
+    <ul>
+      <li><a href="#top">← Prev</a></li>
+      <li><a href="#top" aria-current="page">1</a></li>
+      <li><a href="#top">2</a></li>
+      <li><a href="#top">3</a></li>
+      <li><a href="#top">Next →</a></li>
+    </ul>
+  </nav>
+
+  <h3 id="table-of-contents">Table of contents</h3>
+  <p>Right-rail asides and "On this page" navigation, styled semantically
+    like breadcrumbs and pagination. Inside <code>.mote-doc</code>, put the TOC
+    in the <code>aside</code> to make it the right rail:</p>
+  <pre><code>&lt;nav aria-label="toc"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="#get-started"&gt;Get started&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#theming"&gt;Theming&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+  <nav aria-label="toc">
+    <ul>
+      <li><a href="getting-started.html#get-started">Get started</a></li>
+      <li><a href="getting-started.html#theming">Theming</a></li>
+      <li><a href="elements.html#elements">Elements</a></li>
+    </ul>
+  </nav>
+  <p>On a narrow screen, a long contents list should become a compact index
+    rather than a tall block before or after the document. For this recipe,
+    put the TOC in an <code>aside</code> before <code>main</code>: the
+    narrow-screen <code>.mote-doc</code> column layout preserves that relative
+    order visually, while native focus order follows DOM order. On wide
+    screens, the document shell explicitly places that aside in the
+    right rail. Start the disclosure closed and use the small documented script
+    below to open it only on wide screens:</p>
+  <pre><code>&lt;body class="mote-doc"&gt;
+  &lt;header&gt;…&lt;/header&gt;
+  &lt;aside&gt;
+    &lt;nav aria-label="toc"&gt;
+      &lt;details&gt;
+        &lt;summary&gt;On this page&lt;/summary&gt;
+        &lt;ul&gt;…&lt;/ul&gt;
+      &lt;/details&gt;
+    &lt;/nav&gt;
+  &lt;/aside&gt;
+  &lt;main&gt;…&lt;/main&gt;
+  &lt;footer&gt;…&lt;/footer&gt;
+&lt;/body&gt;
+
+&lt;script&gt;
+  const toc = document.querySelector('nav[aria-label="toc"] details');
+  const narrow = matchMedia('(width &lt; 50rem)');
+  const syncToc = () =&gt; { toc.open = !narrow.matches; };
+  narrow.addEventListener('change', syncToc);
+  syncToc();
+&lt;/script&gt;</code></pre>
+  <p>Without JavaScript the contents stay closed and remain available by
+    activating the summary. If the TOC deliberately follows <code>main</code>,
+    keep that source order on every width; the shell will not reorder it for
+    you. Mark navigational chrome that should not print with
+    <code>.mote-no-print</code>.</p>
+  <p>The recipe above uses the <code>aside</code> so the contents become the
+    right rail. A left-rail contents list is a different arrangement: put a
+    <code>nav</code> directly before <code>main</code> in the source — the
+    shell keeps it as the left rail on wide screens and above the content on
+    narrow ones — and keep the reference material in the <code>aside</code>.</p>
+
+  <h3 id="card-grids">Card grids</h3>
+  <p>One class; columns are computed from the container — as many 16rem cards as fit.
+    <code>auto-fill</code> made column-count utilities obsolete. It may leave
+    empty grid tracks when there are fewer cards than the container can hold;
+    use <code>.mote-grid-sparse</code> when those empty tracks should collapse:</p>
+  <p>For wider or narrower tracks, set <code>--mote-grid-min</code>:
+    22rem gives 3-wide pricing; 26rem gives 2-column content. The default
+    16rem minimum suits compact cards; prose-heavy cards often need 22–26rem
+    so their text has a comfortable measure:</p>
+  <pre><code>&lt;div class="mote-grid" style="--mote-grid-min: 22rem"&gt;
+  &lt;!-- 3 columns on any container &gt;= 66rem --&gt;
+&lt;/div&gt;
+</code></pre>
+  <pre><code>&lt;div class="mote-grid"&gt;
+  &lt;article class="mote-card"&gt;…&lt;/article&gt;
+  &lt;article class="mote-card"&gt;…&lt;/article&gt;
+  &lt;article class="mote-card"&gt;…&lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+  <div class="mote-grid">
+    <article class="mote-card"><h3 style="margin-block-start:0">One</h3><p>As many as fit.</p></article>
+    <article class="mote-card"><h3 style="margin-block-start:0">Two</h3><p>Resize the window.</p></article>
+    <article class="mote-card"><h3 style="margin-block-start:0">Three</h3><p>No breakpoints.</p></article>
+    <article class="mote-card"><h3 style="margin-block-start:0">Four</h3><p>No utilities.</p></article>
+  </div>
+
+  <p>For sparse grids (a 4-item footer in a wide container), the variant
+    class collapses empty tracks — standalone, no <code>.mote-grid</code>
+    needed:</p>
+  <pre><code>&lt;div class="mote-grid-sparse"&gt;…&lt;/div&gt;
+</code></pre>
+
+<h2 id="components">Components</h2>
+  <p>From <code>mote.components.css</code> — opt-in, CSS-only, built on the platform.</p>
+
+  <h3 id="cards">Cards</h3>
+  <pre><code>&lt;article class="mote-card"&gt;
+  &lt;h3&gt;Card title&lt;/h3&gt;
+  &lt;p&gt;A soft surface for grouped content.&lt;/p&gt;
+&lt;/article&gt;
+</code></pre>
+  <p>Featured cards read <code>--mote-status</code> for their border —
+    one class tints the edge:</p>
+  <pre><code>&lt;article class="mote-card mote-success"&gt;
+  &lt;h3&gt;Accepted answer&lt;/h3&gt;
+  &lt;p&gt;The status class tints the border.&lt;/p&gt;
+&lt;/article&gt;
+</code></pre>
+  <div class="mote-card mote-success">
+    <h3 style="margin-block-start:0">Accepted answer</h3>
+    <p>The status class tints the border.</p>
+  </div>
+  <p>Flush-top media (cover photos, thumbnails) — the one compositional
+    card pattern that ships as a class: <code>.mote-card-media</code> pulls
+    the media edge-to-edge and matches the card radius:</p>
+  <p><code>.mote-card</code> and <code>.mote-media</code> don't merge —
+    the card's column direction wins over the media row. Nest the media
+    inside the card. The class sizes a direct <code>img</code>, <code>video</code>,
+    or inline <code>svg</code> child. A direct SVG keeps its own
+    <code>viewBox</code> aspect ratio; nested SVG icons keep their own
+    dimensions. A non-image cover block needs its own
+    <code>aspect-ratio</code> and padding.</p>
+  <pre><code>&lt;article class="mote-card"&gt;
+  &lt;div class="mote-card-media"&gt;
+    &lt;img src="cover.jpg" alt=""&gt;
+  &lt;/div&gt;
+  &lt;h3&gt;Card title&lt;/h3&gt;
+&lt;/article&gt;
+
+&lt;article class="mote-card"&gt;
+  &lt;div class="mote-card-media"&gt;
+    &lt;svg viewBox="0 0 160 100" role="img" aria-label="Cover artwork"&gt;
+      &lt;rect width="160" height="100" fill="currentColor" opacity=".15"&gt;&lt;/rect&gt;
+    &lt;/svg&gt;
+  &lt;/div&gt;
+  &lt;h3&gt;Card title&lt;/h3&gt;
+&lt;/article&gt;</code></pre>
+  <article class="mote-card" style="max-width: 24rem">
+    <div class="mote-card-media">
+      <img src="https://picsum.photos/seed/mote-cover/480/240" alt="Cover photo example">
+    </div>
+    <h3 style="margin-block-start:0">Card title</h3>
+    <p>Media flush to the card edges, radius matched — one class.</p>
+  </article>
+  <div class="mote-grid">
+    <article class="mote-card">
+      <div class="mote-card-media">
+        <svg viewBox="0 0 160 100" role="img" aria-label="Abstract cover artwork">
+          <rect width="160" height="100" fill="currentColor" opacity=".15"></rect>
+          <circle cx="80" cy="50" r="30" fill="currentColor" opacity=".35"></circle>
+        </svg>
+      </div>
+      <h3 style="margin-block-start:0">SVG cover</h3>
+      <p>A direct SVG cover fills the media wrapper and keeps its own ratio.</p>
+    </article>
+    <article class="mote-card">
+      <h3 style="margin-block-start:0">Action row</h3>
+      <p>Cards in the same row can have different amounts of copy.</p>
+      <div class="card-actions mote-row">
+        <a class="mote-btn" href="#cards">Open</a>
+        <a href="#cards">Details</a>
+      </div>
+    </article>
+  </div>
+  <div class="mote-card">
+    <h3 style="margin-block-start:0">Card title</h3>
+    <p>A soft surface for grouped content — a border, a whisper of shadow, and nothing else
+      deciding your layout.</p>
+  </div>
+  <p>Cards are vertical flex containers. When cards in one row have different
+    copy lengths, keep their actions aligned at the bottom with a page-owned
+    class:</p>
+  <pre><code>&lt;article class="mote-card"&gt;
+  &lt;h3&gt;Card title&lt;/h3&gt;
+  &lt;p&gt;Different amounts of copy…&lt;/p&gt;
+  &lt;div class="card-actions mote-row"&gt;
+    &lt;a class="mote-btn" href="#"&gt;Open&lt;/a&gt;
+    &lt;a href="#"&gt;Details&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+  <p>Your class name can be anything. <code>.mote-row</code> still owns the
+    action row's display, gap, and wrapping; the page rule only supplies
+    <code>margin-block-start: auto</code>:</p>
+  <pre><code>.mote-card > .card-actions { margin-block-start: auto; }</code></pre>
+
+  <h3 id="badges">Badges</h3>
+  <p>Badges are content markers — they declare their own status, never
+    inherit from context (same gating as <a href="elements.html#buttons-and-statuses">buttons</a>).
+    A plain <code>.mote-badge</code> is always accent-tinted; a status class on
+    the badge itself provides the tint:</p>
+  <pre><code>&lt;span class="mote-badge"&gt;accent&lt;/span&gt;
+&lt;span class="mote-badge mote-success"&gt;success&lt;/span&gt;
+&lt;span class="mote-badge mote-warning"&gt;warning&lt;/span&gt;
+&lt;span class="mote-badge mote-error"&gt;error&lt;/span&gt;
+&lt;span class="mote-badge mote-info"&gt;info&lt;/span&gt;
+&lt;span class="mote-badge mote-muted"&gt;muted&lt;/span&gt;
+</code></pre>
+  <p>
+    <span class="mote-badge">accent</span>
+    <span class="mote-badge mote-success">success</span>
+    <span class="mote-badge mote-warning">warning</span>
+    <span class="mote-badge mote-error">error</span>
+    <span class="mote-badge mote-info">info</span>
+    <span class="mote-badge mote-muted">muted</span>
+  </p>
+  <p>Badges use <code>min(0.8em, 0.8rem)</code>: they shrink with smaller
+    surrounding text but never enlarge with headings. Inside a table (0.95em)
+    or a small metadata strip, the badge scales down with its context.</p>
+
+  <h3 id="avatars">Avatars</h3>
+  <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem);
+    corners via <code>--mote-avatar-radius</code> (default 999px — round for
+    people; square cover art and favicons set it to 0):</p>
+  <pre><code>&lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Ada" alt="Ada Lovelace"&gt;
+&lt;img class="mote-avatar" style="--mote-avatar: 6rem" src="…" alt="Hero portrait"&gt;
+&lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Grace" alt="Grace Hopper"&gt;
+&lt;img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Alan" alt="Alan Turing"&gt;
+</code></pre>
+  <p>
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Ada" alt="Ada Lovelace avatar">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Grace" alt="Grace Hopper avatar">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Alan" alt="Alan Turing avatar">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Radia" alt="Radia Perlman avatar">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Katherine" alt="Katherine Johnson avatar">
+  </p>
+  <p>
+    <img class="mote-avatar" style="--mote-avatar: 6rem" src="https://api.dicebear.com/9.x/notionists/svg?seed=Mote" alt="Hero portrait at 6rem">
+  </p>
+
+  <h3 id="skeletons-and-spinners">Skeletons and spinners</h3>
+  <pre><code>&lt;div class="mote-skeleton" style="height:1rem;width:60%"&gt;&lt;/div&gt;
+&lt;div class="mote-skeleton" style="height:1rem;width:40%"&gt;&lt;/div&gt;
+
+&lt;span class="mote-spinner" role="status" aria-label="Loading"&gt;&lt;/span&gt;
+</code></pre>
+  <div class="mote-skeleton" style="height:1rem;width:60%"></div>
+  <div class="mote-skeleton" style="height:1rem;width:40%"></div>
+  <p><span class="mote-spinner" role="status" aria-label="Loading"></span> Loading something…</p>
+  <p>Spinners read the status classes too —
+    <span class="mote-spinner" role="status"></span> default,
+    <span class="mote-spinner mote-success" role="status"></span> success,
+    <span class="mote-spinner mote-warning" role="status"></span> warning,
+    <span class="mote-spinner mote-error" role="status"></span> error,
+    <span class="mote-spinner mote-info" role="status"></span> info,
+    <span class="mote-spinner mote-muted" role="status"></span> muted:</p>
+  <pre><code>&lt;span class="mote-spinner" role="status" aria-label="Loading"&gt;&lt;/span&gt;
+&lt;span class="mote-spinner mote-error" role="status" aria-label="Loading"&gt;&lt;/span&gt;
+</code></pre>
+  <p>Small indicator dots: the skeleton's 1em minimum is for content
+    placeholders — dots need one page rule:</p>
+  <pre><code>.dot { min-height: 0; width: 0.45rem; height: 0.45rem; border-radius: 50%; }
+</code></pre>
+
+  <h3 id="media-objects">Media objects</h3>
+  <p>Avatar or icon beside body — forum posts, comments, chat, author boxes.
+    <code>.mote-media</code> flexes the row; the last child grows. Rows align
+    to flex-start — long content never stretches the avatar row:</p>
+  <pre><code>&lt;div class="mote-media"&gt;
+  &lt;img class="mote-avatar" src="…" alt=""&gt;
+  &lt;div&gt;&lt;p&gt;Post body…&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+  <div class="mote-media" style="max-width:30rem">
+    <img class="mote-avatar" src="https://api.dicebear.com/9.x/notionists/svg?seed=Mote" alt="Author avatar">
+    <div>
+      <p><strong>Ada Lovelace</strong></p>
+      <p class="mote-muted">Wrote the first algorithm. Currently inspiring a CSS library.</p>
+    </div>
+  </div>
+  <p>An inline SVG icon can stand in for an avatar. It does not carry the
+    avatar helper's image styling, so give it a stable square size and keep
+    it from shrinking with one page rule:</p>
+  <pre><code>.club-icon {
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  flex: none;
+}</code></pre>
+
+  <h3 id="toasts">Toasts</h3>
+  <p>A styled <code>popover</code> pinned to the corner. Showing it takes one line — the
+    browser handles stacking, Esc, and light-dismiss:</p>
+  <p>Use <code>popover="manual"</code> for toasts — auto popovers light-dismiss on any
+    body click, which surprises notification text — and show one at a time, since
+    multiple toasts pin to the same corner:</p>
+  <pre><code>&lt;div popover="manual" class="mote-toast" id="toast"&gt;
+  Saved. Everything is fine.
+&lt;/div&gt;
+
+&lt;script&gt;
+  const t = document.querySelector('#toast');
+  t.showPopover();
+  setTimeout(() =&gt; t.hidePopover(), 3000);
+&lt;/script&gt;
+</code></pre>
+  <p>Toast edges follow every status class — fire each one:</p>
+  <p>
+    <button type="button" id="toast-btn">Accent</button>
+    <button type="button" id="toast-btn-success">Success</button>
+    <button type="button" id="toast-btn-warning">Warning</button>
+    <button type="button" id="toast-btn-error">Error</button>
+    <button type="button" id="toast-btn-info">Info</button>
+    <button type="button" id="toast-btn-muted">Muted</button>
+  </p>
+  <div popover="manual" class="mote-toast" id="docs-toast">Plain toast, accent edge.</div>
+  <div popover="manual" class="mote-toast mote-success" id="docs-toast-success">Saved. Everything is fine.</div>
+  <div popover="manual" class="mote-toast mote-warning" id="docs-toast-warning">Careful now, the honey jar is open.</div>
+  <p>Add a status class and the accent edge follows:</p>
+  <pre><code>&lt;div popover="manual" class="mote-toast mote-error" id="toast"&gt;
+  Something went softly wrong.
+&lt;/div&gt;
+&lt;div popover="manual" class="mote-toast mote-muted" id="toast-m"&gt;Copied to clipboard.&lt;/div&gt;
+</code></pre>
+  <div popover="manual" class="mote-toast mote-error" id="docs-toast-error">Something went softly wrong.</div>
+  <div popover="manual" class="mote-toast mote-info" id="docs-toast-info">Heads up — a gentle, dusty-blue fact.</div>
+  <div popover="manual" class="mote-toast mote-muted" id="docs-toast-muted">Copied to clipboard.</div>
+
+<h2 id="gallery">Gallery</h2>
+  <p>Every element, every state — the long tail the sections above don't
+    show: all input types, footnoted tables, sample output. Rendered by the
+    two stylesheets and nothing else.</p>
+
+  <h3 id="the-complete-form">The complete form</h3>
+  <form onsubmit="return false">
+    <fieldset>
+      <legend>A plain, honest form</legend>
+      <p><label for="g-name">Name</label>
+        <input id="g-name" type="text" placeholder="Ada Lovelace"></p>
+      <p><label for="g-email">Email</label>
+        <input id="g-email" type="email" placeholder="ada@example.com"></p>
+      <p><label for="g-flavor">Flavor</label>
+        <select id="g-flavor"><option>Oat</option><option selected>Sage</option><option>Plum</option></select></p>
+      <p><label for="g-color">Favorite color</label>
+        <input id="g-color" type="color" value="#6f5486"></p>
+      <p><label for="g-story">Story</label>
+        <textarea id="g-story" placeholder="Once upon a page…"></textarea></p>
+      <p><label><input type="checkbox" checked> Subscribe to the newsletter</label></p>
+      <p><label><input type="radio" name="g-size" checked> Cozy</label>
+        <label><input type="radio" name="g-size"> Roomier</label></p>
+      <p><label for="g-file">Receipt</label>
+        <input id="g-file" type="file"></p>
+      <p><label for="g-date">Date</label>
+        <input id="g-date" type="date"></p>
+      <p><button type="submit">Send it</button>
+        <button type="reset">Start over</button></p>
+    </fieldset>
+  </form>
+
+  <h3 id="footnoted-table">Footnoted table</h3>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Token cost of the cozy feel">
+  <table>
+    <caption>Token cost of the cozy feel</caption>
+    <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Usage</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-bg</code></td><td>#faf9f7</td><td>#1c1a17</td><td>Page background</td></tr>
+      <tr><td><code>--mote-surface</code></td><td>#f1eee7</td><td>#262320</td><td>Cards, code blocks</td></tr>
+      <tr><td><code>--mote-fg</code></td><td>#2b2924</td><td>#eae6de</td><td>Body text</td></tr>
+      <tr><td><code>--mote-accent</code></td><td>#6f5486</td><td>#b8a1ca</td><td>Links, buttons, focus</td></tr>
+    </tbody>
+    <tfoot><tr><td>Total</td><td colspan="3">4 lines of variables to re-theme everything</td></tr></tfoot>
+  </table>
+  </div>
+
+  <h3 id="sample-output">Sample output</h3>
+  <p>Press <kbd>Esc</kbd> to close dialogs. The ratio <code>0Oo 1lI</code>
+    stays legible in <samp>Commit Mono</samp>.</p>
+
+  <nav class="mote-row docs-page-nav" aria-label="Documentation pagination">
+    <a class="mote-btn" href="elements.html">← Elements</a>
+    <a class="mote-btn mote-push" href="helpers-print.html">Helpers →</a>
+  </nav>
+
+  <hr>
+  <p class="mote-muted">mote.css · MIT ·
+    <a href="https://gitlab.com/abmach/mote">GitLab</a> ·
+    <a href="https://github.com/abmach/mote">GitHub</a> ·
+    <a href="index.html">Documentation home</a> ·
+    <a href="#top">Back to top</a> ·
+    styled by two CSS files and zero lines of library JavaScript.</p>
+</main>
+
+<aside class="mote-no-print">
+  <nav aria-label="toc">
+    <details class="docs-toc" open>
+      <summary>On this page</summary>
+      <ul>
+<ul>
+          <li><a href="#layout">Layout</a>
+<ul>
+          <li><a href="#simple-page">Simple page</a></li>
+          <li><a href="#responsive-composition">Responsive composition</a></li>
+          <li><a href="#hero-and-bands">Hero and bands</a></li>
+          <li><a href="#document-layout">Document layout</a></li>
+          <li><a href="#header-navigation">Header and navigation</a></li>
+          <li><a href="#pagination">Pagination</a></li>
+          <li><a href="#table-of-contents">Table of contents</a></li>
+          <li><a href="#card-grids">Card grids</a></li>
+        </ul>          </li>
+          <li><a href="#components">Components</a>
+<ul>
+          <li><a href="#cards">Cards</a></li>
+          <li><a href="#badges">Badges</a></li>
+          <li><a href="#avatars">Avatars</a></li>
+          <li><a href="#skeletons-and-spinners">Skeletons and spinners</a></li>
+          <li><a href="#media-objects">Media objects</a></li>
+          <li><a href="#toasts">Toasts</a></li>
+        </ul>          </li>
+          <li><a href="#gallery">Gallery</a>
+<ul>
+          <li><a href="#the-complete-form">The complete form</a></li>
+          <li><a href="#footnoted-table">Footnoted table</a></li>
+          <li><a href="#sample-output">Sample output</a></li>
+        </ul>          </li>
+        </ul>
+      </ul>
+    </details>
+  </nav>
+</aside>
+</body>
+</html>

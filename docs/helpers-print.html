@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helpers and print — mote.css documentation</title>
+  <meta name="description" content="Use mote status classes, layout helpers, notes, and print-specific rules without turning the library into utilities.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
+  <link rel="stylesheet" href="../mote.css">
+  <link rel="stylesheet" href="../mote.components.css">
+  <link rel="stylesheet" href="docs.css">
+  <script src="docs.js" defer></script>
+</head>
+<body class="mote-doc">
+<a class="mote-skip-link" href="#top">Skip to content</a>
+
+<header class="mote-header">
+  <div class="mote-container mote-row">
+    <a href="index.html" class="mote-brand">mote.css</a>
+    <nav class="mote-nav" aria-label="Documentation pages">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="getting-started.html">Start</a></li>
+        <li><a href="elements.html">Elements</a></li>
+        <li><a href="layout-components.html">Layout</a></li>
+        <li><a href="helpers-print.html" aria-current="page">Helpers</a></li>
+        <li><a href="patterns.html">Patterns</a></li>
+        <li><a href="reference.html">Reference</a></li>
+        <li><a href="https://github.com/abmach/mote">GitHub</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle" type="button" class="mote-push">Theme: auto</button>
+  </div>
+</header>
+
+<main class="mote-container" id="top">
+  <h1>Helpers and print</h1>
+  <p class="docs-page-intro">Use these escapes only when semantics cannot carry the distinction. Helpers remain opt-in; print rules stay separate from screen styling.</p>
+
+<h2 id="helpers">Helpers</h2>
+  <p>Escape hatches for what semantics cannot express — the helpers, plus the
+    status classes every status-consuming component reads:</p>
+  <h3 id="status-classes">Status classes</h3>
+  <p><code>.mote-success</code>, <code>.mote-warning</code>, <code>.mote-error</code>
+    and <code>.mote-info</code> are pure token assignments: they set the
+    <code>--mote-status</code> and <code>--mote-status-soft</code> variables and
+    nothing else. <code>.mote-muted</code> also dims text directly and carries the
+    neutral status tokens. Status-consuming surfaces read those tokens; most
+    fall back to accent. See <a href="elements.html#semantic-feedback">Semantic feedback</a>
+    for the role-specific error/info fallbacks:</p>
+  <p>Status tokens cascade through inheriting content surfaces. Buttons and badges
+    are <strong>gated</strong>: they declare their own status and never inherit an
+    ancestor's tint — see <a href="layout-components.html#badges">Badges</a> and
+    <a href="elements.html#buttons-and-statuses">Buttons and statuses</a>.</p>
+  <p>Two more classes control <em>inheritance</em> for the surfaces that consume
+    those tokens. <code>.mote-default</code> sets an explicit accent status for
+    inheriting surfaces in that subtree ("keep this plum in this section"); gated
+    controls still use their own status classes. <code>.mote-reset</code> clears
+    the inherited status so the surface falls back to accent:</p>
+  <pre><code>&#60;div class="mote-error"&#62;
+  &#60;div class="mote-note"&#62;Inherits the brick status.&#60;/div&#62;
+
+  &#60;div class="mote-reset"&#62;
+    &#60;div class="mote-note"&#62;Falls back to accent.&#60;/div&#62;
+  &#60;/div&#62;
+&#60;/div&#62;
+</code></pre>
+  <pre><code>/* the status contract */
+.mote-success {
+  --mote-status: var(--mote-success);
+  --mote-status-soft: var(--mote-success-soft);
+}
+
+/* inheriting surfaces only read the tokens */
+.mote-note {
+  color: var(--mote-status, var(--mote-accent-deep));
+  background: var(--mote-status-soft, var(--mote-accent-soft));
+}
+</code></pre>
+  <p>No specificity to fight: restyle a status once and every inheriting content
+    surface follows. Gated buttons and badges follow their own status class.
+    Or set the variable inline — <code>style="--mote-status: rebeccapurple"</code> — on any
+    status-consuming element.</p>
+  <p>Status classes are token carriers, not text colors: a plain
+    <code>mote-success</code> on a paragraph does not recolor its text.
+    For tinted text, write <code>color: var(--mote-success)</code> in
+    your page CSS — the tokens are yours to read.</p>
+  <p>Two rules cover the whole status system. <strong>Inheriting surfaces</strong>
+    take the nearest status in the tree; <strong>gated surfaces</strong> declare
+    their own and never inherit an ancestor's tint. Progress and meter are
+    inheriting surfaces: a bar inside a themed row takes that row's status
+    unless it carries its own class, while a badge or button in the same
+    row never does. To steer inheritance,
+    <code>.mote-default</code> pins accent status for a subtree and
+    <code>.mote-reset</code> clears the inherited one:</p>
+  <table>
+    <thead><tr><th>Consumer</th><th>Mode</th><th>Documented at</th></tr></thead>
+    <tbody>
+      <tr><td>Notes</td><td>Inheriting</td><td><a href="#notes">Helpers — Notes and callouts</a></td></tr>
+      <tr><td>Display text</td><td>Inheriting</td><td><a href="elements.html#display-text">Elements — Display text</a></td></tr>
+      <tr><td>Semantic feedback</td><td>Inheriting</td><td><a href="elements.html#semantic-feedback">Elements — Semantic feedback</a> — alert falls back to error; status falls back to info</td></tr>
+      <tr><td>Cards</td><td>Inheriting</td><td><a href="layout-components.html#cards">Components — Cards</a></td></tr>
+      <tr><td>Bands</td><td>Inheriting</td><td><a href="layout-components.html#hero-and-bands">Layout — Hero and bands</a></td></tr>
+      <tr><td>Blockquote rules</td><td>Inheriting</td><td><a href="elements.html#lists-and-block-content">Elements — Lists and block content</a></td></tr>
+      <tr><td>Progress and meter</td><td>Inheriting</td><td><a href="elements.html#progress-and-meter">Elements — Progress and meter</a></td></tr>
+      <tr><td>Spinners</td><td>Inheriting</td><td><a href="layout-components.html#skeletons-and-spinners">Components — Skeletons and spinners</a></td></tr>
+      <tr><td>Summary markers</td><td>Inheriting</td><td><a href="elements.html#details">Details and accordions</a></td></tr>
+      <tr><td>Toast edges</td><td>Inheriting</td><td><a href="layout-components.html#toasts">Components — Toasts</a> — read the status token for their top border</td></tr>
+      <tr><td>Buttons — solid and ghost</td><td>Gated</td><td><a href="elements.html#buttons-and-statuses">Elements — Buttons and statuses</a></td></tr>
+      <tr><td>Badges</td><td>Gated</td><td><a href="layout-components.html#badges">Components — Badges</a></td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <thead><tr><th>Class</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>.mote-container</code></td><td>Centered page wrapper: <code>width: min(100% - 3rem, 70rem)</code></td></tr>
+      <tr><td><code>.mote-muted</code></td><td>Dimmed secondary text</td></tr>
+      <tr><td><code>.mote-note</code> + status class</td><td>Tinted message surfaces — see <a href="#notes">Notes and callouts</a></td></tr>
+      <tr><td><code>.mote-row</code></td><td>Flex row with wrapping and a gap</td></tr>
+      <tr><td><code>.mote-push</code></td><td>Right-aligns its element in a row</td></tr>
+      <tr><td><code>.mote-brand</code></td><td>Quiet wordmark link: bold, foreground, no underline</td></tr>
+      <tr><td><code>.mote-display</code></td><td>Hero/error-code scale, per use via <code>--mote-display</code></td></tr>
+      <tr><td><code>.mote-num</code></td><td>Right-aligned tabular figures — table columns or any figure block</td></tr>
+      <tr><td><code>.mote-tabular</code></td><td>Tabular figures without the alignment — day numbers, headline figures, meta lines</td></tr>
+      <tr><td><code>.mote-hero</code></td><td>Centers content in the remaining viewport; <code>--mote-hero-offset</code></td></tr>
+      <tr><td><code>.mote-band</code></td><td>Full-bleed tinted section; reads <code>--mote-status</code></td></tr>
+      <tr><td><code>.mote-stack</code></td><td>Vertical rhythm with gap: children margin-zeroed, fields full width, checkboxes 1em — <code>--mote-stack-gap</code></td></tr>
+      <tr><td><code>.mote-sr-only</code> · <code>.mote-skip-link</code></td><td>Clipped to nothing (clip-path, not display: none); the skip link reveals as a fixed pill whenever it receives focus</td></tr>
+      <tr><td><code>.mote-no-print</code> · <code>.mote-print-only</code></td><td>Hide screen-only content on paper, or show paper-only content — see <a href="#print">Print and paper</a></td></tr>
+      <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
+    </tbody>
+  </table>
+  <p>Card-action alignment and status-row painting are page-owned recipes:
+    see <a href="layout-components.html#cards">Cards</a> and <a href="elements.html#tables">Tables</a>.</p>
+  <h3 id="notes">Notes and callouts</h3>
+  <p>Two mechanisms cover note-like surfaces. <code>.mote-note</code> is the
+    callout box — the component for info panels, warnings, confirmations. A
+    <code>blockquote</code> with a status class is the quote treatment — a tinted
+    rule, quieter than a box. Both are content surfaces: they inherit status
+    from an ancestor, and both fall back to the accent when no status is
+    present:</p>
+  <pre><code>&lt;div class="mote-note"&gt;Plain, accent tint&lt;/div&gt;
+&lt;div class="mote-note mote-success"&gt;Saved. Everything is fine.&lt;/div&gt;
+&lt;div class="mote-note mote-info"&gt;Heads up — a gentle fact.&lt;/div&gt;
+&lt;div class="mote-note mote-warning"&gt;Careful now.&lt;/div&gt;
+&lt;div class="mote-note mote-error"&gt;Something went softly wrong.&lt;/div&gt;
+&lt;div class="mote-note mote-muted"&gt;A neutral fact, quietly stated.&lt;/div&gt;
+</code></pre>
+  <div class="mote-note">Plain, accent tint — the default note.</div>
+  <div class="mote-note mote-success">Saved. Everything is fine.</div>
+  <div class="mote-note mote-info">Heads up — a gentle fact.</div>
+  <div class="mote-note mote-warning">Careful now.</div>
+  <div class="mote-note mote-error">Something went softly wrong.</div>
+  <div class="mote-note mote-muted">A neutral fact, quietly stated.</div>
+  <p>In centered sections a note stretches full width; for a callout-sized
+    box: <code>style="width: fit-content; margin-inline: auto"</code>.</p>
+
+<h2 id="print">Print and paper</h2>
+  <p>mote prints on a light paper palette in either theme. Use the print helpers
+    when the screen and the page need different content, then add page CSS for
+    the document-specific parts such as orientation and page breaks.</p>
+  <div class="mote-note mote-info">
+    <p><strong>Paper checklist</strong></p>
+    <ul>
+      <li>Keep the light paper palette; repeat brand accent overrides for print.</li>
+      <li>Use <code>.mote-no-print</code> for navigation, filters, and interactive-only controls.</li>
+      <li>Use <code>.mote-print-only</code> for paper-only contact details and instructions.</li>
+      <li>Check table completeness, orientation, and browser-dependent repeated headings.</li>
+      <li>Keep records, totals, and disclosure panels together where appropriate with <code>break-inside</code>.</li>
+      <li>Decide whether forms print; prefer a paper-only summary over split controls.</li>
+      <li>Inspect the generated PDF, not only print-media emulation.</li>
+    </ul>
+  </div>
+  <h3 id="screen-only-and-paper-only-content">Screen-only and paper-only content</h3>
+  <p><code>.mote-no-print</code> removes screen chrome from paper.
+    <code>.mote-print-only</code> stays hidden on screen and appears on paper:</p>
+  <pre><code>&lt;nav class="mote-no-print"&gt;Site navigation&lt;/nav&gt;
+&lt;div class="mote-print-only"&gt;Printed at the visitor’s request&lt;/div&gt;
+</code></pre>
+  <h3 id="tables-disclosures-and-page-breaks">Tables, disclosures, and page breaks</h3>
+  <p>With <code>mote.components.css</code>, <code>.mote-table-scroll</code>
+    removes the screen height cap and clipping on paper. This guarantees that the
+    complete table is present without artificial clipping; it does not guarantee
+    that an arbitrary wide matrix fits narrow paper.</p>
+  <p>The <code>.mote-doc</code> shell itself does not choose a paper layout.
+    That remains page-owned: collapse the screen grid, remove the shell gutter,
+    and let the main region show its complete content. Mark navigation and
+    other screen chrome with <code>.mote-no-print</code> when it should not
+    appear on paper:</p>
+  <pre><code>@media print {
+  body.mote-doc {
+    display: block;
+    padding-inline: 0;
+  }
+  body.mote-doc > main {
+    overflow: visible;
+  }
+}</code></pre>
+  <p>This is the boundary between mote's component behavior and the page's
+    print design. The complete light palette and table expansion are shipped;
+    the shell's paper arrangement is not.</p>
+  <p>For a document or dedicated print output containing a dense matrix,
+    landscape paper may be clearer than forcing many columns into portrait.
+    This <code>@page</code> rule applies to the whole printed document:</p>
+  <pre><code>@page {
+  size: landscape;
+  margin: 12mm;
+}
+</code></pre>
+  <p>For a document that mixes portrait and landscape sections, keep the landscape
+    matrix in a separate print document rather than applying this rule to every
+    page.</p>
+  <p>Check the generated PDF. Reducing type and padding can fit more columns but
+    may force words to break; when many columns cannot remain legible, use the
+    semantic record layout from <a href="elements.html#narrow-tables">Narrow screens: scroll or
+    transform</a> instead of forcing the matrix onto the page.</p>
+  <p>Chromium repeats a <code>tfoot</code> totals row at the top of each
+    continuation page, where its <code>colspan</code> cells no longer line
+    up with the columns. The data is complete; the repeated row is browser
+    pagination. Keep the totals in <code>tbody</code> when the alignment
+    matters.</p>
+  <p>mote's sticky site header goes static on paper, so it does not repeat
+    over every page. A print-specific layout may restore
+    <code>position: sticky</code>, but repetition across pages depends on the
+    browser's paged-media implementation and is not guaranteed. Inspect the
+    generated PDF; use the print engine's page-header mechanism when every
+    page must carry a running head.</p>
+  <p>The phone-record layout keeps the table a table on paper: the recipe's
+    print guard restores the hidden header row and the caption.</p>
+  <p>Keep important tables intact with a small page rule:</p>
+  <pre><code>@media print {
+  .receipt, tr, figure { break-inside: avoid; }
+}
+</code></pre>
+  <p>A closed <code>details</code> element does not guarantee that its hidden
+    content reaches paper. If a manual must print every disclosure, open them
+    in a <code>beforeprint</code> handler and restore their previous state in
+    <code>afterprint</code>. Exclusive groups also need their shared
+    <code>name</code> removed while printing, or the browser allows only one
+    panel open. This complete page-level handler selects every disclosure,
+    including unnamed panels, and preserves the original state:</p>
+  <pre><code>const disclosures = [...document.querySelectorAll('details')];
+let printState = [];
+
+addEventListener('beforeprint', () => {
+  if (printState.length === 0) {
+    printState = disclosures.map(details => ({
+      details,
+      name: details.getAttribute('name'),
+      open: details.open
+    }));
+  }
+  for (const { details, name } of printState) {
+    if (name !== null) details.removeAttribute('name');
+    details.open = true;
+  }
+});
+
+addEventListener('afterprint', () => {
+  for (const { details, name, open } of printState) {
+    if (name !== null) details.setAttribute('name', name);
+    details.open = open;
+  }
+  printState = [];
+});</code></pre>
+  <p>Print helpers live in the helper map, but this section keeps the complete
+    disclosure workflow together.</p>
+
+  <nav class="mote-row docs-page-nav" aria-label="Documentation pagination">
+    <a class="mote-btn" href="layout-components.html">← Layout</a>
+    <a class="mote-btn mote-push" href="patterns.html">Patterns →</a>
+  </nav>
+
+  <hr>
+  <p class="mote-muted">mote.css · MIT ·
+    <a href="https://gitlab.com/abmach/mote">GitLab</a> ·
+    <a href="https://github.com/abmach/mote">GitHub</a> ·
+    <a href="index.html">Documentation home</a> ·
+    <a href="#top">Back to top</a> ·
+    styled by two CSS files and zero lines of library JavaScript.</p>
+</main>
+
+<aside class="mote-no-print">
+  <nav aria-label="toc">
+    <details class="docs-toc" open>
+      <summary>On this page</summary>
+      <ul>
+<ul>
+          <li><a href="#helpers">Helpers</a>
+<ul>
+          <li><a href="#status-classes">Status classes</a></li>
+          <li><a href="#notes">Notes and callouts</a></li>
+        </ul>          </li>
+          <li><a href="#print">Print and paper</a>
+<ul>
+          <li><a href="#screen-only-and-paper-only-content">Screen-only and paper-only content</a></li>
+          <li><a href="#tables-disclosures-and-page-breaks">Tables, disclosures, and page breaks</a></li>
+        </ul>          </li>
+        </ul>
+      </ul>
+    </details>
+  </nav>
+</aside>
+</body>
+</html>

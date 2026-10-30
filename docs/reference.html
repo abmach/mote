@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference — mote.css documentation</title>
+  <meta name="description" content="Look up mote design tokens, fonts, browser support, and platform feature fallbacks.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
+  <link rel="stylesheet" href="../mote.css">
+  <link rel="stylesheet" href="../mote.components.css">
+  <link rel="stylesheet" href="docs.css">
+  <script src="docs.js" defer></script>
+</head>
+<body class="mote-doc">
+<a class="mote-skip-link" href="#top">Skip to content</a>
+
+<header class="mote-header">
+  <div class="mote-container mote-row">
+    <a href="index.html" class="mote-brand">mote.css</a>
+    <nav class="mote-nav" aria-label="Documentation pages">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="getting-started.html">Start</a></li>
+        <li><a href="elements.html">Elements</a></li>
+        <li><a href="layout-components.html">Layout</a></li>
+        <li><a href="helpers-print.html">Helpers</a></li>
+        <li><a href="patterns.html">Patterns</a></li>
+        <li><a href="reference.html" aria-current="page">Reference</a></li>
+        <li><a href="https://github.com/abmach/mote">GitHub</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle" type="button" class="mote-push">Theme: auto</button>
+  </div>
+</header>
+
+<main class="mote-container" id="top">
+  <h1>Reference</h1>
+  <p class="docs-page-intro">Lookup tables for the values and platform features behind mote. This page is reference material, not a second guide.</p>
+
+<h2 id="tokens">Tokens</h2>
+  <p>Every knob in the library is a custom property. Page CSS that reads these
+    re-themes automatically — check for a token before writing a value. The
+    palette redefines itself per theme; the layout and density tokens are
+    inline defaults — set them per use, on the element or a selector. The
+    status contract (<code>--mote-status</code> / <code>--mote-status-soft</code>)
+    is covered in <a href="helpers-print.html#status-classes">Helpers — status classes</a>.</p>
+
+  <h3 id="palette">Palette <span class="mote-muted">(light / dark)</span></h3>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Palette tokens">
+  <table>
+    <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-bg</code></td><td>#faf9f7 / #1c1a17</td><td>Page background, sticky table headers</td></tr>
+      <tr><td><code>--mote-surface</code></td><td>#f1eee7 / #262320</td><td>Cards, popovers, code blocks</td></tr>
+      <tr><td><code>--mote-fg</code></td><td>#2b2924 / #eae6de</td><td>Body text, <code>.mote-brand</code></td></tr>
+      <tr><td><code>--mote-muted</code></td><td>#716a60 / #a49c90</td><td>Secondary text, captions</td></tr>
+      <tr><td><code>--mote-border</code></td><td>#e6e0d4 / #3b362f</td><td>Rules, card edges, input borders</td></tr>
+      <tr><td><code>--mote-border-strong</code></td><td>mix(border 55%, fg)</td><td>Table header rules</td></tr>
+      <tr><td><code>--mote-accent</code></td><td>#6f5486 / #b8a1ca</td><td>Links, primary buttons, focus, badges</td></tr>
+      <tr><td><code>--mote-accent-deep</code></td><td>mix(accent, black 14%)<br>dark: white 14%</td><td>Ghost text, badge text fallback</td></tr>
+      <tr><td><code>--mote-accent-soft</code></td><td>accent 9%, <em>transparent</em></td><td>Ghost fills, subtle tints. Transparent by design — for opaque section tints use <code>.mote-band</code></td></tr>
+      <tr><td><code>--mote-success</code> · <code>--mote-warning</code> · <code>--mote-error</code> · <code>--mote-info</code></td><td>status palette<br>(soft variants: 10–12%, transparent)</td><td>Everything status-consuming, via the contract</td></tr>
+      <tr><td><code>--mote-on-accent</code></td><td>#fff / #241d28</td><td>Text on accent fills</td></tr>
+      <tr><td><code>--mote-on-status</code></td><td>bg</td><td>Text on status fills</td></tr>
+      <tr><td><code>--mote-selection</code></td><td>accent 18%, transparent</td><td><code>::selection</code></td></tr>
+      <tr><td><code>--mote-focus-ring</code></td><td>accent 32% ring</td><td><code>:focus-visible</code> everywhere</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 id="type-shape-and-motion">Type, shape and motion</h3>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Type, shape, and motion tokens">
+  <table>
+    <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-font</code></td><td>Inter → system stack</td><td>Body text</td></tr>
+      <tr><td><code>--mote-font-mono</code></td><td>Commit Mono → ui-monospace</td><td>Code, <code>kbd</code>, <code>pre</code></td></tr>
+      <tr><td><code>--mote-line-height</code></td><td>1.65</td><td>Body text</td></tr>
+      <tr><td><code>--mote-tracking</code></td><td>-0.011em</td><td>Headings, display text</td></tr>
+      <tr><td><code>--mote-display</code></td><td>clamp(2.75rem, 1.5rem + 4vw, 5rem)</td><td><code>.mote-display</code> — set per use</td></tr>
+      <tr><td><code>--mote-radius</code></td><td>10px</td><td>Inputs, popovers, toasts</td></tr>
+      <tr><td><code>--mote-radius-sm</code></td><td>6px</td><td>Buttons, badges, notes</td></tr>
+      <tr><td><code>--mote-radius-lg</code></td><td>16px</td><td>Cards</td></tr>
+      <tr><td><code>--mote-border-width</code></td><td>1px</td><td>All borders</td></tr>
+      <tr><td><code>--mote-shadow</code> / <code>--mote-shadow-sm</code></td><td>soft / softer</td><td>Cards, popovers, dialogs</td></tr>
+      <tr><td><code>--mote-transition</code></td><td>150ms ease</td><td>Hovers, color changes</td></tr>
+      <tr><td><code>--mote-chevron</code></td><td>data-URI arrow</td><td><code>select</code> marker</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 id="layout-and-density">Layout and density <span class="mote-muted">(inline defaults — set per use)</span></h3>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Layout and density tokens">
+  <table>
+    <thead><tr><th>Token</th><th>Default</th><th>Consumed by</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-container-max</code></td><td>70rem</td><td><code>.mote-container</code> — 42rem reads like an article, 26rem like an auth card</td></tr>
+      <tr><td><code>--mote-grid-min</code></td><td>16rem</td><td><code>.mote-grid</code> — 22rem gives 3-wide pricing, 26rem 2-column content</td></tr>
+      <tr><td><code>--mote-avatar</code></td><td>2.5rem</td><td><code>.mote-avatar</code></td></tr>
+      <tr><td><code>--mote-avatar-radius</code></td><td>999px</td><td><code>.mote-avatar</code> — 0 for square covers/favicons</td></tr>
+      <tr><td><code>--mote-cell-pad</code> / <code>--mote-cell-pad-inline</code></td><td>0.6rem / 0.8rem</td><td>Table cells</td></tr>
+      <tr><td><code>--mote-control-pad</code> / <code>--mote-control-pad-inline</code></td><td>0.5rem / 0.75rem<br>(buttons 1.1rem)</td><td>Inputs, selects, textareas, buttons, file inputs — one density scale for all controls</td></tr>
+      <tr><td><code>--mote-table-max</code></td><td>60vh</td><td><code>.mote-table-scroll</code> panel cap; sticky header engages once the wrapper scrolls</td></tr>
+      <tr><td><code>--mote-hero-offset</code></td><td>12rem</td><td><code>.mote-hero</code> — header/footer clearance</td></tr>
+      <tr><td><code>--mote-rail-top</code></td><td>auto (4.75rem with a sticky header)</td><td><code>.mote-doc</code> rails; set only for wrapped shells</td></tr>
+      <tr><td><code>--mote-stack-gap</code></td><td>1.25rem</td><td><code>.mote-stack</code> — the vertical rhythm</td></tr>
+      <tr><td><code>--mote-grid-gap</code></td><td>1.25rem</td><td><code>.mote-grid</code>, <code>.mote-grid-sparse</code></td></tr>
+      <tr><td><code>--mote-band-pad</code></td><td>4rem</td><td><code>.mote-band</code> — 1rem for thin strips</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+<h2 id="fonts">Fonts</h2>
+  <p>mote declares font <em>stacks</em> only — it embeds nothing and requires nothing.
+    Out of the box it falls back to your system fonts. For the full experience, add Inter and
+    Commit Mono (both free, SIL OFL):</p>
+  <pre><code>&lt;!-- CDN --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css"&gt;
+
+&lt;!-- or self-host --&gt;
+npm install @fontsource-variable/inter @fontsource/commit-mono
+</code></pre>
+
+<h2 id="support">Browser support</h2>
+  <p>Modern evergreen browsers. The core needs <code>color-mix()</code>: Chrome/Edge 111+,
+    Firefox 113+, Safari 16.2+. Component niceties ride on Baseline 2024 platform features and
+    degrade gracefully:</p>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Browser feature support">
+  <table>
+    <thead><tr><th>Feature</th><th>Used for</th><th>Fallback</th></tr></thead>
+    <tbody>
+      <tr><td><code>popover</code></td><td>Tooltips, menus, toasts</td><td>Supported everywhere since 2024</td></tr>
+      <tr><td><code>details name</code></td><td>Exclusive accordions</td><td>Unsupported: groups stay independent</td></tr>
+      <tr><td><code>@starting-style</code>, <code>allow-discrete</code></td><td>Open/close animations</td><td>Instant open/close</td></tr>
+      <tr><td><code>:user-invalid</code></td><td>Form validation styling</td><td>No live feedback border</td></tr>
+      <tr><td>CSS anchor positioning</td><td>Popovers next to their trigger</td><td>Viewport-centered popover</td></tr>
+      <tr><td><code>details::details-content</code> + <code>interpolate-size</code></td><td>Accordion open/close animation</td><td>Instant toggle</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <nav class="mote-row docs-page-nav" aria-label="Documentation pagination">
+    <a class="mote-btn" href="patterns.html">← Patterns</a>
+    <a class="mote-btn mote-push" href="index.html">Docs →</a>
+  </nav>
+
+  <hr>
+  <p class="mote-muted">mote.css · MIT ·
+    <a href="https://gitlab.com/abmach/mote">GitLab</a> ·
+    <a href="https://github.com/abmach/mote">GitHub</a> ·
+    <a href="index.html">Documentation home</a> ·
+    <a href="#top">Back to top</a> ·
+    styled by two CSS files and zero lines of library JavaScript.</p>
+</main>
+
+<aside class="mote-no-print">
+  <nav aria-label="toc">
+    <details class="docs-toc" open>
+      <summary>On this page</summary>
+      <ul>
+<ul>
+          <li><a href="#tokens">Tokens</a>
+<ul>
+          <li><a href="#palette">Palette (light / dark)</a></li>
+          <li><a href="#type-shape-and-motion">Type, shape and motion</a></li>
+          <li><a href="#layout-and-density">Layout and density (inline defaults — set per use)</a></li>
+        </ul>          </li>
+          <li><a href="#fonts">Fonts</a></li>
+          <li><a href="#support">Browser support</a></li>
+        </ul>
+      </ul>
+    </details>
+  </nav>
+</aside>
+</body>
+</html>

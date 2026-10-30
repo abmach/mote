@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting started — mote.css documentation</title>
+  <meta name="description" content="Install mote.css, follow its semantic-first principles, and customize themes and dark mode.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
+  <link rel="stylesheet" href="../mote.css">
+  <link rel="stylesheet" href="../mote.components.css">
+  <link rel="stylesheet" href="docs.css">
+  <script src="docs.js" defer></script>
+</head>
+<body class="mote-doc">
+<a class="mote-skip-link" href="#top">Skip to content</a>
+
+<header class="mote-header">
+  <div class="mote-container mote-row">
+    <a href="index.html" class="mote-brand">mote.css</a>
+    <nav class="mote-nav" aria-label="Documentation pages">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="getting-started.html" aria-current="page">Start</a></li>
+        <li><a href="elements.html">Elements</a></li>
+        <li><a href="layout-components.html">Layout</a></li>
+        <li><a href="helpers-print.html">Helpers</a></li>
+        <li><a href="patterns.html">Patterns</a></li>
+        <li><a href="reference.html">Reference</a></li>
+        <li><a href="https://github.com/abmach/mote">GitHub</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle" type="button" class="mote-push">Theme: auto</button>
+  </div>
+</header>
+
+<main class="mote-container" id="top">
+  <h1>Getting started</h1>
+  <p class="docs-page-intro">Install mote, understand its semantic-first contract, and learn the small token system that controls every theme.</p>
+
+<h2 id="principles">Principles</h2>
+  <ul>
+    <li><strong>Semantic HTML is the API.</strong> Elements are styled by what they are;
+      classes exist only where the platform has no semantic carrier.</li>
+    <li><strong>The platform before the library.</strong> Dialogs, popovers, accordions and
+      validation use native features, quietly styled — mote never ships JavaScript to do
+      what the browser already does.</li>
+    <li><strong>Tokens all the way down.</strong> Every color, radius, shadow and status is a
+      variable; derived tones are computed, never hand-tuned twice.</li>
+    <li><strong>Weightless by default.</strong> One file for elements, an opt-in second file
+      for components — zero bytes of library JavaScript.</li>
+    <li><strong>Unobtrusive.</strong> Warm, soft, accessible; styling that never shouts.</li>
+  </ul>
+
+<h2 id="get-started">Get started</h2>
+  <p>Drop one file in your page and write plain HTML. Everything is styled by
+    <strong>element</strong> — no utility classes, no framework, no build.</p>
+  <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="mote.css"&gt;
+    &lt;title&gt;That's it.&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello, cozy.&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  <p>Out of the box, mote falls back to your system fonts; two <code>link</code> tags give it
+    the intended look — see <a href="reference.html#fonts">Fonts</a>.</p>
+  <p>Optional components — cards, badges, popovers, accordions, spinners — live in a second
+    stylesheet. Include it only if you use them:</p>
+  <pre><code>&lt;link rel="stylesheet" href="mote.css"&gt;
+&lt;link rel="stylesheet" href="mote.components.css"&gt;</code></pre>
+  <p>This page is a live demo: it is styled by exactly those two files.</p>
+
+<h2 id="theming">Theming</h2>
+  <p>Every color, radius, shadow and font flows from <code>--mote-*</code> custom properties.
+    Override a few tokens and the whole library re-themes — derived tones (focus rings, hover
+    deepening, tinted surfaces) are computed with <code>color-mix()</code>, so you never
+    hand-tune a second palette.</p>
+  <p>The cascade has three layers, each computed from the last: the <strong>base
+    palette</strong> feeds <strong>derived tones</strong> (soft tints, hover deepening,
+    focus rings — re-derived automatically whenever a base token changes), and
+    <strong>status classes</strong> add a third indirection on top. Inheriting content
+    surfaces read the <code>--mote-status</code> tokens with an accent fallback, while
+    gated actions and badges declare their own status. Override the chain anywhere;
+    everything downstream follows.</p>
+  <p>Live proof — this card re-themes everything inside it with two inline tokens:</p>
+  <pre><code>&lt;div class="mote-card" style="--mote-accent: #4a7a5b; --mote-on-accent: #ffffff"&gt;
+  &lt;h3&gt;Re-themed card&lt;/h3&gt;
+  &lt;p&gt;A &lt;a href="#"&gt;link&lt;/a&gt;, a &lt;button type="button"&gt;button&lt;/button&gt; and a
+    &lt;span class="mote-badge mote-success"&gt;badge&lt;/span&gt; — all from
+    two variables.&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+  <div class="mote-card" style="--mote-accent: #4a7a5b; --mote-on-accent: #ffffff">
+    <h3 style="margin-block-start:0">Re-themed card</h3>
+    <p>A <a href="#theming">link</a>, a <button type="button" onclick="return false">button</button> and a
+      <span class="mote-badge mote-success">badge</span> — all from two variables.
+      The focus ring, hover states and soft tints re-derived automatically.</p>
+  </div>
+  <pre><code>:root {
+  --mote-accent: #4a7a5b;    /* your brand color */
+  --mote-on-accent: #ffffff; /* readable text on accent fills */
+  --mote-bg: #fffdf5;        /* your paper */
+  --mote-radius: 6px;        /* your edges */
+}</code></pre>
+  <p>When replacing <code>--mote-accent</code>, replace <code>--mote-on-accent</code>
+    too: mote cannot infer whether white or dark text has enough contrast on an
+    arbitrary brand color. A separate dark-theme accent may need its own foreground
+    token as well.</p>
+
+  <h3 id="brand-themes">Brand themes</h3>
+  <p>A brand needs more than one declaration. mote's own palette rules are more
+    specific than a plain <code>:root</code> override, so a lone
+    <code>:root { --mote-accent: … }</code> is superseded in automatic dark
+    mode and on paper. Restate the brand in every state it can appear in — and
+    always pair the accent with its foreground token:</p>
+  <pre><code>:root {
+  --mote-accent: #4a7a5b;      /* brand in light and automatic light mode */
+  --mote-on-accent: #ffffff;
+}
+
+:root[data-theme="dark"] {
+  --mote-accent: #8fc7a1;      /* brand in forced dark mode */
+  --mote-on-accent: #10231a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mote-accent: #8fc7a1;    /* brand in automatic dark mode */
+    --mote-on-accent: #10231a;
+  }
+}
+
+@media print {
+  :root,
+  :root[data-theme="dark"],
+  :root:not([data-theme="light"]) {
+    --mote-accent: #4a7a5b;    /* brand on paper */
+    --mote-on-accent: #ffffff;
+  }
+}</code></pre>
+  <p>Those selectors match mote's own palette rules, so your values win by
+    order — override only the tokens you need and every derived tone
+    re-derives from the accent you set. The <code>@media print</code> block is
+    the one most pages forget: mote prints on a light paper palette, so without
+    it paper keeps mote's accent instead of yours.</p>
+  <div class="mote-table-scroll" style="--mote-table-max: none" tabindex="0" role="region" aria-label="Core token reference">
+  <table>
+    <caption>Core tokens — light and dark values</caption>
+    <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Used for</th></tr></thead>
+    <tbody>
+      <tr><td><code>--mote-bg</code></td>
+        <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#faf9f7;border:1px solid var(--mote-border);"></span> <code>#faf9f7</code></td>
+        <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#1c1a17;border:1px solid var(--mote-border);"></span> <code>#1c1a17</code></td>
+        <td>Page background</td></tr>
+      <tr><td><code>--mote-surface</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#f1eee7;border:1px solid var(--mote-border);"></span> <code>#f1eee7</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#262320;border:1px solid var(--mote-border);"></span> <code>#262320</code></td><td>Code blocks, inputs, cards</td></tr>
+      <tr><td><code>--mote-fg</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#2b2924;"></span> <code>#2b2924</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#eae6de;"></span> <code>#eae6de</code></td><td>Body text</td></tr>
+      <tr><td><code>--mote-muted</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#716a60;"></span> <code>#716a60</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#a49c90;"></span> <code>#a49c90</code></td><td>Secondary text</td></tr>
+      <tr><td><code>--mote-border</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#e6e0d4;border:1px solid var(--mote-border-strong);"></span> <code>#e6e0d4</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#3b362f;border:1px solid var(--mote-border-strong);"></span> <code>#3b362f</code></td><td>Rules and edges</td></tr>
+      <tr><td><code>--mote-accent</code></td>
+        <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#6f5486;"></span> <code>#6f5486</code></td>
+        <td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#b8a1ca;"></span> <code>#b8a1ca</code></td>
+        <td>Links, buttons, focus, markers</td></tr>
+      <tr><td><code>--mote-on-accent</code></td><td><code>#ffffff</code></td><td><code>#241d28</code></td>
+        <td>Readable text on accent fills</td></tr>
+      <tr><td><code>--mote-success</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#4e7d51;"></span> <code>#4e7d51</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#8ab88c;"></span> <code>#8ab88c</code></td><td>Positive semantics</td></tr>
+      <tr><td><code>--mote-warning</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#8a6819;"></span> <code>#8a6819</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#d4b465;"></span> <code>#d4b465</code></td><td>Cautious semantics</td></tr>
+      <tr><td><code>--mote-error</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#b34d4d;"></span> <code>#b34d4d</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#d98a8a;"></span> <code>#d98a8a</code></td><td>Destructive semantics</td></tr>
+      <tr><td><code>--mote-info</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#527097;"></span> <code>#527097</code></td><td><span style="display:inline-block;width:1em;height:1em;border-radius:3px;background:#96b1d1;"></span> <code>#96b1d1</code></td><td>Neutral semantics</td></tr>
+      <tr><td><code>--mote-font</code></td><td colspan="2"><code>"Inter", system-ui, …</code></td><td>Content typeface</td></tr>
+      <tr><td><code>--mote-font-mono</code></td><td colspan="2"><code>"Commit Mono", ui-monospace, …</code></td><td>Code typeface</td></tr>
+      <tr><td><code>--mote-radius</code></td><td colspan="2"><code>10px</code></td><td>Corner softness (also <code>-sm</code>, <code>-lg</code>)</td></tr>
+      <tr><td><code>--mote-shadow</code></td><td colspan="2">warm diffuse</td><td>Elevation (also <code>-sm</code>)</td></tr>
+      <tr><td><code>--mote-transition</code></td><td colspan="2"><code>150ms ease</code></td><td>Hover/focus timing</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The accent is deliberately plum: it is the one hue family that collides with none of the
+    four semantic colors, so a link never looks like a status.</p>
+
+  <h3 id="dark-mode">Dark mode</h3>
+  <p>mote follows the user's system preference automatically. To force a theme, set an
+    attribute on <code>&lt;html&gt;</code>:</p>
+  <pre><code>&lt;html data-theme="dark"&gt;  &lt;!-- or "light" --&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Chromium note:&lt;/strong&gt; toggling &lt;code&gt;data-theme&lt;/code&gt; can leave
+    transition-styled elements at the old theme's colors (the engine doesn't
+    restart CSS transitions on custom-property changes). If you hit this,
+    disable transitions around the flip:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;document.documentElement.classList.add('mote-theme-switch');
+document.documentElement.dataset.theme = next;
+requestAnimationFrame(() =&gt;
+document.documentElement.classList.remove('mote-theme-switch'));
+</code></pre>
+<pre><code>/* shipped in mote.css — just add/remove the class around the flip */
+.mote-theme-switch, .mote-theme-switch * {
+transition: none !important;
+}
+</code></pre>
+  <p>The toggle on this page is a few lines of JavaScript, including the
+    <code>.mote-theme-switch</code> helper that prevents the stale-color bug.
+    It also writes the current state into the button label — keep that line if
+    your toggle shows which state is active:</p>
+  <pre><code>const root = document.documentElement;
+const states = ['', 'light', 'dark'];
+const toggle = document.querySelector('#theme-toggle');
+let i = 0;
+toggle.addEventListener('click', () =&gt; {
+  root.classList.add('mote-theme-switch');
+  i = (i + 1) % states.length;
+  root.dataset.theme = states[i];
+  toggle.textContent = 'Theme: ' + (states[i] || 'auto');
+  requestAnimationFrame(() =&gt; root.classList.remove('mote-theme-switch'));
+});
+</code></pre>
+
+  <nav class="mote-row docs-page-nav" aria-label="Documentation pagination">
+    <a class="mote-btn" href="index.html">← Home</a>
+    <a class="mote-btn mote-push" href="elements.html">Elements →</a>
+  </nav>
+
+  <hr>
+  <p class="mote-muted">mote.css · MIT ·
+    <a href="https://gitlab.com/abmach/mote">GitLab</a> ·
+    <a href="https://github.com/abmach/mote">GitHub</a> ·
+    <a href="index.html">Documentation home</a> ·
+    <a href="#top">Back to top</a> ·
+    styled by two CSS files and zero lines of library JavaScript.</p>
+</main>
+
+<aside class="mote-no-print">
+  <nav aria-label="toc">
+    <details class="docs-toc" open>
+      <summary>On this page</summary>
+      <ul>
+<ul>
+          <li><a href="#principles">Principles</a></li>
+          <li><a href="#get-started">Get started</a></li>
+          <li><a href="#theming">Theming</a>
+<ul>
+          <li><a href="#brand-themes">Brand themes</a></li>
+          <li><a href="#dark-mode">Dark mode</a></li>
+        </ul>          </li>
+        </ul>
+      </ul>
+    </details>
+  </nav>
+</aside>
+</body>
+</html>

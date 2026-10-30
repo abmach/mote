@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patterns and recipes — mote.css documentation</title>
+  <meta name="description" content="Copy-ready task-oriented recipes for application shells, content pages, data views, and commerce layouts.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
+  <link rel="stylesheet" href="../mote.css">
+  <link rel="stylesheet" href="../mote.components.css">
+  <link rel="stylesheet" href="docs.css">
+  <script src="docs.js" defer></script>
+</head>
+<body class="mote-doc">
+<a class="mote-skip-link" href="#top">Skip to content</a>
+
+<header class="mote-header">
+  <div class="mote-container mote-row">
+    <a href="index.html" class="mote-brand">mote.css</a>
+    <nav class="mote-nav" aria-label="Documentation pages">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="getting-started.html">Start</a></li>
+        <li><a href="elements.html">Elements</a></li>
+        <li><a href="layout-components.html">Layout</a></li>
+        <li><a href="helpers-print.html">Helpers</a></li>
+        <li><a href="patterns.html" aria-current="page">Patterns</a></li>
+        <li><a href="reference.html">Reference</a></li>
+        <li><a href="https://github.com/abmach/mote">GitHub</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle" type="button" class="mote-push">Theme: auto</button>
+  </div>
+</header>
+
+<main class="mote-container" id="top">
+  <h1>Patterns and recipes</h1>
+  <p class="docs-page-intro">These recipes cross several sections of mote. Each one names the page-owned CSS explicitly so the library boundary stays clear.</p>
+
+<h2 id="patterns">Patterns</h2>
+  <p>Compositions that span multiple topics — each piece is documented in the
+    topic pages; these show how they fit together. Copy, paste, adjust.</p>
+
+  <h3 id="error-page">Error page</h3>
+  <p>A full-height centered page with a themed giant code, search, and
+    quiet CTAs — <code>body class="mote-error"</code> tints everything
+    except the actions (<a href="getting-started.html#theming">theming</a>,
+    <a href="elements.html#display-text">display text</a>, <a href="elements.html#buttons-and-statuses">buttons</a>):</p>
+  <pre><code>&lt;body class="mote-error"&gt;
+  &lt;header&gt;Site header&lt;/header&gt;
+  &lt;main class="mote-container mote-hero"&gt;
+    &lt;p class="mote-display"&gt;404&lt;/p&gt;
+    &lt;p&gt;This page drifted away.&lt;/p&gt;
+    &lt;form class="mote-row" role="search" style="justify-content:center"&gt;
+      &lt;label class="mote-sr-only" for="q"&gt;Search&lt;/label&gt;
+      &lt;input id="q" type="search" placeholder="Search…"&gt;
+      &lt;button type="submit"&gt;Go&lt;/button&gt;
+    &lt;/form&gt;
+    &lt;p&gt;
+      &lt;a class="mote-btn" href="/"&gt;Back home&lt;/a&gt;
+      &lt;a class="mote-ghost" href="/docs"&gt;Read the docs&lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+</code></pre>
+
+  <h3 id="article-page">Article page</h3>
+  <p>A narrow reading-measure article with breadcrumb, byline, tags,
+    and an author box — <code>--mote-container-max</code> narrows the
+    column (<a href="layout-components.html#simple-page">Simple page</a>,
+    <a href="layout-components.html#badges">badges as links</a>,
+    <a href="layout-components.html#media-objects">media objects</a>):</p>
+  <p>For a companion TOC and numbered references, continue with
+    <a href="#long-form-reading">Long-form reading with notes</a>.</p>
+  <pre><code>&lt;main class="mote-container" style="--mote-container-max: 42rem"&gt;
+  &lt;nav aria-label="breadcrumb"&gt;
+    &lt;ol&gt;&lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href="/blog"&gt;Blog&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span aria-current="page"&gt;Article&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+  &lt;/nav&gt;
+  &lt;h1&gt;Article title&lt;/h1&gt;
+  &lt;p&gt;&lt;small class="mote-muted"&gt;October 2026 · 8 min read&lt;/small&gt;&lt;/p&gt;
+  &lt;p&gt;
+    &lt;a class="mote-badge" href="/tags/css"&gt;css&lt;/a&gt;
+    &lt;a class="mote-badge" href="/tags/design"&gt;design&lt;/a&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Article body…&lt;/p&gt;
+  &lt;blockquote&gt;&lt;p&gt;A pull quote.&lt;/p&gt;&lt;cite&gt;— Someone&lt;/cite&gt;&lt;/blockquote&gt;
+  &lt;figure&gt;
+    &lt;img src="photo.jpg" alt="Caption"&gt;
+    &lt;figcaption&gt;Photo credit&lt;/figcaption&gt;
+  &lt;/figure&gt;
+  &lt;div class="mote-media"&gt;
+    &lt;img class="mote-avatar" src="author.jpg" alt="Author"&gt;
+    &lt;div&gt;
+      &lt;p&gt;&lt;strong&gt;Author Name&lt;/strong&gt;&lt;/p&gt;
+      &lt;p class="mote-muted"&gt;Bio line&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+</code></pre>
+
+  <h3 id="long-form-reading">Long-form reading with notes</h3>
+  <p>A chapter can pair a narrow reading column with a companion table of
+    contents and numbered references. mote styles the semantic navigation and
+    links; one page rule owns the grid and sticky rail. Keep the TOC label
+    lowercase so the <code>toc</code> selector applies:</p>
+  <pre><code>&lt;style&gt;
+.reading-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 42rem) minmax(12rem, 16rem);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+.reading-column { grid-column: 1; }
+.reading-toc {
+  grid-column: 2;
+  grid-row: 1;
+  position: sticky;
+  top: 5rem;
+}
+@media (max-width: 50rem) {
+  .reading-layout { grid-template-columns: 1fr; }
+  .reading-column, .reading-toc { grid-column: 1; grid-row: auto; }
+  .reading-toc { position: static; }
+}
+&lt;/style&gt;
+
+&lt;main class="mote-container"&gt;
+  &lt;div class="reading-layout"&gt;
+    &lt;nav class="reading-toc" aria-label="toc"&gt;
+      &lt;p&gt;&lt;strong&gt;On this page&lt;/strong&gt;&lt;/p&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#argument"&gt;Argument&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#notes-heading"&gt;Notes&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+    &lt;article class="reading-column"&gt;
+      &lt;header&gt;
+        &lt;h1&gt;The Hour Before the Boats&lt;/h1&gt;
+        &lt;p class="mote-muted"&gt;Chapter 4 · 8 min read&lt;/p&gt;
+      &lt;/header&gt;
+      &lt;section id="argument"&gt;
+        &lt;h2&gt;Argument&lt;/h2&gt;
+        &lt;p&gt;The harbor changed before dawn&lt;sup&gt;
+          &lt;a href="#note-1" id="ref-1"&gt;1&lt;/a&gt;
+        &lt;/sup&gt;&lt;/p&gt;
+      &lt;/section&gt;
+      &lt;section aria-labelledby="notes-heading"&gt;
+        &lt;h2 id="notes-heading"&gt;Notes&lt;/h2&gt;
+        &lt;ol&gt;
+          &lt;li id="note-1"&gt;
+            &lt;p&gt;The tide table records the first light.&lt;/p&gt;
+            &lt;a href="#ref-1"&gt;Back to reference 1&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/section&gt;
+    &lt;/article&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+</code></pre>
+  <p>The narrow layout keeps the TOC before the article in source order and
+    stacks it above the prose. The paired anchors make the reference and
+    backlink explicit without adding JavaScript.</p>
+  <h3 id="settings-form">Settings form</h3>
+  <p>A sidebar shell with grouped nav, stacked form, validation,
+    and destructive actions — <code>.mote-doc</code> +
+    <code>.mote-stack</code> + gated buttons
+    (<a href="layout-components.html#document-layout">Document layout</a>,
+    <a href="elements.html#forms">Forms</a>,
+    <a href="elements.html#buttons-and-statuses">Buttons and statuses</a>):</p>
+  <pre><code>&lt;body class="mote-doc"&gt;
+  &lt;header&gt;Settings&lt;/header&gt;
+  &lt;nav&gt;
+    &lt;h2&gt;Account&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="#profile" aria-current="page"&gt;Profile&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#security"&gt;Security&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;h2&gt;Site&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="#preferences"&gt;Preferences&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;main&gt;
+    &lt;form class="mote-stack"&gt;
+      &lt;fieldset&gt;
+        &lt;legend&gt;Profile&lt;/legend&gt;
+        &lt;p&gt;&lt;label for="name"&gt;Name&lt;/label&gt;
+        &lt;input id="name" type="text" required&gt;&lt;/p&gt;
+        &lt;p&gt;&lt;label for="email"&gt;Email&lt;/label&gt;
+        &lt;input id="email" type="email" required aria-invalid="true"&gt;
+        &lt;span role="alert" class="mote-error"&gt;Invalid email&lt;/span&gt;&lt;/p&gt;
+      &lt;/fieldset&gt;
+      &lt;p&gt;
+        &lt;button type="submit"&gt;Save&lt;/button&gt;
+        &lt;button type="button" class="mote-ghost"&gt;Cancel&lt;/button&gt;
+      &lt;/p&gt;
+    &lt;/form&gt;
+  &lt;/main&gt;
+  &lt;aside&gt;
+    &lt;h2&gt;Danger zone&lt;/h2&gt;
+    &lt;div class="mote-note mote-error"&gt;
+      &lt;p&gt;Deleting your account is permanent.&lt;/p&gt;
+      &lt;button class="mote-error"&gt;Delete account&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/aside&gt;
+&lt;/body&gt;
+</code></pre>
+
+  <h3 id="card-grid-with-covers">Card grid with covers</h3>
+  <p>The flush-media recipe applied to a real grid — cover photos edge-to-edge,
+    titles and metadata pinned to the bottom
+    (<a href="layout-components.html#cards">Cards</a>,
+    <a href="layout-components.html#card-grids">Card grids</a>):</p>
+  <pre><code>&lt;div class="mote-grid" style="--mote-grid-min: 22rem"&gt;
+  &lt;article class="mote-card"&gt;
+    &lt;div class="mote-card-media"&gt;
+      &lt;img src="cover.jpg" alt=""&gt;
+    &lt;/div&gt;
+    &lt;h3&gt;Project title&lt;/h3&gt;
+    &lt;p class="mote-muted"&gt;Description…&lt;/p&gt;
+    &lt;p style="margin-block-start:auto"&gt;
+      &lt;a class="mote-ghost" href="/project"&gt;View →&lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+
+  <h3 id="login-page">Login page</h3>
+  <p>A focused auth screen — <code>.mote-hero</code> centers the card in the
+    viewport, the card resets alignment so labels read normally inside the
+    centered hero, <code>.mote-stack</code> stretches fields, and
+    <code>.mote-row</code> + <code>.mote-push</code> split the remember-me line.
+    The full-width submit is the one page rule — the stack stretches fields,
+    not buttons:</p>
+  <pre><code>&lt;body&gt;
+  &lt;main class="mote-container mote-hero" style="--mote-container-max: 26rem"&gt;
+    &lt;form class="mote-card mote-stack"&gt;
+      &lt;h1&gt;Sign in&lt;/h1&gt;
+      &lt;p&gt;&lt;label for="email"&gt;Email&lt;/label&gt;
+        &lt;input id="email" type="email" required&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;label for="password"&gt;Password&lt;/label&gt;
+        &lt;input id="password" type="password" required&gt;&lt;/p&gt;
+      &lt;p class="mote-row"&gt;
+        &lt;label&gt;&lt;input type="checkbox"&gt; Remember me&lt;/label&gt;
+        &lt;a class="mote-push" href="/reset"&gt;Forgot password?&lt;/a&gt;
+      &lt;/p&gt;
+      &lt;p&gt;
+        &lt;button type="submit" style="width:100%"&gt;Sign in&lt;/button&gt;
+      &lt;/p&gt;
+    &lt;/form&gt;
+    &lt;p class="mote-muted"&gt;No account? &lt;a href="/signup"&gt;Create one&lt;/a&gt;&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+</code></pre>
+  <h3 id="marketing-hero">Marketing hero</h3>
+  <p><code>.mote-hero</code> fills the viewport — right for 404s and logins,
+    wrong for marketing, where the CTA must sit above the fold. A marketing
+    hero is a plain centered section; the closing call-to-action band is
+    <code>.mote-band</code> (<a href="layout-components.html#hero-and-bands">Hero and bands</a>):</p>
+  <pre><code>&lt;main&gt;
+  &lt;section class="mote-container" style="text-align:center; padding-block:5rem 4rem"&gt;
+    &lt;span class="mote-badge mote-success"&gt;New — v0.8&lt;/span&gt;
+    &lt;h1 class="mote-display"&gt;Ship plain HTML&lt;/h1&gt;
+    &lt;p class="mote-muted"&gt;Zero classes required. Opt-in where semantics run out.&lt;/p&gt;
+    &lt;p&gt;
+      &lt;a class="mote-btn" href="/signup"&gt;Get started&lt;/a&gt;
+      &lt;a class="mote-ghost" href="/docs"&gt;Read the docs&lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section class="mote-band"&gt;
+    &lt;div class="mote-container" style="text-align:center"&gt;
+      &lt;h2&gt;Ready when you are.&lt;/h2&gt;
+      &lt;p&gt;&lt;a class="mote-btn" href="/signup"&gt;Create account&lt;/a&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+</code></pre>
+  <h3 id="stat-row">Stat row</h3>
+  <p>A stats strip — cards in a grid, display-scale numbers with a per-use
+    <code>--mote-display</code>, muted labels:</p>
+  <pre><code>&lt;div class="mote-grid"&gt;
+  &lt;article class="mote-card"&gt;
+    &lt;p class="mote-display" style="--mote-display:2.25rem; margin-block:0"&gt;99.98%&lt;/p&gt;
+    &lt;p class="mote-muted" style="margin-block:0"&gt;Uptime, trailing 90 days&lt;/p&gt;
+  &lt;/article&gt;
+  &lt;article class="mote-card"&gt;
+    &lt;p class="mote-display" style="--mote-display:2.25rem; margin-block:0"&gt;214 ms&lt;/p&gt;
+    &lt;p class="mote-muted" style="margin-block:0"&gt;Median response&lt;/p&gt;
+  &lt;/article&gt;
+  &lt;article class="mote-card"&gt;
+    &lt;p class="mote-display" style="--mote-display:2.25rem; margin-block:0"&gt;0&lt;/p&gt;
+    &lt;p class="mote-muted" style="margin-block:0"&gt;Incidents this quarter&lt;/p&gt;
+  &lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+  <h3 id="billing-toggle">Billing toggle</h3>
+  <p>The pricing-page idiom, CSS-only: hidden radios steer the prices with
+    <code>:checked ~</code> selectors. The radios must precede, as siblings,
+    every element they steer — they sit bare in <code>main</code>, not in a
+    <code>p</code> or <code>fieldset</code>. And <code>.mote-sr-only</code> is the
+    wrong way to hide them — it doubles as a skip link on keyboard focus — so
+    hide them yourself:</p>
+  <pre><code>&lt;style&gt;
+  main &gt; input[type="radio"] { position: absolute; opacity: 0; }
+  main &gt; label {
+    padding: var(--mote-control-pad, 0.5rem) 0.9rem;
+    border-radius: var(--mote-radius-sm);
+    cursor: pointer;
+  }
+  main &gt; input:focus-visible + label { box-shadow: var(--mote-focus-ring); }
+  #bill-monthly:checked + label,
+  #bill-yearly:checked + label {
+    background: var(--mote-accent);
+    color: var(--mote-on-accent);
+  }
+  .yearly { display: none; }
+  #bill-yearly:checked ~ * .monthly { display: none; }
+  #bill-yearly:checked ~ * .yearly { display: inline; }
+&lt;/style&gt;
+
+&lt;main class="mote-container"&gt;
+  &lt;input type="radio" name="bill" id="bill-monthly" checked&gt;
+  &lt;label for="bill-monthly"&gt;Monthly&lt;/label&gt;
+  &lt;input type="radio" name="bill" id="bill-yearly"&gt;
+  &lt;label for="bill-yearly"&gt;Yearly &lt;small class="mote-muted"&gt;−17%&lt;/small&gt;&lt;/label&gt;
+
+  &lt;section&gt;
+    &lt;span class="price"&gt;&lt;span class="monthly"&gt;$24&lt;/span&gt;&lt;span class="yearly"&gt;$20&lt;/span&gt;/mo&lt;/span&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+</code></pre>
+  <h3 id="display-pull-quote">Display pull-quote</h3>
+  <p>Editorial pull-quote — compose <code>blockquote</code> with
+    <code>.mote-display</code> on the quoted paragraph: the rule tints from the
+    blockquote, the attribution stays body-scale:</p>
+  <pre><code>&lt;blockquote&gt;
+  &lt;p class="mote-display" style="--mote-display: 1.75rem"&gt;
+    Quotes carry more weight when they are larger than the prose around them.
+  &lt;/p&gt;
+  &lt;cite&gt;— Every magazine, ever&lt;/cite&gt;
+&lt;/blockquote&gt;
+</code></pre>
+  <h3 id="row-hover">Row hover</h3>
+  <p>mote ships zebra striping; attention-on-hover stays a page opinion.
+    One token-reading rule covers both themes:</p>
+  <pre><code>tbody tr:hover {
+  background: var(--mote-accent-soft);
+}
+</code></pre>
+  <h3 id="feedback-row">Feedback row</h3>
+  <p>The end-of-article "was this helpful?" — a row, a solid and a ghost
+    button, a pushed support link:</p>
+  <pre><code>&lt;p class="mote-row" style="margin-block-start:3rem"&gt;
+  &lt;span&gt;Was this page helpful?&lt;/span&gt;
+  &lt;button type="button"&gt;Yes&lt;/button&gt;
+  &lt;button type="button" class="mote-ghost"&gt;Not really&lt;/button&gt;
+  &lt;a class="mote-push" href="/support"&gt;Get support&lt;/a&gt;
+&lt;/p&gt;
+</code></pre>
+  <h3 id="toolbar-row">Toolbar row</h3>
+  <p>Filter and action bars — a search, a select, quiet actions, a pushed
+    count — one <code>.mote-row</code>. Controls keep intrinsic widths and
+    equal heights:</p>
+  <pre><code>&lt;form class="mote-row" role="search"&gt;
+  &lt;label class="mote-sr-only" for="q"&gt;Filter&lt;/label&gt;
+  &lt;input id="q" type="search" placeholder="Filter…"&gt;
+  &lt;label class="mote-sr-only" for="sort"&gt;Sort&lt;/label&gt;
+  &lt;select id="sort"&gt;&lt;option&gt;Newest&lt;/option&gt;&lt;/select&gt;
+  &lt;button type="submit" class="mote-ghost"&gt;Apply&lt;/button&gt;
+  &lt;span class="mote-muted mote-push"&gt;12 of 48 shown&lt;/span&gt;
+&lt;/form&gt;
+</code></pre>
+  <h3 id="result-rows">Result rows</h3>
+  <p>Poll results, skill bars, quota meters — label, bar, figure rows that
+    align across different label lengths. A small grid does what a flex row
+    can't:</p>
+  <pre><code>&lt;style&gt;
+  .results {
+    display: grid;
+    gap: 0.5rem 1rem;
+    grid-template-columns: minmax(10rem, 1fr) minmax(8rem, 2fr) auto;
+  }
+&lt;/style&gt;
+
+&lt;div class="results"&gt;
+  &lt;span&gt;Cascade layers&lt;/span&gt;
+  &lt;progress class="mote-success" value="1538" max="4812"&gt;&lt;/progress&gt;
+  &lt;span class="mote-num"&gt;32.0%&lt;/span&gt;
+  &lt;span&gt;color-mix()&lt;/span&gt;
+  &lt;progress value="1204" max="4812"&gt;&lt;/progress&gt;
+  &lt;span class="mote-num"&gt;25.0%&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+  <h3 id="price-line">Price line</h3>
+  <p>Product pricing — display scale for the number, a muted compare-at
+    strike, plain-text stars. One inline <code>--mote-display</code> keeps
+    the price huge without hijacking the whole line:</p>
+  <pre><code>&lt;p class="mote-display" style="--mote-display: 2.25rem; margin-block:0"&gt;
+  $179 &lt;s class="mote-muted" style="font-size: 1.15rem"&gt;$229&lt;/s&gt;
+&lt;/p&gt;
+&lt;p class="mote-muted" style="margin-block-start:0"&gt;★★★★★ 4.6 — 312 reviews&lt;/p&gt;
+</code></pre>
+  <h3 id="post-actions">Post actions</h3>
+  <p>The quiet action strip under forum posts and comments — muted links in
+    a row; buttons only when an action is destructive:</p>
+  <pre><code>&lt;p class="mote-row mote-muted" style="gap: 1rem; margin-block: 0"&gt;
+  &lt;a href="#top"&gt;♥ 38&lt;/a&gt;
+  &lt;a href="#top"&gt;Quote&lt;/a&gt;
+  &lt;a href="#top"&gt;Reply&lt;/a&gt;
+  &lt;a class="mote-push" href="#top"&gt;Report&lt;/a&gt;
+&lt;/p&gt;
+</code></pre>
+  <h3 id="growing-input">Growing input</h3>
+  <p>Fields keep intrinsic width by design — but in a toolbar a promo or URL
+    field should eat the remaining space. One page rule, token-safe:</p>
+  <pre><code>&lt;form class="mote-row"&gt;
+  &lt;input class="grow" type="text" placeholder="Promo code"&gt;
+  &lt;button type="submit"&gt;Apply&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;style&gt;
+  .grow { flex: 1; min-width: 8rem; }
+&lt;/style&gt;
+</code></pre>
+  <h3 id="prominent-search">Prominent search</h3>
+  <p>Help-center and docs heroes want a big obvious search box — the
+    canonical form plus one width rule:</p>
+  <pre><code>&lt;form class="mote-row" role="search" style="justify-content: center"&gt;
+  &lt;label class="mote-sr-only" for="q"&gt;Search&lt;/label&gt;
+  &lt;input id="q" type="search" placeholder="How can we help?"
+    style="width: min(100%, 30rem)"&gt;
+  &lt;button type="submit"&gt;Search&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+  <h3 id="grouped-messages">Grouped messages</h3>
+  <p>Consecutive chat or comment messages from the same sender: repeat
+    <code>.mote-media</code> with an <code>aria-hidden</code> spacer the width of
+    the avatar, so follow-ups align under the text rather than the face:</p>
+  <pre><code>&lt;div class="mote-media"&gt;
+  &lt;img class="mote-avatar" src="a.png" alt="Ada"&gt;
+  &lt;div&gt;First message…&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="mote-media"&gt;
+  &lt;span aria-hidden="true" style="flex: 0 0 var(--mote-avatar, 2.5rem)"&gt;&lt;/span&gt;
+  &lt;div&gt;Follow-up from the same sender…&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+  <h3 id="weekend-columns">Weekend columns</h3>
+  <p>Calendar grids: the zebra and the <code>tr[aria-current]</code> tint
+    paint on the row, so column shading must be a <code>background-image</code>
+    layered over the row color — a plain cell background would cover the
+    current-row tint:</p>
+  <pre><code>.weekend {
+  background-image: linear-gradient(
+    color-mix(in oklab, var(--mote-surface) 55%, transparent),
+    color-mix(in oklab, var(--mote-surface) 55%, transparent)
+  );
+}
+</code></pre>
+
+  <nav class="mote-row docs-page-nav" aria-label="Documentation pagination">
+    <a class="mote-btn" href="helpers-print.html">← Helpers</a>
+    <a class="mote-btn mote-push" href="reference.html">Reference →</a>
+  </nav>
+
+  <hr>
+  <p class="mote-muted">mote.css · MIT ·
+    <a href="https://gitlab.com/abmach/mote">GitLab</a> ·
+    <a href="https://github.com/abmach/mote">GitHub</a> ·
+    <a href="index.html">Documentation home</a> ·
+    <a href="#top">Back to top</a> ·
+    styled by two CSS files and zero lines of library JavaScript.</p>
+</main>
+
+<aside class="mote-no-print">
+  <nav aria-label="toc">
+    <details class="docs-toc" open>
+      <summary>On this page</summary>
+      <ul>
+<ul>
+          <li><a href="#patterns">Patterns</a>
+<ul>
+          <li><a href="#error-page">Error page</a></li>
+          <li><a href="#article-page">Article page</a></li>
+          <li><a href="#long-form-reading">Long-form reading with notes</a></li>
+          <li><a href="#settings-form">Settings form</a></li>
+          <li><a href="#card-grid-with-covers">Card grid with covers</a></li>
+          <li><a href="#login-page">Login page</a></li>
+          <li><a href="#marketing-hero">Marketing hero</a></li>
+          <li><a href="#stat-row">Stat row</a></li>
+          <li><a href="#billing-toggle">Billing toggle</a></li>
+          <li><a href="#display-pull-quote">Display pull-quote</a></li>
+          <li><a href="#row-hover">Row hover</a></li>
+          <li><a href="#feedback-row">Feedback row</a></li>
+          <li><a href="#toolbar-row">Toolbar row</a></li>
+          <li><a href="#result-rows">Result rows</a></li>
+          <li><a href="#price-line">Price line</a></li>
+          <li><a href="#post-actions">Post actions</a></li>
+          <li><a href="#growing-input">Growing input</a></li>
+          <li><a href="#prominent-search">Prominent search</a></li>
+          <li><a href="#grouped-messages">Grouped messages</a></li>
+          <li><a href="#weekend-columns">Weekend columns</a></li>
+        </ul>          </li>
+        </ul>
+      </ul>
+    </details>
+  </nav>
+</aside>
+</body>
+</html>

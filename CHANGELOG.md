@@ -5,6 +5,23 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed (documentation)
+
+- Split the monolithic live documentation into seven canonical, task-oriented pages:
+  an overview map, getting started, elements and platform behavior, layout and
+  components, helpers and print, patterns, and reference.
+- Added shared documentation CSS and JavaScript assets plus a compact,
+  link-checked `docs/llms.txt` discovery index for retrieval tools.
+
+### Tests
+
+- Documentation outline checks now validate every page's local outline,
+  cross-page fragments, shared assets, and discovery-index links.
+- Recipe checks now scan the complete documentation set rather than a single
+  monolithic page.
+
 ## [0.12.0] - 2026-10-29
 
 ### Removed

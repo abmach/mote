@@ -1,0 +1,83 @@
+/* Inline code must never widen the page: a long token breaks instead.
+       Code inside a pre block keeps scrolling, as mote.css intends. */
+    :not(pre) > code { overflow-wrap: break-word; }
+
+    /* The spinner's ring rotates past its own box; give the demo line
+       room so the shell's inner scroll never gains a stray 4px. */
+    main p:has(.mote-spinner) { padding-inline-end: 0.5rem; }
+
+    /* Page-owned recipe: this class is not a mote helper. */
+    .mote-card > .card-actions { margin-block-start: auto; }
+
+    /* Contents rail: the page outline. The section in view is marked,
+       and the rail keeps that entry in sight while it scrolls. */
+    nav[aria-label="toc"] > details > summary {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--mote-muted);
+    }
+    nav[aria-label="toc"] > details > ul > li > a {
+      color: var(--mote-fg);
+      font-weight: 600;
+    }
+    nav[aria-label="toc"] a[aria-current="location"] {
+      color: var(--mote-accent-deep);
+      background: var(--mote-accent-soft);
+      border-radius: var(--mote-radius-sm);
+      font-weight: 600;
+    }
+    header nav a[aria-current="location"] {
+      background: var(--mote-accent-soft);
+      color: var(--mote-accent-deep);
+    }
+
+    /* Narrow screens: the rail becomes a compact outline above the
+       content; the header strip stays the persistent section index. */
+    @media (width < 50rem) {
+      /* One gutter, not two: the shell already pads the page, and the
+         container would narrow the measure a second time. */
+      body.mote-doc { padding-inline: 0; }
+      body.mote-doc > header { order: -2; }
+      body.mote-doc > aside { order: -1; }
+      /* Narrow screens: the rail is the section index — a one-line bar
+         under the header — so the header keeps just the brand and the
+         theme control. An opened outline scrolls with the page. */
+      body.mote-doc header .mote-nav { display: none; }
+      body.mote-doc > aside {
+        position: sticky;
+        top: var(--mote-rail-top, 1rem);
+        z-index: 5;
+      }
+      body.mote-doc > aside:has(details[open]) { position: static; }
+      body.mote-doc > aside details { margin-block: 0; padding: 0.35rem 0.6rem; }
+      /* A jump must clear the header and the rail bar under it. */
+      html:where(:has(body > header)) { scroll-padding-block-start: 7rem; }
+    }
+
+    /* Print: the contents rail is screen chrome, and the shell's inner
+       scroll must not clip wide tables on paper. */
+    @media print {
+      body.mote-doc { display: block; padding-inline: 0; }
+      body.mote-doc > main { overflow: visible; }
+    }
+
+/* Shared documentation shell and topic map. */
+header nav a[aria-current="page"] {
+  background: var(--mote-accent-soft);
+  color: var(--mote-accent-deep);
+}
+
+.docs-page-intro {
+  max-width: 46rem;
+  color: var(--mote-muted);
+}
+
+.docs-topic-card p:last-child {
+  margin-block-end: 0;
+}
+
+.docs-page-nav {
+  margin-block-start: 2rem;
+}

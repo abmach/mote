@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elements and platform behavior — mote.css documentation</title>
+  <meta name="description" content="See how mote styles semantic HTML, forms, tables, dialogs, accordions, and popovers.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/commit-mono@5/700.css">
+  <link rel="stylesheet" href="../mote.css">
+  <link rel="stylesheet" href="../mote.components.css">
+  <link rel="stylesheet" href="docs.css">
+  <script src="docs.js" defer></script>
+</head>
+<body class="mote-doc">
+<a class="mote-skip-link" href="#top">Skip to content</a>
+
+<header class="mote-header">
+  <div class="mote-container mote-row">
+    <a href="index.html" class="mote-brand">mote.css</a>
+    <nav class="mote-nav" aria-label="Documentation pages">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="getting-started.html">Start</a></li>
+        <li><a href="elements.html" aria-current="page">Elements</a></li>
+        <li><a href="layout-components.html">Layout</a></li>
+        <li><a href="helpers-print.html">Helpers</a></li>
+        <li><a href="patterns.html">Patterns</a></li>
+        <li><a href="reference.html">Reference</a></li>
+        <li><a href="https://github.com/abmach/mote">GitHub</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle" type="button" class="mote-push">Theme: auto</button>
+  </div>
+</header>
+
+<main class="mote-container" id="top">
+  <h1>Elements and platform behavior</h1>
+  <p class="docs-page-intro">mote styles ordinary HTML before it reaches for classes. Start with the element that already carries the meaning.</p>
+
+<h2 id="elements">Elements</h2>
+  <p>Everything below is plain semantic HTML — no classes, no attributes beyond semantics.
+    The <a href="layout-components.html#gallery">gallery</a> on the layout and components page
+    renders the complete set.</p>
+
+  <h3 id="typography">Typography</h3>
+  <h1>Heading 1</h1>
+  <h2>Heading 2</h2>
+  <h3>Heading 3</h3>
+  <p>Body text with <strong>strong</strong>, <em>emphasis</em>, <a href="#elements">links</a>,
+    <small>small print</small>, H<sub>2</sub>O, x<sup>2</sup>, <abbr title="Cascading Style Sheets">CSS</abbr>,
+    <mark>highlights</mark>, <del>removals</del>, <ins>insertions</ins>, <q>quotes</q>, inline
+    <code>code</code>, and <kbd>Ctrl</kbd>+<kbd>K</kbd>.</p>
+  <pre><code>&lt;h1&gt;Heading 1&lt;/h1&gt;
+&lt;h2&gt;Heading 2&lt;/h2&gt;
+&lt;p&gt;Body text with &lt;strong&gt;strong&lt;/strong&gt;, &lt;em&gt;emphasis&lt;/em&gt;,
+  &lt;a href="#"&gt;links&lt;/a&gt;, &lt;small&gt;small print&lt;/small&gt;, H&lt;sub&gt;2&lt;/sub&gt;O,
+  x&lt;sup&gt;2&lt;/sup&gt;, &lt;abbr title="..."&gt;CSS&lt;/abbr&gt;, &lt;mark&gt;highlights&lt;/mark&gt;,
+  &lt;del&gt;removals&lt;/del&gt;, &lt;ins&gt;insertions&lt;/ins&gt;, &lt;q&gt;quotes&lt;/q&gt;,
+  inline &lt;code&gt;code&lt;/code&gt;, and &lt;kbd&gt;Ctrl&lt;/kbd&gt;+&lt;kbd&gt;K&lt;/kbd&gt;.&lt;/p&gt;
+</code></pre>
+
+  <h3 id="lists-and-block-content">Lists and block content</h3>
+  <ul>
+    <li>Unordered lists</li>
+    <li>With <a href="#elements">links</a></li>
+  </ul>
+  <pre><code>&lt;ul&gt;
+  &lt;li&gt;Unordered lists&lt;/li&gt;
+  &lt;li&gt;With &lt;a href="#"&gt;links&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+  <blockquote>
+    A mote is the smallest thing that can carry style.
+    <cite>— this library's only opinion</cite>
+  </blockquote>
+  <pre><code>&lt;blockquote&gt;
+  A mote is the smallest thing that can carry style.
+  &lt;cite&gt;— this library's only opinion&lt;/cite&gt;
+&lt;/blockquote&gt;
+
+&lt;!-- optional status class tints the rule --&gt;
+&lt;blockquote class="mote-info"&gt;
+  The same quote, with a dusty-blue rule.
+&lt;/blockquote&gt;
+</code></pre>
+  <blockquote class="mote-success">A moss-green rule.</blockquote>
+  <blockquote class="mote-warning">A honey rule.</blockquote>
+  <blockquote class="mote-error">A brick rule.</blockquote>
+  <blockquote class="mote-info">A dusty-blue rule.</blockquote>
+  <blockquote class="mote-muted">A neutral rule.</blockquote>
+  <p>For callout boxes — info and warning panels rather than quotes — see
+    <a href="helpers-print.html#notes">Notes and callouts</a>: <code>.mote-note</code> is the box
+    component; the tinted rule above is the quote treatment.</p>
+
+  <h3 id="definition-lists">Definition lists</h3>
+  <p>Definition lists align terms and descriptions in two columns without classes.
+    Both direct <code>dt</code>/<code>dd</code> children and valid grouping wrappers
+    keep the same aligned rows:</p>
+  <pre><code>&lt;dl&gt;
+  &lt;dt&gt;Format&lt;/dt&gt;
+  &lt;dd&gt;CSS&lt;/dd&gt;
+  &lt;dt&gt;Dependencies&lt;/dt&gt;
+  &lt;dd&gt;None&lt;/dd&gt;
+&lt;/dl&gt;
+
+&lt;!-- group each term with its description --&gt;
+&lt;dl&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Format&lt;/dt&gt;
+    &lt;dd&gt;CSS&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Dependencies&lt;/dt&gt;
+    &lt;dd&gt;None&lt;/dd&gt;
+  &lt;/div&gt;
+&lt;/dl&gt;
+</code></pre>
+  <p>For mote's two-column layout, direct children alternate one term with one
+    description. The grouping div is structural, not another visual row: use
+    one term and one description per wrapper. Both structures then keep terms
+    in one column and descriptions in the other.</p>
+  <dl>
+    <div><dt>Format</dt><dd>CSS</dd></div>
+    <div><dt>Dependencies</dt><dd>None</dd></div>
+  </dl>
+  <p>On a narrow screen, stack the term above its description when the two-column
+    measure becomes cramped. This is page CSS: keep mote's aligned columns on
+    wider screens and change only the definition list that needs the compact
+    treatment.</p>
+  <pre><code>&lt;dl class="facts"&gt;
+  &lt;dt&gt;Format&lt;/dt&gt;
+  &lt;dd&gt;CSS&lt;/dd&gt;
+  &lt;dt&gt;Dependencies&lt;/dt&gt;
+  &lt;dd&gt;None&lt;/dd&gt;
+&lt;/dl&gt;
+
+&lt;style&gt;
+@media (width &lt; 30rem) {
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+  }
+  .facts dd { margin-block-end: 0.6rem; }
+}
+&lt;/style&gt;</code></pre>
+  <p>The same recipe works for grouped definition lists because mote keeps each
+    grouping wrapper structural. Use a page-specific class so unrelated lists
+    keep their default two-column alignment. In a narrow rail — the
+    reference <code>aside</code> of the document shell is about 250px — the
+    two columns get cramped; stack that one list with the recipe above.</p>
+
+  <h3 id="tables">Tables</h3>
+  <p>Numeric figures align automatically — mote sets
+    <code>font-variant-numeric: tabular-nums</code> on every <code>td</code>.
+    Right-align a whole column with the opt-in <code>.mote-num</code> class on
+    its cells; when you want the tabular figures without the alignment
+    (day numbers, headline figures, meta lines), use
+    <code>.mote-tabular</code> instead:</p>
+  <pre><code>&lt;th class="mote-num"&gt;Price&lt;/th&gt;
+&lt;td class="mote-num"&gt;$24&lt;/td&gt;
+</code></pre>
+  <p>For sticky headers and scrollable data tables, wrap in the opt-in
+    <code>.mote-table-scroll</code> — the header row sticks, wide tables scroll
+    inside the wrapper, never the page. Cap the panel height with
+    <code>--mote-table-max</code> (default 60vh); the sticky header engages once
+    the wrapper actually scrolls. The page and the wrapper have distinct scroll
+    regions: the page may scroll vertically, the wrapper owns horizontal overflow,
+    and the wrapper also scrolls vertically when its content exceeds the cap. A
+    tall table can therefore scroll inside the wrapper before the page reaches
+    it. The content is not cropped; move the pointer or keyboard focus over the
+    wrapper and use its scrollbar or arrow keys. On paper, the wrapper releases
+    the screen height cap and clipping so the complete table is present in the
+    output; a very wide table may still exceed narrow paper, and mote does not
+    shrink an arbitrary matrix. Inside the wrapper, cell borders
+    are drawn per side — Chromium paints collapsed borders at the flow position,
+    not with the sticky cell:</p>
+  <pre><code>&lt;div class="mote-table-scroll"&gt;
+  &lt;table&gt;…&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;!-- dense panels: cap the height --&gt;
+&lt;div class="mote-table-scroll" style="--mote-table-max: 24rem"&gt;
+  &lt;table&gt;…&lt;/table&gt;
+&lt;/div&gt;
+</code></pre>
+  <h4 id="narrow-tables">Narrow screens: scroll or transform</h4>
+  <p>Choose the representation before the breakpoint. Keep a comparison or data
+    matrix as one semantic table and let its wrapper own sideways scrolling.
+    For independent records that people read one at a time, use semantic articles
+    or definition lists instead — a card-per-record layout is usually easier to
+    scan on a phone.</p>
+  <p>Do not render both a table and a card copy and hide one with CSS: duplicated
+    content becomes ambiguous for assistive technology and search. The same records
+    may appear in a second representation only when it presents genuinely distinct
+    information or serves a different task; otherwise mark the current row inside
+    the table with <code>aria-current</code> and use the row-tint recipe below.
+    When the table is the only representation, give its scroll region an accessible
+    name and keyboard focus:</p>
+  <pre><code>&lt;div class="mote-table-scroll" tabindex="0" role="region" aria-label="Product comparison"&gt;
+  &lt;table&gt;…&lt;/table&gt;
+&lt;/div&gt;
+</code></pre>
+  <p>The wrapper keeps the page still while the table moves. On paper, mote's
+    components file removes the wrapper's artificial clipping and height cap; the
+    complete table is present, but a wide matrix may still exceed the paper width.</p>
+  <p>When one table must become readable records on a phone, transform that
+    same table instead of adding a second, hidden card copy. Every data cell
+    in the transformed branch must have a non-empty <code>data-label</code>. The
+    attribute supplies the visible label when the table becomes records. A
+    missing <code>data-label</code> produces a blank label beside the value;
+    this applies to every transformed <code><td></code>, not only the
+    first column. Then change the table's visual layout below the chosen
+    breakpoint. The markup remains one table rather than duplicated content.
+    Current Chromium retains the table, row, header, and cell roles in this
+    layout; because CSS display changes can affect semantics in other engines,
+    verify the recipe with the browsers and assistive technology you support:</p>
+  <pre><code>&lt;table class="records"&gt;
+  &lt;caption&gt;Autumn fixtures&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Date&lt;/th&gt;&lt;th&gt;Fixture&lt;/th&gt;&lt;th&gt;Ground&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-label="Date"&gt;12 Oct&lt;/td&gt;
+      &lt;td class="mote-num" data-label="Score"&gt;24–18&lt;/td&gt;
+      &lt;td data-label="Fixture"&gt;Riverside v Northfield&lt;/td&gt;
+      &lt;td data-label="Ground"&gt;Meadow 2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;style&gt;
+/* One label column for every record: widen it once when a label is longer. */
+.records {
+  --records-label: 7rem;
+}
+@media (width &lt; 40rem) {
+  .records,
+  .records tbody,
+  .records tr,
+  .records td {
+    display: block;
+  }
+  .records tbody th[scope="row"] {
+    display: block;
+    font-weight: 600;
+    padding-block-end: 0.25rem;
+  }
+  .records caption {
+    display: block;
+    width: 100%;
+    text-align: start;
+  }
+  .records thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .records tr {
+    margin-block-end: 1rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--mote-border);
+    border-radius: var(--mote-radius);
+  }
+  .records td {
+    display: grid;
+    grid-template-columns: var(--records-label) minmax(0, 1fr);
+    gap: 0.5rem;
+    padding-block: 0.25rem;
+    border: 0;
+  }
+  .records td::before {
+    content: attr(data-label);
+    color: var(--mote-muted);
+    font-weight: 600;
+    text-align: start;
+  }
+  .records td.mote-num {
+    text-align: start;
+  }
+}
+
+/* Paper keeps the table a table: undo the phone layout, the hidden
+   header and the block caption before anything prints. */
+@media print {
+  .records,
+  .records tbody,
+  .records tr,
+  .records td,
+  .records tbody th[scope="row"] {
+    display: revert;
+  }
+  .records thead,
+  .records thead th {
+    position: static;
+  }
+  .records thead {
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+  .records td::before {
+    content: none;
+  }
+  .records caption {
+    display: table-caption;
+  }
+  .records tr {
+    margin-block-end: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
+&lt;/style&gt;</code></pre>
+  <p>Keep the semantic table as the only representation. If each record needs a
+    different phone layout, prefer articles or definition lists instead of
+    adding increasingly specific table transformations.</p>
+  <p>The <code>40rem</code> breakpoint in this recipe is an example, not a mote
+    default. Choose the threshold before copying the recipe: a wide desktop
+    matrix may need to remain a table until a narrower width, while a record
+    list can transform earlier. A custom breakpoint cannot be parameterized
+    with a CSS variable inside <code>@media</code>. Copy the recipe and replace
+    the threshold in both the transform query and the cap-release query, keeping
+    them identical. The print-restoration rules remain unchanged regardless of
+    the selected breakpoint.</p>
+  <p>Four details of this recipe are load-bearing. The label column is one
+    knob for the whole table — <code>--records-label</code>, 7rem by default —
+    so every record's labels line up with each other; widen it once when a
+    label is longer than the default. The label keeps
+    <code>text-align: start</code>, so a right-aligned numeric column does
+    not drag the label to the far edge away from its value; numeric values
+    also start-align in the record branch, where a label/value grid replaces
+    table-column alignment. The print guard restores the table, its header row
+    and its caption: the phone layout hides the header, so a print rule that
+    only reverted <code>display</code> would print a table with no columns.
+    It also removes the generated labels and resets sticky header cells, so
+    narrow-viewport print emulation and paged output restore the table
+    completely.</p>
+  <p>The transform branch does not need <code>.mote-table-scroll</code> —
+    records no longer scroll sideways. When one table serves both branches,
+    keep the wrapper for the wide matrix and release its height cap in the
+    narrow query, or the panel crops the records it now contains. Name the
+    wrapper and release the cap by that name — no selector magic needed:</p>
+  <pre><code>&lt;div class="mote-table-scroll records-panel"&gt;
+ &lt;table class="records"&gt;…&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+@media (width &lt; 40rem) {
+ .records-panel {
+    --mote-table-max: none;
+ }
+}
+</style></code></pre>
+
+  <p>Mark the current row with <code>aria-current</code> — the same vocabulary
+    as nav pills. The tint reads over zebra (the regression fixture asserts
+    it on both parities):</p>
+  <pre><code>&lt;tr aria-current="true"&gt;…&lt;/tr&gt;
+</code></pre>
+  <p>Status classes remain token carriers: a status on a table row sets the
+    row's tokens but paints nothing by itself. The page owns the visual row
+    policy. Choose a class for your markup — here, <code>.status-row</code> —
+    and add it to the row with the status class:</p>
+  <pre><code>&lt;tr class="status-row mote-warning"&gt;
+  &lt;th scope="row"&gt;Order 1048&lt;/th&gt;
+  &lt;td&gt;Needs review&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+  <p>Copy this page rule to paint the row's direct cells with the status it
+    declares:</p>
+  <pre><code>tr.status-row:is(.mote-success, .mote-warning, .mote-error, .mote-info)
+  > :is(td, th[scope="row"]) {
+  background-color: var(--mote-status-soft);
+}
+</code></pre>
+  <p>The selector preserves semantic row headers and uses
+    <code>background-color</code>, so a column's background-image layer — such
+    as the weekend shading below — remains intact:</p>
+  <p>Only direct cells are painted. Badges and buttons remain gated and keep
+    their own status instead of inheriting the row's tint.</p>
+  <p>Captions center by default; a quiet left-aligned caption is one page
+    rule: <code>caption { text-align: start }</code>.</p>
+  <table>
+    <caption>Deliverables</caption>
+    <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>mote.css</code></td><td>Core: semantic element styles</td></tr>
+      <tr><td><code>mote.components.css</code></td><td>Optional components and layout</td></tr>
+    </tbody>
+  </table>
+  <pre><code>&lt;table&gt;
+  &lt;caption&gt;Deliverables&lt;/caption&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;File&lt;/th&gt;&lt;th&gt;Purpose&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;code&gt;mote.css&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Core: semantic element styles&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;code&gt;mote.components.css&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Optional components and layout&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+
+  <h3 id="forms">Forms</h3>
+  <p>Labels, inputs, selects, checkboxes, radios and buttons inherit the cozy surface.
+    Invalid fields show a brick border once the user interacts with them (<code>:user-invalid</code>).</p>
+  <p>Timing is the browser's: text and email fields can fail as soon as you leave
+    them, while Chromium marks a required <code>&#60;select&#62;</code> invalid on a
+    submit attempt rather than on blur.</p>
+  <p>Fields keep their intrinsic width — for stacked forms, add
+    <code>input, select, textarea { width: 100% }</code> in your page styles;
+    inline forms are equally valid, so mote does not decide for you.</p>
+  <p>Or use the opt-in <code>.mote-stack</code> class — a vertical rhythm for
+    forms and lists: children space by <code>--mote-stack-gap</code>
+    (default 1.25rem) with their block margins zeroed, fields stretch full
+    width, checkboxes/radios stay at 1em. It stacks any content, not just
+    forms. On a <code>&lt;fieldset&gt;</code> it flattens the native legend
+    notch — the legend renders as the first line inside the box, which
+    reads fine for most forms:</p>
+  <pre><code>&lt;form class="mote-stack"&gt;
+  &lt;p&gt;&lt;label for="name"&gt;Name&lt;/label&gt; &lt;input id="name" type="text"&gt;&lt;/p&gt;
+&lt;/form&gt;
+</code></pre>  <p>File inputs get a minimal drop-zone treatment — a dashed border and the
+    same density tokens as every other control, so their height matches
+    sibling fields in a stack.</p>
+
+  <p>Programmatic validation: <code>aria-invalid="true"</code> gets the same
+    brick border as <code>:user-invalid</code>, so server-side and failed-save
+    states are styleable without waiting for user interaction. A canonical
+    search form (sr-only label + inline row):</p>
+  <pre><code>&lt;form class="mote-row" role="search"&gt;
+  &lt;label class="mote-sr-only" for="q"&gt;Search&lt;/label&gt;
+  &lt;input id="q" type="search" placeholder="Search…"&gt;
+  &lt;button type="submit"&gt;Go&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+
+  <h3 id="buttons-and-statuses">Buttons and statuses</h3>
+  <p>All button styles — solid and ghost — are <strong>gated</strong>: the
+    status class must sit on the button itself. A themed section — an error
+    note, a toast, a page-level <code>body class="mote-error"</code> — never
+    recolors the actions inside it. Statuses theme content; they never theme
+    actions. The intent of an action is declared at the action site:</p>
+  <pre><code>&lt;button&gt;Neutral action&lt;/button&gt;
+&lt;button class="mote-error"&gt;Delete forever&lt;/button&gt;
+&lt;button class="mote-ghost"&gt;Quiet action&lt;/button&gt;
+&lt;button class="mote-ghost mote-success"&gt;Confirm quietly&lt;/button&gt;
+</code></pre>
+  <p>
+    <button type="button">Neutral</button>
+    <button type="button" class="mote-error">Delete forever</button>
+    <button type="button" class="mote-ghost">Quiet</button>
+    <button type="button" class="mote-ghost mote-success">Confirm quietly</button>
+  </p>
+  <p>Ghost buttons follow the same law. Inside a themed section, a ghost stays
+    accent-tinted; to make it match the section's status, put the status class
+    on it explicitly — <code>class="mote-ghost mote-error"</code> for a quiet
+    destructive, <code>class="mote-ghost mote-success"</code> for a quiet confirm.
+    Ghosts work on buttons and anchors alike.</p>
+  <pre><code>&lt;button class="mote-ghost"&gt;Cancel&lt;/button&gt;
+&lt;a class="mote-ghost" href="/docs"&gt;Read the docs&lt;/a&gt;
+&lt;button class="mote-ghost mote-error"&gt;Delete draft&lt;/button&gt;
+</code></pre>
+  <p>
+    <a class="mote-ghost" href="#elements">Get started quietly</a>
+  </p>
+  <p>Solid button on an anchor — <code>.mote-btn</code> is the opt-in class
+    for the full solid recipe on any element:</p>
+  <pre><code>&lt;a class="mote-btn" href="/signup"&gt;Get started&lt;/a&gt;
+</code></pre>
+  <p>
+    <a class="mote-btn" href="#elements">Get started</a>
+  </p>
+  <h3 id="live-form-demo">Live form demo</h3>
+  <p>The controls above, assembled — type an invalid email and blur to see
+    <code>:user-invalid</code> in action:</p>
+  <form onsubmit="event.preventDefault()">
+    <p>
+      <label for="d-email">Email</label>
+      <input id="d-email" type="email" placeholder="ada@example.com" required>
+    </p>
+    <p>
+      <label for="d-plan">Plan</label>
+      <select id="d-plan"><option>Free</option><option selected>Cozy</option></select>
+    </p>
+    <p>
+      <label><input type="checkbox" checked> Send me gentle updates</label>
+    </p>
+    <p>
+      <button type="submit">Subscribe</button>
+      <button type="reset">Reset</button>
+    </p>
+  </form>
+
+  <h3 id="display-text">Display text</h3>
+  <p>Opt-in hero/error-code scale via <code>.mote-display</code> — the body
+    heading scale is untouched. Widen per use with the <code>--mote-display</code>
+    variable. Display text reads <code>--mote-status</code> so a themed page
+    (e.g. <code>body class="mote-error"</code>) tints the giant code:</p>
+  <pre><code>&lt;h1 class="mote-display"&gt;404&lt;/h1&gt;
+&lt;h1 class="mote-display" style="--mote-display: clamp(6rem, 24vw, 12rem)"&gt;500&lt;/h1&gt;
+</code></pre>
+  <p>
+    <span class="mote-display">404</span>
+  </p>
+  <h3 id="semantic-feedback">Semantic feedback</h3>
+  <p><code>[role="alert"]</code> and <code>[role="status"]</code> are styled
+    as semantic feedback. They read <code>--mote-status</code> when one is
+    present; otherwise <code>role="alert"</code> falls back to the error color
+    and <code>role="status"</code> falls back to the info color. A status class
+    on the element or an ancestor sets their text color:</p>
+  <pre><code>&lt;p role="alert" class="mote-error"&gt;Invalid email&lt;/p&gt;
+&lt;p role="status"&gt;Saved&lt;/p&gt;
+</code></pre>
+  <p>
+    <p role="alert" class="mote-error" style="margin-block:0">Invalid email address</p>
+    <br>
+    <p role="status" style="margin-block:0">Saved successfully</p>
+  </p>
+  <pre><code>&lt;form&gt;
+  &lt;p&gt;
+    &lt;label for="email"&gt;Email&lt;/label&gt;
+    &lt;input id="email" type="email" placeholder="ada@example.com" required&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label for="plan"&gt;Plan&lt;/label&gt;
+    &lt;select id="plan"&gt;&lt;option&gt;Free&lt;/option&gt;&lt;option selected&gt;Cozy&lt;/option&gt;&lt;/select&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;label&gt;&lt;input type="checkbox" checked&gt; Send me gentle updates&lt;/label&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;button type="submit"&gt;Subscribe&lt;/button&gt;
+    &lt;button type="reset"&gt;Reset&lt;/button&gt;
+  &lt;/p&gt;
+&lt;/form&gt;
+</code></pre>
+
+  <h3 id="progress-and-meter">Progress and meter</h3>
+  <p>Progress bars and meters take the accent by default and follow the status
+    classes — every variant:</p>
+  <pre><code>&lt;progress value="70" max="100"&gt;70%&lt;/progress&gt;
+&lt;progress class="mote-success" value="70" max="100"&gt;70%&lt;/progress&gt;
+&lt;meter class="mote-error" value="0.6" min="0" max="1"&gt;&lt;/meter&gt;
+</code></pre>
+  <p><progress value="70" max="100">70%</progress> accent (plain)</p>
+  <p><progress class="mote-success" value="70" max="100">70%</progress> success</p>
+  <p><progress class="mote-warning" value="70" max="100">70%</progress> warning</p>
+  <p><progress class="mote-error" value="70" max="100">70%</progress> error</p>
+  <p><progress class="mote-info" value="70" max="100">70%</progress> info</p>
+  <p><progress class="mote-muted" value="70" max="100">70%</progress> muted</p>
+  <p>
+    <meter value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> accent
+    <meter class="mote-success" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> success
+    <meter class="mote-warning" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> warning
+    <meter class="mote-error" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> error
+    <meter class="mote-info" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> info
+    <meter class="mote-muted" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.9">0.6</meter> muted
+  </p>
+  <p>Meters keep their native zone coloring (green/yellow/red from
+    <code>low</code>/<code>high</code>/<code>optimum</code>) in some engines; the
+    status class tints the gauge wherever the engine honors it.</p>
+  <p>A native <code>&#60;progress&#62;</code> keeps its intrinsic width — set
+    <code>progress { width: 100% }</code> in your page styles when you want a
+    full-width bar.</p>
+
+  <h3 id="dialogs">Dialogs</h3>
+  <p>Native <code>&lt;dialog&gt;</code> gets a soft surface, a dimmed blurred backdrop, and —
+    with the components file — a gentle entrance animation. Opening a <em>modal</em> takes one
+    line of JavaScript:</p>
+  <pre><code>&lt;dialog id="example"&gt;
+  &lt;h3&gt;Modal title&lt;/h3&gt;
+  &lt;p&gt;Content…&lt;/p&gt;
+  &lt;form method="dialog"&gt;&lt;button&gt;Close&lt;/button&gt;&lt;/form&gt;
+&lt;/dialog&gt;
+
+&lt;script&gt;
+  document.querySelector('#open-btn').onclick = () =&gt;
+    document.querySelector('#example').showModal();
+&lt;/script&gt;
+</code></pre>
+  <p>
+    <button type="button" id="open-dialog">Open a live modal</button>
+  </p>
+  <dialog id="docs-dialog">
+    <h3>A cozy modal</h3>
+    <p>Backdrop dim, gentle fade, native Esc-to-close. The <code>form method="dialog"</code>
+      button closes it declaratively.</p>
+    <form method="dialog"><button>Close</button></form>
+  </dialog>
+
+  <p>One dialog can serve many items: fill its fields from the trigger
+    before opening it, then close it with <code>form method="dialog"</code>.
+    The wiring is the page's own code — mote ships none.</p>
+  <pre><code>&lt;dialog id="lot-dialog"&gt;
+  &lt;form method="dialog"&gt;
+    &lt;h3&gt;Place a bid&lt;/h3&gt;
+    &lt;label&gt;Amount &lt;input type="number" name="amount" min="45" step="0.50"&gt;&lt;/label&gt;
+    &lt;button&gt;Confirm&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;
+
+&lt;script&gt;
+  const dialog = document.querySelector('#lot-dialog');
+  document.querySelectorAll('[data-bid-for]').forEach(button =&gt; {
+    button.onclick = () =&gt; {
+      dialog.querySelector('input[name="amount"]').min = button.dataset.min;
+      dialog.showModal();
+    };
+  });
+&lt;/script&gt;</code></pre>
+
+<h2 id="details">Details and accordions</h2>
+  <p>Single <code>&lt;details&gt;</code> elements are soft cards. Give a group of siblings the
+    same <code>name</code> and the browser turns them into an <strong>exclusive accordion</strong> —
+    one open at a time, no JavaScript. Try it:</p>
+  <p>An exclusive group spans the whole document: two disclosures that
+    share a <code>name</code> close each other even when they sit in
+    different cards. Give unrelated panels distinct names.</p>
+  <pre><code>&lt;details name="faq"&gt;
+  &lt;summary&gt;Does it need a build step?&lt;/summary&gt;
+  &lt;p&gt;No.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details name="faq"&gt;
+  &lt;summary&gt;Does it need classes?&lt;/summary&gt;
+  &lt;p&gt;No.&lt;/p&gt;
+&lt;/details&gt;
+</code></pre>
+  <details name="faq">
+    <summary>Does it need a build step?</summary>
+    <p>No. It is a single CSS file.</p>
+  </details>
+  <details name="faq">
+    <summary>Does it need classes?</summary>
+    <p>Not for elements. The optional components file adds a handful where no semantic
+      element exists.</p>
+  </details>
+  <details name="faq">
+    <summary>Does it need JavaScript?</summary>
+    <p>No. Tooltips, menus and accordions ride on native platform features.</p>
+  </details>
+
+  <p>In Chromium engines, opening and closing also animates smoothly — a
+    <code>details</code> pseudo-element nicety provided by the components file. Everywhere
+    else the toggle is instant.</p>
+  <p>Printing note: the browser enforces one open panel per exclusive group, so
+    printing "everything open" needs a <code>beforeprint</code> listener that
+    removes the <code>name</code> attribute (and restores it after). The print
+    stylesheet already forces the light palette, so dark-mode users get paper
+    colors, not ink floods.</p>
+  <p>Print helpers: <code>.mote-no-print</code> hides any element on paper;
+    <code>.mote-print-only</code> shows only in print:</p>
+  <pre><code>&lt;header class="mote-no-print"&gt;…&lt;/header&gt;
+&lt;p class="mote-print-only"&gt;Printed notice&lt;/p&gt;
+</code></pre>
+
+  <p>Summary markers read the status classes too — moss, honey, brick, dusty-blue
+    or neutral markers, from one class on the details element:</p>
+  <pre><code>&lt;details class="mote-success"&gt;
+  &lt;summary&gt;A summary with a moss-green marker&lt;/summary&gt;
+  &lt;p&gt;Content…&lt;/p&gt;
+&lt;/details&gt;
+</code></pre>
+  <div>
+    <details class="mote-success"><summary>success marker</summary></details>
+    <details class="mote-warning"><summary>warning marker</summary></details>
+    <details class="mote-error"><summary>error marker</summary></details>
+    <details class="mote-info"><summary>info marker</summary></details>
+    <details class="mote-muted"><summary>muted marker</summary></details>
+  </div>
+
+<h2 id="popovers">Popovers: tooltips and menus</h2>
+  <p>The native <code>popover</code> attribute gives you top-layer, light-dismiss,
+    Esc-to-close surfaces — styled by mote, wired by the browser. A
+    <code>popovertarget</code> button toggles one with <strong>zero JavaScript</strong>:</p>
+  <pre><code>&lt;button popovertarget="tip"&gt;What is a mote?&lt;/button&gt;
+&lt;div popover class="mote-tooltip" id="tip"&gt;
+  A speck of dust, especially one drifting in a sunbeam.
+&lt;/div&gt;
+
+&lt;button popovertarget="menu"&gt;Options&lt;/button&gt;
+&lt;menu popover id="menu" role="menu"&gt;
+  &lt;li&gt;&lt;button role="menuitem"&gt;Rename&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button role="menuitem"&gt;Duplicate&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button role="menuitem"&gt;Archive&lt;/button&gt;&lt;/li&gt;
+&lt;/menu&gt;
+</code></pre>
+  <p>
+    <button popovertarget="docs-tip" type="button" style="anchor-name: --docs-tip-a">What is a mote?</button>
+  </p>
+  <div popover class="mote-tooltip" id="docs-tip" style="position-anchor: --docs-tip-a">
+    A speck of dust, especially one drifting in a sunbeam.
+  </div>
+  <p>
+    <button popovertarget="docs-menu" type="button" style="anchor-name: --docs-menu-a">Options</button>
+  </p>
+  <menu popover id="docs-menu" role="menu" style="position-anchor: --docs-menu-a">
+    <li><button role="menuitem">Rename</button></li>
+    <li><button role="menuitem">Duplicate</button></li>
+    <li><button role="menuitem">Archive</button></li>
+  </menu>
+
+  <p>By default, the browser opens popovers centered in the viewport. To place one next to
+    its trigger instead, use CSS anchor positioning (Chrome 125+, Safari 26+): give the
+    trigger an <code>anchor-name</code> and the popover a matching
+    <code>position-anchor</code> — mote then positions it right below the trigger and flips
+    it when it would overflow the viewport. Engines without support keep the centered
+    fallback:</p>
+  <pre><code>&lt;button popovertarget="menu" style="anchor-name: --menu-a"&gt;Options&lt;/button&gt;
+&lt;menu popover id="menu" style="position-anchor: --menu-a" role="menu"&gt;
+  &lt;li&gt;&lt;button role="menuitem"&gt;Rename&lt;/button&gt;&lt;/li&gt;
+&lt;/menu&gt;
+</code></pre>
+  <p>The live examples above are anchored — in Chromium and Safari they open next to their
+    buttons; in Firefox they open centered.</p>
+  <p>Anchored popovers sit below their trigger, centered on it, and flip above it when
+    they would overflow the viewport. mote separates them with a 0.45rem margin.
+    Chromium adds its own offset to the popover's placement, so the visible
+    separation there is a little larger than the margin. Override it in page CSS
+    when a surface needs more breathing room:</p>
+  <pre><code>[popover].mote-tooltip {
+  margin: 0.75rem;
+}
+</code></pre>
+  <p>The margin belongs to the anchored placement, so it travels with the popover when
+    the browser flips it.</p>
+
+  <nav class="mote-row docs-page-nav" aria-label="Documentation pagination">
+    <a class="mote-btn" href="getting-started.html">← Start</a>
+    <a class="mote-btn mote-push" href="layout-components.html">Layout →</a>
+  </nav>
+
+  <hr>
+  <p class="mote-muted">mote.css · MIT ·
+    <a href="https://gitlab.com/abmach/mote">GitLab</a> ·
+    <a href="https://github.com/abmach/mote">GitHub</a> ·
+    <a href="index.html">Documentation home</a> ·
+    <a href="#top">Back to top</a> ·
+    styled by two CSS files and zero lines of library JavaScript.</p>
+</main>
+
+<aside class="mote-no-print">
+  <nav aria-label="toc">
+    <details class="docs-toc" open>
+      <summary>On this page</summary>
+      <ul>
+<ul>
+          <li><a href="#elements">Elements</a>
+<ul>
+          <li><a href="#typography">Typography</a></li>
+          <li><a href="#lists-and-block-content">Lists and block content</a></li>
+          <li><a href="#definition-lists">Definition lists</a></li>
+          <li><a href="#tables">Tables</a>
+<ul>
+          <li><a href="#narrow-tables">Narrow screens: scroll or transform</a></li>
+        </ul>          </li>
+          <li><a href="#forms">Forms</a></li>
+          <li><a href="#buttons-and-statuses">Buttons and statuses</a></li>
+          <li><a href="#live-form-demo">Live form demo</a></li>
+          <li><a href="#display-text">Display text</a></li>
+          <li><a href="#semantic-feedback">Semantic feedback</a></li>
+          <li><a href="#progress-and-meter">Progress and meter</a></li>
+          <li><a href="#dialogs">Dialogs</a></li>
+        </ul>          </li>
+          <li><a href="#details">Details and accordions</a></li>
+          <li><a href="#popovers">Popovers: tooltips and menus</a></li>
+        </ul>
+      </ul>
+    </details>
+  </nav>
+</aside>
+</body>
+</html>

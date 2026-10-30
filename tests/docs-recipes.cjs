@@ -1,17 +1,24 @@
 'use strict';
 
-// Pins the published phone-record recipe in docs/index.html.
+// Pins the published phone-record recipe across the documentation set.
 //
 // The recipe is a copy-ready CSS block, so the shipped stylesheets cannot
-// assert it — the check reads the docs source, decodes the entities, and
+// assert it — the check reads every docs page, decodes the entities, and
 // requires the rules the round-13 fixes depend on. It also fails if a code
 // sample ever leaks a live tag into the page.
 
 const fs = require('node:fs');
 const path = require('node:path');
 
-const docsPath = path.resolve(__dirname, '..', 'docs', 'index.html');
-const html = fs.readFileSync(docsPath, 'utf8');
+const docsDir = path.resolve(__dirname, '..', 'docs');
+const docsFiles = fs.readdirSync(docsDir)
+  .filter(file => file.endsWith('.html'))
+  .sort();
+const docsPages = docsFiles.map(file => ({
+  file,
+  html: fs.readFileSync(path.join(docsDir, file), 'utf8')
+}));
+const html = docsPages.map(page => page.html).join('\n');
 
 const LT = String.fromCharCode(38, 108, 116, 59); // <
 const GT = String.fromCharCode(38, 103, 116, 59); // >
