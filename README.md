@@ -32,19 +32,20 @@ Source on [GitLab](https://gitlab.com/abmach/mote) · mirrored on [GitHub](https
 
 ## Install
 
-**CDN** — jsDelivr, serving the npm package, with auto-minified variants:
+**CDN** — jsDelivr, serving the npm package, with committed minified variants:
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0/mote.css">
-<!-- minified variant (dotted filenames minify to <name>.min.css) -->
+<!-- committed minified variant -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0/mote.min.css">
 
 <!-- optional components file -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0/mote.components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mote.css@0/mote.components.min.css">
 ```
 
 `@0` tracks the latest 0.x release, so these snippets never go stale. Pin an exact
-version (`mote.css@0.3.0`) for reproducible production builds.
+version (`mote.css@0.13.0`) for reproducible production builds.
 
 **npm**:
 
@@ -52,7 +53,7 @@ version (`mote.css@0.3.0`) for reproducible production builds.
 npm install mote.css
 ```
 
-**Download**: [`mote.css`](mote.css) and [`mote.components.css`](mote.components.css) — link them directly.
+**Download**: [`mote.css`](mote.css), [`mote.min.css`](mote.min.css), [`mote.components.css`](mote.components.css), and [`mote.components.min.css`](mote.components.min.css) — link them directly.
 
 ## Theming
 

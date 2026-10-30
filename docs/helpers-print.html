@@ -229,7 +229,12 @@
     generated PDF; use the print engine's page-header mechanism when every
     page must carry a running head.</p>
   <p>The phone-record layout keeps the table a table on paper: the recipe's
-    print guard restores the hidden header row and the caption.</p>
+    print guard restores the hidden header row and the caption. Keep that guard
+    with the transform recipe, and apply it to every table the author chooses
+    to transform. A retained comparison matrix does not need the phone-record
+    transform or its print guard; the table-scroll guidance above still applies.
+    Use the complete checklist in
+    <a href="elements.html#narrow-tables">Narrow screens: scroll or transform</a>.</p>
   <p>Keep important tables intact with a small page rule:</p>
   <pre><code>@media print {
   .receipt, tr, figure { break-inside: avoid; }

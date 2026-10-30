@@ -94,6 +94,7 @@ const stripCode = html => html.replace(/<pre><code>[\s\S]*?<\/code><\/pre>/g, ''
 const specificTargets = new Map([
   ['badges', { file: 'layout-components.html', id: 'badges' }],
   ['badges as links', { file: 'layout-components.html', id: 'badges' }],
+  ['bottom-aligned card actions', { file: 'layout-components.html', id: 'cards' }],
   ['buttons', { file: 'elements.html', id: 'buttons-and-statuses' }],
   ['buttons and statuses', { file: 'elements.html', id: 'buttons-and-statuses' }],
   ['card grids', { file: 'layout-components.html', id: 'card-grids' }],
@@ -111,7 +112,9 @@ const specificTargets = new Map([
   ['media objects', { file: 'layout-components.html', id: 'media-objects' }],
   ['narrow screens: scroll or transform', { file: 'elements.html', id: 'narrow-tables' }],
   ['notes and callouts', { file: 'helpers-print.html', id: 'notes' }],
+  ['phone-record tables', { file: 'elements.html', id: 'narrow-tables' }],
   ['progress and meter', { file: 'elements.html', id: 'progress-and-meter' }],
+  ['status rows', { file: 'elements.html', id: 'tables' }],
   ['semantic feedback', { file: 'elements.html', id: 'semantic-feedback' }],
   ['simple page', { file: 'layout-components.html', id: 'simple-page' }],
   ['skeletons and spinners', { file: 'layout-components.html', id: 'skeletons-and-spinners' }],

@@ -1,0 +1,34 @@
+{
+  "generator": "bun x clean-css-cli@latest",
+  "toolchain": {
+    "cleanCssCli": "5.6.3",
+    "cleanCss": "5.3.3"
+  },
+  "options": {
+    "level": 2
+  },
+  "packageVersion": "0.13.0",
+  "files": [
+    {
+      "source": "mote.css",
+      "output": "mote.min.css",
+      "sourceSha256": "3efb33a4d179022b7cccf9901bd22179bc2dab47b0c6511e207afeb6ae45383a",
+      "outputSha256": "46757d6d963ecbae9e08b114409a74fcb45c17053c1f32fa7ea1e431a5a9ca31",
+      "bytes": 16954,
+      "maxBytes": 18000,
+      "preserved": {}
+    },
+    {
+      "source": "mote.components.css",
+      "output": "mote.components.min.css",
+      "sourceSha256": "b250e34bbff4d6683702e2e35875863c2f9738cf9f3ae60f75291feb3481f04e",
+      "outputSha256": "26d2bff1d2d3d036f4f328c066c25a428fc1cf65e5b287caf5b9ae8bc7b30353",
+      "bytes": 12373,
+      "maxBytes": 13000,
+      "preserved": {
+        "@starting-style rules": 3,
+        "allow-discrete values": 4
+      }
+    }
+  ]
+}

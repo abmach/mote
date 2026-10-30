@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-30
+
+### Changed (distribution)
+
+- Added committed `mote.min.css` and `mote.components.min.css` to the npm package so jsDelivr serves project-owned bytes instead of generating variants on demand.
+- Added a staged-blob pre-commit minification gate that regenerates and stages the minified artifacts and manifest after enforcing warnings, byte budgets, version stamps, and Baseline 2024 construct counts. The manifest records the exact resolved `clean-css-cli` and `clean-css` versions used by that invocation.
+- Added `scripts/install-hooks` to configure the repository-local `core.hooksPath` and verify the active pre-commit hook after cloning.
+
+### Fixed (documentation — round-16 findings)
+
+- Added a phone-record completion checklist covering selected transforms, data labels, print restoration, scroll-panel caps, narrow overflow, and generated-PDF inspection while preserving retained comparison matrices as a valid representation.
+- Documented native dialog cancellation with required controls: the cancel button uses `formnovalidate`, while the confirm action keeps validation.
+- Added a cross-page recipe index for phone-record tables, status rows, and bottom-aligned card actions.
+
+### Tests
+
+- Added `tests/minified-artifacts.cjs` to verify the committed minified outputs and manifest, including source/output hashes, byte budgets, version stamps, and preserved Baseline 2024 constructs.
+- CI now runs the committed-artifact check plus the documentation outline and recipe checks before the npm staging job.
+- Documentation checks now validate the phone-record checklist structure, the dialog cancellation example, and recipe-index link targets.
+
+### Evaluation
+
+- Sixteenth round: ten independent builders created ten new page types against v0.12.1. All ten would use mote again, and no confirmed library failures were reported. The three documentation fixes in this release address the recurring authoring friction surfaced by the round.
+
 ## [0.12.1] - 2026-10-30
 
 ### Changed (documentation)
@@ -967,7 +991,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.12.1...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.0...HEAD
+[0.13.0]: https://gitlab.com/abmach/mote/compare/v0.12.1...v0.13.0
 [0.12.1]: https://gitlab.com/abmach/mote/compare/v0.12.0...v0.12.1
 [0.12.0]: https://gitlab.com/abmach/mote/compare/v0.11.0...v0.12.0
 [0.11.0]: https://gitlab.com/abmach/mote/compare/v0.10.9...v0.11.0

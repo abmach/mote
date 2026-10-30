@@ -22,6 +22,7 @@
   - Print and paper: https://gitlab.com/abmach/mote/-/raw/main/docs/helpers-print.html#print
 - Patterns and recipes: https://gitlab.com/abmach/mote/-/raw/main/docs/patterns.html
   - Patterns: https://gitlab.com/abmach/mote/-/raw/main/docs/patterns.html#patterns
+  - Recipe index: https://gitlab.com/abmach/mote/-/raw/main/docs/patterns.html#recipe-index
 - Reference: https://gitlab.com/abmach/mote/-/raw/main/docs/reference.html
   - Tokens: https://gitlab.com/abmach/mote/-/raw/main/docs/reference.html#tokens
   - Fonts: https://gitlab.com/abmach/mote/-/raw/main/docs/reference.html#fonts

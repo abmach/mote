@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+hook_path=.githooks/pre-commit
+if [ ! -f "$hook_path" ]; then
+  printf 'Hook file missing: %s\n' "$hook_path" >&2
+  exit 1
+fi
+
+git config --local core.hooksPath .githooks
+
+resolved_hook=$(git rev-parse --git-path hooks/pre-commit)
+if [ ! -f "$resolved_hook" ]; then
+  printf 'Hook file missing after installation: %s\n' "$resolved_hook" >&2
+  exit 1
+fi
+
+printf 'Installed pre-commit hook: %s\n' "$resolved_hook"

@@ -26,6 +26,8 @@ const AMP = String.fromCharCode(38, 97, 109, 112, 59); // &
 
 const rawBlocks = html.match(/<pre><code>[\s\S]*?<\/code><\/pre>/g) || [];
 const decode = (text) => text
+  .replace(/&#60;/g, '<')
+  .replace(/&#62;/g, '>')
   .split(LT).join('<')
   .split(GT).join('>')
   .split(AMP).join('&');
@@ -61,7 +63,7 @@ if (!svgSampleArticle) {
   }
 }
 
-const leaked = rawBlocks.filter((block) => /<(style|div|table|script|article|h[1-6]|p|a|tr|th|td)\b/.test(block));
+const leaked = rawBlocks.filter((block) => /<(style|div|table|script|article|h[1-6]|p|a|tr|th|td|form|label|select|option|button)\b/.test(block));
 if (leaked.length) {
   console.error(`FAIL docs recipes: ${leaked.length} code block(s) leak live tags`);
   process.exitCode = 1;
@@ -138,6 +140,62 @@ if (failedGuidance.length) {
   process.exitCode = 1;
 } else if (!process.exitCode) {
   console.log(`PASS docs recipes: ${guidanceChecks.length} guidance checks`);
+}
+
+const phoneChecklist = html.match(/<div\b[^>]*id="phone-record-checklist"[^>]*>([\s\S]*?)<\/div>/)?.[1];
+const phoneChecklistItems = phoneChecklist
+  ? [...phoneChecklist.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/g)].map(match => match[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim())
+  : [];
+const phoneChecklistText = phoneChecklistItems.join(' ');
+const phoneChecklistChecks = phoneChecklist
+  ? [
+      ['the checklist has six semantic list items', phoneChecklistItems.length === 6],
+      ['the checklist covers representation choice', /retained/.test(phoneChecklistText) && /matrix/.test(phoneChecklistText)],
+      ['the checklist scopes the recipe to selected transforms', /transform/.test(phoneChecklistText)],
+      ['the checklist requires data labels', /data-label/.test(phoneChecklistText)],
+      ['the checklist requires print restoration', /print/.test(phoneChecklistText) && /restoration/.test(phoneChecklistText)],
+      ['the checklist covers the scroll-panel cap', /\.mote-table-scroll/.test(phoneChecklistText)],
+      ['the checklist covers overflow and PDF verification', /overflow/.test(phoneChecklistText) && /PDF/.test(phoneChecklistText)]
+    ]
+  : [];
+if (!phoneChecklist) {
+  console.error('FAIL docs recipes: phone-record checklist is missing');
+  process.exitCode = 1;
+} else {
+  const failedPhoneChecklist = phoneChecklistChecks.filter(([, passed]) => !passed);
+  if (failedPhoneChecklist.length) {
+    for (const [label] of failedPhoneChecklist) console.error(`FAIL docs recipes: ${label}`);
+    process.exitCode = 1;
+  } else {
+    console.log(`PASS docs recipes: ${phoneChecklistChecks.length} phone-record checklist checks`);
+  }
+}
+
+const dialogBlock = blocks.find(block =>
+  block.includes('<form method="dialog">') &&
+  block.includes('required') &&
+  block.includes('formnovalidate')
+);
+const dialogChecks = dialogBlock
+  ? [
+      ['the dialog form uses method=dialog', /<form\b[^>]*method="dialog"/.test(dialogBlock)],
+      ['the dialog select is required', /<select\b[^>]*\brequired\b/.test(dialogBlock)],
+      ['the dialog select starts with an empty selected option', /<option\b[^>]*value=""[^>]*\bselected\b/.test(dialogBlock)],
+      ['the dialog cancel button skips validation', /<button\b[^>]*value="cancel"[^>]*\bformnovalidate\b/.test(dialogBlock)],
+      ['the dialog confirm button remains distinct', /<button\b[^>]*value="confirm"(?![^>]*formnovalidate)/.test(dialogBlock)]
+    ]
+  : [];
+if (!dialogBlock) {
+  console.error('FAIL docs recipes: validated dialog cancellation sample is missing');
+  process.exitCode = 1;
+} else {
+  const failedDialog = dialogChecks.filter(([, passed]) => !passed);
+  if (failedDialog.length) {
+    for (const [label] of failedDialog) console.error(`FAIL docs recipes: ${label}`);
+    process.exitCode = 1;
+  } else {
+    console.log(`PASS docs recipes: ${dialogChecks.length} dialog cancellation checks`);
+  }
 }
 
 const narrowHeaderBlock = blocks.find((block) => block.includes('mote-container mote-row') && block.includes('flex: 1 1 100%'));

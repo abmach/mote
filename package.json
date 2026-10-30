@@ -1,6 +1,6 @@
 {
   "name": "mote.css",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "bugs": {
     "url": "https://gitlab.com/abmach/mote/-/issues"
   },
@@ -8,7 +8,9 @@
   "style": "mote.css",
   "files": [
     "mote.css",
+    "mote.min.css",
     "mote.components.css",
+    "mote.components.min.css",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"

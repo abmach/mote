@@ -329,7 +329,18 @@
     the threshold in both the transform query and the cap-release query, keeping
     them identical. The print-restoration rules remain unchanged regardless of
     the selected breakpoint.</p>
-  <p>Four details of this recipe are load-bearing. The label column is one
+  <div id="phone-record-checklist" class="mote-note mote-info">
+    <p><strong>Phone-record checklist</strong></p>
+    <ul>
+      <li>Choose the representation first. A retained comparison matrix remains valid; do not transform it merely because the page also contains record-style tables.</li>
+      <li>Apply the recipe to <strong>every table the author chooses to transform</strong>, and apply each recipe completely.</li>
+      <li>Give every transformed <code>td</code> a non-empty <code>data-label</code>.</li>
+      <li>Keep the complete print restoration: table display, header row, sticky cells, caption, and generated labels.</li>
+      <li>When a transformed table stays inside <code>.mote-table-scroll</code>, release its height cap in the same narrow query.</li>
+      <li>Verify the chosen narrow width has no page-level horizontal overflow, then inspect the generated PDF.</li>
+    </ul>
+  </div>
+  <p>Several details of this recipe are load-bearing. The label column is one
     knob for the whole table — <code>--records-label</code>, 7rem by default —
     so every record's labels line up with each other; widen it once when a
     label is longer than the default. The label keeps
@@ -596,6 +607,23 @@
   <p>One dialog can serve many items: fill its fields from the trigger
     before opening it, then close it with <code>form method="dialog"</code>.
     The wiring is the page's own code — mote ships none.</p>
+  <p>A submit button inside <code>form method="dialog"</code> follows native
+    form validation. If the form contains a required control, a cancel button
+    would be blocked by that validation instead of closing the dialog. Add
+    <code>formnovalidate</code> to the cancel button so it always closes the
+    dialog:</p>
+  <pre><code>&#60;form method="dialog"&#62;
+  &#60;label&#62;Delivery method
+    &#60;select name="delivery" required&#62;
+      &#60;option value="" selected&#62;Choose a method&#60;/option&#62;
+      &#60;option value="standard"&#62;Standard&#60;/option&#62;
+    &#60;/select&#62;
+  &#60;/label&#62;
+  &#60;button value="cancel" formnovalidate&#62;Cancel&#60;/button&#62;
+  &#60;button value="confirm"&#62;Confirm&#60;/button&#62;
+&#60;/form&#62;</code></pre>
+  <p>This is native HTML behavior, not mote behavior. Keep validation on the
+    confirming action; only the cancel button skips it.</p>
   <pre><code>&lt;dialog id="lot-dialog"&gt;
   &lt;form method="dialog"&gt;
     &lt;h3&gt;Place a bid&lt;/h3&gt;

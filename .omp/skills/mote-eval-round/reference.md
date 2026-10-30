@@ -132,7 +132,7 @@ conversation history can produce a real page, not a demo.>
 
 ## Archetype pool
 
-Seventy used across rounds 5–11 — do not repeat. Track additions here.
+One hundred twenty used across rounds 5–16 — do not repeat. Track additions here.
 
 **Used (round 5):** pricing, blog post, login, 404, settings, dashboard,
 knowledge-base, landing, release-notes, contact.
@@ -171,6 +171,10 @@ residential solar installation assessment.
 availability board, library cultural-events programme, retailer returns center,
 yoga studio class schedule, cruise itinerary, board-game rules appendix,
 building-permit tracker, fashion lookbook.
+**Used (round 16):** hospital discharge summary, veterinary patient record,
+aircraft maintenance log, brewery batch record, archaeological fieldbook,
+fire-station duty roster, consumer warranty claim tracker, tool-lending
+catalogue, public-art installation guide, manufacturing deviation report.
 
 **Candidates (unexercised):** none currently listed.
 
