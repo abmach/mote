@@ -14,7 +14,7 @@
       /* These round-15 probes assert screen layout only. Keep them out of
          the focused paper artifact without repurposing mote-no-print. */
       #t-status-table, #t-status-reference, #t-badge-info,
-      #t-card-media {
+      #t-card-badge, #t-card-media {
         display: none;
       }
     }
@@ -132,6 +132,10 @@
     <div id="t-centered" style="text-align: center">
       <article id="t-card-align" class="mote-card">Aligned card</article>
     </div>
+    <article id="t-card-badge" class="mote-card" style="max-width: 24rem">
+      <span id="t-card-badge-direct" class="mote-badge">direct</span>
+      <div><span id="t-card-badge-nested" class="mote-badge">nested</span></div>
+    </article>
     <article id="t-card-media" class="mote-card" style="max-width: 24rem">
       <div id="t-card-media-box" class="mote-card-media">
         <svg id="t-card-svg" viewBox="0 0 160 100" role="img" aria-label="Cover probe">
@@ -453,6 +457,34 @@
     // ---- Cards, hero, media ----
     t('card normalizes alignment inside centered parent', () =>
       eq(gcs($('t-card-align')).textAlign, 'start', 'text-align'));
+    t('direct card badge keeps marker width and alignment', () => {
+      const badge = $('t-card-badge-direct');
+      const card = $('t-card-badge');
+      if (!badge || !card) return fail('card badge probe missing');
+      const badgeWidth = badge.getBoundingClientRect().width;
+      const cardStyle = gcs(card);
+      const cardContentWidth = card.clientWidth
+        - parseFloat(cardStyle.paddingLeft)
+        - parseFloat(cardStyle.paddingRight);
+      return badgeWidth < cardContentWidth / 2 &&
+        gcs(badge).alignSelf === 'flex-start'
+        ? ok()
+        : fail(`badge width ${badgeWidth}, align-self ${gcs(badge).alignSelf}, card content width ${cardContentWidth}`);
+    });
+    t('nested card badge stays inline-sized', () => {
+      const badge = $('t-card-badge-nested');
+      const card = $('t-card-badge');
+      if (!badge || !card) return fail('nested card badge probe missing');
+      const badgeWidth = badge.getBoundingClientRect().width;
+      const cardStyle = gcs(card);
+      const cardContentWidth = card.clientWidth
+        - parseFloat(cardStyle.paddingLeft)
+        - parseFloat(cardStyle.paddingRight);
+      return gcs(badge).display === 'inline-block' &&
+        badgeWidth < cardContentWidth / 2
+        ? ok()
+        : fail(`badge display ${gcs(badge).display}, width ${badgeWidth}, card content width ${cardContentWidth}`);
+    });
     t('direct card SVG is a block cover', () => {
       const s = gcs($('t-card-svg'));
       return eq(s.display, 'block', 'display') &&

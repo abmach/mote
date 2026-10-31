@@ -174,10 +174,11 @@
       <li>Use <code>.mote-no-print</code> for navigation, filters, and interactive-only controls.</li>
       <li>Use <code>.mote-print-only</code> for paper-only contact details and instructions.</li>
       <li>Check table completeness, orientation, and browser-dependent repeated headings.</li>
-      <li>Keep records, totals, and disclosure panels together where appropriate with <code>break-inside</code>.</li>
-      <li>Decide whether forms print; prefer a paper-only summary over split controls.</li>
+      <li>Keep table rows, metadata blocks, totals, figures, and disclosure panels together where appropriate with <code>break-inside</code>.</li>
+      <li>Keep a heading with the content it introduces; avoid headings stranded at the bottom of a page with <code>break-after: avoid</code>.</li>
+      <li>Decide whether forms print; prefer a paper-only summary over split controls, and keep the summary together.</li>
       <li>Inspect the generated PDF visually, not only print-media emulation or extracted text order.</li>
-      <li>Check the visible composition: dense multi-column summaries, orphaned headings or footers, and actions separated from their content.</li>
+      <li>Check the visible composition: dense multi-column summaries, orphaned headings or footers, split metadata blocks, and actions separated from their content.</li>
       <li>When records read better as a vertical list than a paper card grid, add a page-owned print rule for that flow.</li>
     </ul>
   </div>

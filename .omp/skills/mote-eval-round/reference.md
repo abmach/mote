@@ -132,7 +132,7 @@ conversation history can produce a real page, not a demo.>
 
 ## Archetype pool
 
-One hundred thirty used across rounds 5–17 — do not repeat. Track additions here.
+One hundred forty used across rounds 5–18 — do not repeat. Track additions here.
 
 **Used (round 5):** pricing, blog post, login, 404, settings, dashboard,
 knowledge-base, landing, release-notes, contact.
@@ -179,6 +179,11 @@ catalogue, public-art installation guide, manufacturing deviation report.
 language-exchange session, genealogy research log, food-safety inspection,
 ski-resort snow report, telecom outage status, community choir roster,
 bakery order board, wildlife rescue log.
+
+**Used (round 18):** county court docket, farm harvest board, citizen-science
+log, chamber composer catalogue, studio session rundown, bicycle workshop
+booking, literary festival programme, historic-building inspection report,
+course registration dashboard, food-truck dispatch board.
 
 **Candidates (unexercised):** none currently listed.
 

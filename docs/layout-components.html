@@ -81,11 +81,14 @@
     plain wrapper element is the intentional opt-out: the landmark
     selector cannot reach it, so it stays in ordinary flow. Keep a direct site
     header compact on phones because it remains in the viewport while the page
-    scrolls.</p>
+    scrolls. Dense headers may need navigation on its own row; use the
+    <a href="#header-navigation">narrow header recipe</a> below rather than
+    letting the navigation collapse beside the brand or primary action.</p>
   <p>Centering stays opt-in because full-bleed pages are equally valid. If your
     shell is wrapped in a framework-provided wrapper (some frameworks do),
-    <code>.mote-header</code> and <code>.mote-nav</code> bring the same
-    styles to headers the landmark selector cannot see.</p>
+    <code>.mote-header</code> opts into the same sticky translucent site-shell
+    treatment as <code>body > header</code>; <code>.mote-nav</code> brings
+    the navigation styling to headers the landmark selector cannot see.</p>
   <p>For a narrower reading column (long-form articles), set
     <code>--mote-container-max</code> — 42rem is a comfortable measure:</p>
   <pre><code>&lt;main class="mote-container" style="--mote-container-max: 42rem"&gt;
@@ -287,7 +290,8 @@
     shell; keep it compact on phones because it remains in the viewport while
     the page scrolls. The classes exist for one case landmarks cannot express
     — a shell wrapped in a <code>&lt;div&gt;</code>, where <code>body > header</code>
-    cannot reach it:</p>
+    cannot reach it. <code>.mote-header</code> opts into that same sticky
+    translucent site-shell treatment, not only its visual appearance:</p>
   <pre><code>&lt;header class="mote-header"&gt;
   &lt;nav class="mote-nav"&gt;
     &lt;ul&gt;
@@ -610,6 +614,11 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>Badges use <code>min(0.8em, 0.8rem)</code>: they shrink with smaller
     surrounding text but never enlarge with headings. Inside a table (0.95em)
     or a small metadata strip, the badge scales down with its context.</p>
+  <p>A badge directly inside <code>.mote-card</code> keeps its marker width.
+    Cards are column flex containers, but mote prevents their cross-axis
+    stretching from turning that direct badge into a full-width bar. A badge
+    nested inside an ordinary block is unaffected; a nested flex container
+    owns the alignment of its own children.</p>
 
   <h3 id="avatars">Avatars</h3>
   <p>Size via the <code>--mote-avatar</code> variable (default 2.5rem);

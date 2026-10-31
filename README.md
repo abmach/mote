@@ -152,7 +152,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Component | Hook |
 |---|---|
 | Document layout (landmark grid) | `.mote-doc` on `<body>` — `:has()` reads your `header`/`nav`/`main`/`aside`/`footer` |
-| Sticky site header / nav pills | `body > header` — semantic; `.mote-header`/`.mote-nav` only for shells wrapped in a `<div>`; goes static on paper |
+| Sticky site header / nav pills | `body > header` — semantic; `.mote-header` opts wrapped shells into the same sticky treatment, while `.mote-nav` styles navigation the landmark selector cannot see; goes static on paper |
 | Semantic buttons (gated) | `class="mote-success"` etc. on the button itself — themed sections never recolor actions |
 | Ghost buttons | `.mote-ghost` — transparent fill; status tints from the button's own class (gated like solids) |
 | Solid button on any element | `.mote-btn` — the full solid recipe for anchors, spans; status classes gated |
@@ -185,7 +185,7 @@ mote is class-optional by design — elements are styled from tags alone; these 
 | Breadcrumbs | `nav[aria-label="breadcrumb"]` — semantic, no class |
 | Card grids | `.mote-grid` — auto-fill columns from the container, no breakpoints |
 | Cards | `.mote-card` — normalizes content: alignment reads start even inside centered regions |
-| Badges | `.mote-badge` — gated: status from the badge's own class, never inherited; scales with surrounding text but never enlarges with headings |
+| Badges | `.mote-badge` — gated: status from the badge's own class, never inherited; scales with surrounding text but never enlarges with headings; direct children of `.mote-card` keep marker width |
 | Avatars | `.mote-avatar` |
 | Skeleton / spinner | `.mote-skeleton`, `.mote-spinner` |
 | Tooltips | `[popover].mote-tooltip` + `popovertarget` button |

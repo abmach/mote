@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.2] - 2026-10-31
+
+### Fixed
+
+- Kept a badge that is a direct child of `.mote-card` shaped like a marker instead of allowing the card's column-flex layout to stretch it across the card.
+
+### Changed (documentation — round-18 findings)
+
+- Made the narrow own-row header navigation recipe easier to discover from the header layout guidance.
+- Clarified that `.mote-header` opts into the sticky translucent site-shell treatment, not only the header's appearance.
+- Warned that mote's grouped definition-list wrappers use `display: contents` and must not be replaced with another display value without recreating the intended pair alignment.
+- Made the phone-record contract's all-or-nothing copy instruction and the `--records-label` widening option more explicit.
+- Expanded the paper checklist with page-break guidance for metadata blocks, forms, table rows, headings, and footers.
+
 ## [0.13.1] - 2026-10-30
 
 ### Fixed (documentation — round-17 findings)
@@ -1005,7 +1019,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.1...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.2...HEAD
+[0.13.2]: https://gitlab.com/abmach/mote/compare/v0.13.1...v0.13.2
 [0.13.1]: https://gitlab.com/abmach/mote/compare/v0.13.0...v0.13.1
 [0.13.0]: https://gitlab.com/abmach/mote/compare/v0.12.1...v0.13.0
 [0.12.1]: https://gitlab.com/abmach/mote/compare/v0.12.0...v0.12.1

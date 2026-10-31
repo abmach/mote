@@ -1,6 +1,6 @@
 /*!
  * mote.components.css — opt-in components for mote.css.
- * v0.13.1 · MIT
+ * v0.13.2 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * Requires mote.css loaded first (provides the --mote-* tokens).
@@ -73,6 +73,13 @@
   line-height: 1.4;
   background: var(--mote-accent-soft);
   color: var(--mote-accent-deep);
+}
+
+/* Cards are column flex containers, whose default cross-axis alignment
+   stretches direct children. Keep a direct badge shaped like its marker;
+   badges nested in ordinary block content are unaffected. */
+.mote-card > .mote-badge {
+  align-self: flex-start;
 }
 
 .mote-badge:where(.mote-success, .mote-warning, .mote-error, .mote-info, .mote-muted) {

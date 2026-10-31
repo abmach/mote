@@ -121,6 +121,11 @@
     description. The grouping div is structural, not another visual row: use
     one term and one description per wrapper. Both structures then keep terms
     in one column and descriptions in the other.</p>
+  <p><strong>Keep the wrapper's <code>display: contents</code> behavior.</strong>
+    mote uses it so each grouped pair occupies one row without adding another
+    grid track. Do not replace the wrapper's display with a grid, flex, or
+    block value unless the page rule also recreates the intended term/value
+    pairing and containment.</p>
   <dl>
     <div><dt>Format</dt><dd>CSS</dd></div>
     <div><dt>Dependencies</dt><dd>None</dd></div>
@@ -218,7 +223,9 @@
     verify the recipe with the browsers and assistive technology you support.
     Copy the complete recipe as one contract: it groups the narrow-screen
     transform with visible labels and the complete print restoration into two
-    required behavior parts, plus shared label-column setup. If the transformed
+    required behavior parts, plus shared label-column setup. Copy the whole
+    block and adapt the breakpoint rather than cherry-picking individual
+    rules; the transform and its print guard must travel together. If the transformed
     table also stays inside a scroll panel, add the companion cap-release rule
     shown after the checklist. A retained comparison matrix uses neither the
     transform nor its print guard:</p>
@@ -350,7 +357,9 @@
   <p>Several details of this recipe are load-bearing. The label column is one
     knob for the whole table — <code>--records-label</code>, 7rem by default —
     so every record's labels line up with each other; widen it once when a
-    label is longer than the default. The label keeps
+    label is longer than the default. For example, a table whose longest label
+    is “Recommendation” can use one page-owned override:
+    <code>.records { --records-label: 9rem; }</code>. The label keeps
     <code>text-align: start</code>, so a right-aligned numeric column does
     not drag the label to the far edge away from its value; numeric values
     also start-align in the record branch, where a label/value grid replaces
