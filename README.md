@@ -45,7 +45,7 @@ Source on [GitLab](https://gitlab.com/abmach/mote) · mirrored on [GitHub](https
 ```
 
 `@0` tracks the latest 0.x release, so these snippets never go stale. Pin an exact
-version (`mote.css@0.13.0`) for reproducible production builds.
+version (`mote.css@0.13.1`) for reproducible production builds.
 
 **npm**:
 

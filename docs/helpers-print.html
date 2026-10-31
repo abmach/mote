@@ -133,6 +133,11 @@
       <tr><td><code>.mote-success</code> · <code>.mote-warning</code> · <code>.mote-error</code> · <code>.mote-info</code> · <code>.mote-muted</code></td><td>Status tokens for notes, badges, toasts, blockquotes, progress, spinners and summary markers</td></tr>
     </tbody>
   </table>
+  <p>Table rows are a special case: a status class on a table row
+    sets tokens, but the row does not consume them.
+    The page paints its direct cells with the page-owned recipe documented in
+    <a href="elements.html#tables">Tables</a>; badges and buttons in that row
+    stay independently gated.</p>
   <p>Card-action alignment and status-row painting are page-owned recipes:
     see <a href="layout-components.html#cards">Cards</a> and <a href="elements.html#tables">Tables</a>.</p>
   <h3 id="notes">Notes and callouts</h3>
@@ -171,9 +176,16 @@
       <li>Check table completeness, orientation, and browser-dependent repeated headings.</li>
       <li>Keep records, totals, and disclosure panels together where appropriate with <code>break-inside</code>.</li>
       <li>Decide whether forms print; prefer a paper-only summary over split controls.</li>
-      <li>Inspect the generated PDF, not only print-media emulation.</li>
+      <li>Inspect the generated PDF visually, not only print-media emulation or extracted text order.</li>
+      <li>Check the visible composition: dense multi-column summaries, orphaned headings or footers, and actions separated from their content.</li>
+      <li>When records read better as a vertical list than a paper card grid, add a page-owned print rule for that flow.</li>
     </ul>
   </div>
+  <p>mote separates screen and paper content; it does not choose a universal
+    paper grid. Judge missing content, awkward visual flow and text-extraction
+    order separately. An extracted PDF may interleave adjacent columns or cards
+    even when the visible pages are correct, so extraction order alone does not
+    prove a visual defect.</p>
   <h3 id="screen-only-and-paper-only-content">Screen-only and paper-only content</h3>
   <p><code>.mote-no-print</code> removes screen chrome from paper.
     <code>.mote-print-only</code> stays hidden on screen and appears on paper:</p>

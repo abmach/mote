@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.1] - 2026-10-30
+
+### Fixed (documentation — round-17 findings)
+
+- Grouped the complete phone-record recipe into transform/visible-label and print-restoration behavior, with shared label-column setup, and made the all-or-nothing checklist explicit.
+- Clarified that a direct body-level header receives the sticky site-shell treatment, and made the intentional wrapper opt-out prominent.
+- Strengthened status-row discoverability with reciprocal links between the status contract and the page-owned table recipe.
+- Expanded paper guidance to distinguish visible PDF composition from text-extraction order, and documented the no-JavaScript and progressively enhanced form-feedback paths.
+- Clarified that progress bars keep their intrinsic width unless the page sets an explicit width.
+
+### Tests
+
+- Removed prose-bound documentation assertions while retaining behavioral recipe checks, structural outline checks, and the complete phone-record checklist coverage.
+
 ## [0.13.0] - 2026-10-30
 
 ### Changed (distribution)
@@ -991,7 +1005,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.0...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.1...HEAD
+[0.13.1]: https://gitlab.com/abmach/mote/compare/v0.13.0...v0.13.1
 [0.13.0]: https://gitlab.com/abmach/mote/compare/v0.12.1...v0.13.0
 [0.12.1]: https://gitlab.com/abmach/mote/compare/v0.12.0...v0.12.1
 [0.12.0]: https://gitlab.com/abmach/mote/compare/v0.11.0...v0.12.0

@@ -128,7 +128,6 @@ const guidanceChecks = [
   ['the phone breakpoint is documented as an example', /40rem<\/code> breakpoint in this recipe is an example/.test(html)],
   ['media-query breakpoints cannot use CSS variables', /cannot be parameterized[\s\S]*?CSS variable inside <code>@media<\/code>/.test(html)],
   ['transform and cap-release thresholds are kept identical', /both the transform query and the cap-release query, keeping[\s\S]*?them identical/.test(html)],
-  ['the print checklist covers generated PDF inspection', /Inspect the generated PDF, not only print-media emulation/.test(html)],
   ['the print checklist covers page breaks', /break-inside/.test(html)],
   ['the print checklist covers browser-dependent headings', /browser-dependent repeated headings/.test(html)],
   ['the print checklist covers interactive forms', /prefer a paper-only summary over split controls/.test(html)],

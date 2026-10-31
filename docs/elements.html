@@ -212,10 +212,16 @@
     missing <code>data-label</code> produces a blank label beside the value;
     this applies to every transformed <code><td></code>, not only the
     first column. Then change the table's visual layout below the chosen
-    breakpoint. The markup remains one table rather than duplicated content.
+    breakpoint; the markup remains one table rather than duplicated content.
     Current Chromium retains the table, row, header, and cell roles in this
     layout; because CSS display changes can affect semantics in other engines,
-    verify the recipe with the browsers and assistive technology you support:</p>
+    verify the recipe with the browsers and assistive technology you support.
+    Copy the complete recipe as one contract: it groups the narrow-screen
+    transform with visible labels and the complete print restoration into two
+    required behavior parts, plus shared label-column setup. If the transformed
+    table also stays inside a scroll panel, add the companion cap-release rule
+    shown after the checklist. A retained comparison matrix uses neither the
+    transform nor its print guard:</p>
   <pre><code>&lt;table class="records"&gt;
   &lt;caption&gt;Autumn fixtures&lt;/caption&gt;
   &lt;thead&gt;
@@ -232,10 +238,12 @@
 &lt;/table&gt;
 
 &lt;style&gt;
-/* One label column for every record: widen it once when a label is longer. */
+/* Shared setup: one label column for every record. */
 .records {
   --records-label: 7rem;
 }
+
+/* Required behavior 1 of 2: transform the table and generate visible labels. */
 @media (width &lt; 40rem) {
   .records,
   .records tbody,
@@ -284,8 +292,7 @@
   }
 }
 
-/* Paper keeps the table a table: undo the phone layout, the hidden
-   header and the block caption before anything prints. */
+/* Required behavior 2 of 2: restore the complete table on paper. */
 @media print {
   .records,
   .records tbody,
@@ -377,7 +384,9 @@
 </code></pre>
   <p>Status classes remain token carriers: a status on a table row sets the
     row's tokens but paints nothing by itself. The page owns the visual row
-    policy. Choose a class for your markup — here, <code>.status-row</code> —
+    policy. The full inheritance and gating contract is documented under
+    <a href="helpers-print.html#status-classes">Helpers — Status classes</a>.
+    Choose a class for your markup — here, <code>.status-row</code> —
     and add it to the row with the status class:</p>
   <pre><code>&lt;tr class="status-row mote-warning"&gt;
   &lt;th scope="row"&gt;Order 1048&lt;/th&gt;
@@ -575,9 +584,9 @@
   <p>Meters keep their native zone coloring (green/yellow/red from
     <code>low</code>/<code>high</code>/<code>optimum</code>) in some engines; the
     status class tints the gauge wherever the engine honors it.</p>
-  <p>A native <code>&#60;progress&#62;</code> keeps its intrinsic width — set
-    <code>progress { width: 100% }</code> in your page styles when you want a
-    full-width bar.</p>
+  <p>A native <code>&#60;progress&#62;</code> keeps its intrinsic width. Set an
+    explicit width in your page styles when the bar should fill its table cell
+    or other container — for example, <code>progress { width: 100% }</code>:</p>
 
   <h3 id="dialogs">Dialogs</h3>
   <p>Native <code>&lt;dialog&gt;</code> gets a soft surface, a dimmed blurred backdrop, and —

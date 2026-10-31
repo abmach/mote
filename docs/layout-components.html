@@ -74,8 +74,16 @@
   &lt;/main&gt;
 &lt;/body&gt;
 </code></pre>
+  <p><strong>Scope matters:</strong> <code>body > header</code> is the
+    site-shell selector. A header that is a direct child of <code>body</code>
+    receives the sticky translucent treatment even when it also has
+    <code>.mote-container</code> or other classes. Wrapping that header in a
+    plain wrapper element is the intentional opt-out: the landmark
+    selector cannot reach it, so it stays in ordinary flow. Keep a direct site
+    header compact on phones because it remains in the viewport while the page
+    scrolls.</p>
   <p>Centering stays opt-in because full-bleed pages are equally valid. If your
-    shell is wrapped in a <code>&lt;div&gt;</code> (some frameworks do),
+    shell is wrapped in a framework-provided wrapper (some frameworks do),
     <code>.mote-header</code> and <code>.mote-nav</code> bring the same
     styles to headers the landmark selector cannot see.</p>
   <p>For a narrower reading column (long-form articles), set
@@ -275,9 +283,11 @@
 
   <h3 id="header-navigation">Header and navigation</h3>
   <p>Direct children of <code>&lt;body&gt;</code> get these styles from landmarks
-    alone. The classes exist for one case landmarks cannot express — a shell
-    wrapped in a <code>&lt;div&gt;</code>, where <code>body &gt; header</code> cannot
-    reach it:</p>
+    alone. A direct <code>body > header</code> is the sticky translucent site
+    shell; keep it compact on phones because it remains in the viewport while
+    the page scrolls. The classes exist for one case landmarks cannot express
+    — a shell wrapped in a <code>&lt;div&gt;</code>, where <code>body > header</code>
+    cannot reach it:</p>
   <pre><code>&lt;header class="mote-header"&gt;
   &lt;nav class="mote-nav"&gt;
     &lt;ul&gt;
@@ -676,6 +686,12 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   <p>Use <code>popover="manual"</code> for toasts — auto popovers light-dismiss on any
     body click, which surprises notification text — and show one at a time, since
     multiple toasts pin to the same corner:</p>
+  <p>A conventional form submission does not need a toast. Without JavaScript,
+    let the form navigate normally and render <code>role="status"</code> feedback
+    on the result page. With progressive enhancement, show the documented toast
+    after a successful submission. A native <code>popovertarget</code> button
+    fits an action-triggered popover, but it is not a general substitute for
+    reporting a submitted form:</p>
   <pre><code>&lt;div popover="manual" class="mote-toast" id="toast"&gt;
   Saved. Everything is fine.
 &lt;/div&gt;
