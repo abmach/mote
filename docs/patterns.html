@@ -386,12 +386,16 @@
   <h3 id="result-rows">Result rows</h3>
   <p>Poll results, skill bars, quota meters — label, bar, figure rows that
     align across different label lengths. A small grid does what a flex row
-    can't:</p>
+    can't. Native <code>&#60;progress&#62;</code> keeps its intrinsic width, so
+    this recipe sets the bars to <code>width: 100%</code> of the meter column:</p>
   <pre><code>&lt;style&gt;
   .results {
     display: grid;
     gap: 0.5rem 1rem;
     grid-template-columns: minmax(10rem, 1fr) minmax(8rem, 2fr) auto;
+  }
+  .results progress {
+    width: 100%;
   }
 &lt;/style&gt;
 

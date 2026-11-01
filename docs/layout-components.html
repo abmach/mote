@@ -82,8 +82,8 @@
     selector cannot reach it, so it stays in ordinary flow. Keep a direct site
     header compact on phones because it remains in the viewport while the page
     scrolls. Dense headers may need navigation on its own row; use the
-    <a href="#header-navigation">narrow header recipe</a> below rather than
-    letting the navigation collapse beside the brand or primary action.</p>
+    <a href="#header-navigation">narrow recipe for giving navigation its own row</a>
+    rather than letting the navigation collapse beside the brand or primary action.</p>
   <p>Centering stays opt-in because full-bleed pages are equally valid. If your
     shell is wrapped in a framework-provided wrapper (some frameworks do),
     <code>.mote-header</code> opts into the same sticky translucent site-shell
@@ -326,9 +326,11 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 </code></pre>
   <p>On narrow screens, the brand and pushed controls can leave the scrolling nav
     with very little room. For a long navigation, give the navigation its own
-    row and keep primary actions outside the scrolling region. The one-row
-    fallback suits short navigation; its cut pill is the overflow signal when
-    JavaScript is not used.</p>
+    row and keep primary actions outside the scrolling region. When JavaScript
+    is allowed, pair this recipe with the <code>data-nav</code> snippet above:
+    the own-row layout gives the navigation space, while the snippet keeps the
+    scroll-edge fades current. The one-row fallback suits short navigation;
+    its cut pill is the overflow signal when JavaScript is not used.</p>
   <p><strong>This rule is page CSS — copy it into your own stylesheet.</strong>
     mote does not ship it. It gives the navigation its own line in the header;
     the default bar already contains a long nav, by scrolling its pill row

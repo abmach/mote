@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.3] - 2026-11-01
+
+### Changed (documentation — round-19 findings)
+
+- Surfaced the existing narrow-header recipe earlier and clarified that it works together with the documented `data-nav` overflow snippet.
+- Made the result-row recipe set progress bars to the full width of their meter column.
+- Documented the `minmax(0, 1fr)` and `min-width: 0` guard for scrollable tables inside grid or flex layouts.
+- Added the optional per-cell status-painting pattern for comparison rows whose options carry different statuses.
+
+### Evaluation
+
+- Nineteenth round: ten independent builders created ten new page types against v0.13.2. All ten would use mote again, and no confirmed library failures were reported. The four documentation improvements in this release address the recipe and discoverability friction surfaced by the round.
+
 ## [0.13.2] - 2026-10-31
 
 ### Fixed
@@ -1019,7 +1032,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.2...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.3...HEAD
+[0.13.3]: https://gitlab.com/abmach/mote/compare/v0.13.2...v0.13.3
 [0.13.2]: https://gitlab.com/abmach/mote/compare/v0.13.1...v0.13.2
 [0.13.1]: https://gitlab.com/abmach/mote/compare/v0.13.0...v0.13.1
 [0.13.0]: https://gitlab.com/abmach/mote/compare/v0.12.1...v0.13.0

@@ -178,7 +178,26 @@
     wrapper and use its scrollbar or arrow keys. On paper, the wrapper releases
     the screen height cap and clipping so the complete table is present in the
     output; a very wide table may still exceed narrow paper, and mote does not
-    shrink an arbitrary matrix. Inside the wrapper, cell borders
+    shrink an arbitrary matrix. When the wrapper sits inside a grid or flex
+    layout, keep the track's minimum at zero so the table's intrinsic width
+    cannot widen the page. Use <code>minmax(0, 1fr)</code> for a grid track
+    and <code>min-width: 0</code> on the wrapper itself:</p>
+  <pre><code>&#60;div class="data-layout"&#62;
+  &#60;div class="mote-table-scroll"&#62;
+    &#60;table&#62;…&#60;/table&#62;
+  &#60;/div&#62;
+&#60;/div&#62;
+
+&#60;style&#62;
+.data-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.data-layout > .mote-table-scroll {
+  min-width: 0;
+}
+&#60;/style&#62;</code></pre>
+  <p>Inside the wrapper, cell borders
     are drawn per side — Chromium paints collapsed borders at the flow position,
     not with the sticky cell:</p>
   <pre><code>&lt;div class="mote-table-scroll"&gt;
@@ -413,6 +432,24 @@
     as the weekend shading below — remains intact:</p>
   <p>Only direct cells are painted. Badges and buttons remain gated and keep
     their own status instead of inheriting the row's tint.</p>
+  <p><strong>Optional per-cell pattern.</strong> A comparison row may need a
+    different status for each option. Put the status class on each data cell
+    and paint those cells with a second page rule; the existing row recipe
+    remains the right choice when one status describes the whole row:</p>
+  <pre><code>&#60;tr class="status-cells"&#62;
+  &#60;th scope="row"&#62;Policy&#60;/th&#62;
+  &#60;td class="mote-success"&#62;Approved&#60;/td&#62;
+  &#60;td class="mote-warning"&#62;Expires soon&#60;/td&#62;
+  &#60;td class="mote-error"&#62;Expired&#60;/td&#62;
+&#60;/tr&#62;
+
+&#60;style&#62;
+tr.status-cells > td:is(.mote-success, .mote-warning, .mote-error, .mote-info) {
+  background-color: var(--mote-status-soft);
+}
+&#60;/style&#62;</code></pre>
+  <p>The status classes still carry only tokens; the page rule consumes them.
+    Badges and buttons inside these cells remain independently gated.</p>
   <p>Captions center by default; a quiet left-aligned caption is one page
     rule: <code>caption { text-align: start }</code>.</p>
   <table>
