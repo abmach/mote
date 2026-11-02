@@ -243,7 +243,9 @@
     content tracks that absorb wide content (<code>minmax(0, 1fr)</code>). A wide
     table scrolls inside <code>main</code>, never the page; when a table needs a
     sticky header or a height cap, wrap it in <code>.mote-table-scroll</code> so
-    that component owns the horizontal scroll instead. The body shell already has
+    that component owns the horizontal scroll instead. Its default 60vh height
+    cap can leave later rows below the visible area of a long table; scroll the
+    named region itself to reach them. The body shell already has
     page gutters — avoid adding another <code>.mote-container</code> inside
     <code>main</code> unless that narrower measure is intentional. The nav rail is a
     quiet vertical list by default. When a sticky site header (<code>body &#62; header</code>)
@@ -291,7 +293,11 @@
     the page scrolls. The classes exist for one case landmarks cannot express
     — a shell wrapped in a <code>&lt;div&gt;</code>, where <code>body > header</code>
     cannot reach it. <code>.mote-header</code> opts into that same sticky
-    translucent site-shell treatment, not only its visual appearance:</p>
+    translucent site-shell treatment, not only its visual appearance. In a
+    direct <code>body > header</code>, the nav landmark is styled automatically;
+    adding <code>.mote-nav</code> there is optional and redundant. In a wrapped
+    <code>.mote-header</code>, use <code>.mote-nav</code> to bring the
+    navigation styling with it:</p>
   <pre><code>&lt;header class="mote-header"&gt;
   &lt;nav class="mote-nav"&gt;
     &lt;ul&gt;
@@ -365,9 +371,13 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
 }
 &lt;/style&gt;</code></pre>
   <p>The brand and primary action remain on the first row; the navigation gets
-    the second row and keeps its own horizontal scroll behavior. If every label
-    must be visible without scrolling, shorten the navigation or move secondary
-    links into the page body.</p>
+    the second row and keeps its own horizontal scroll behavior. This assumes
+    the brand and primary action fit together at the narrow width. If they do
+    not, the action may wrap below the brand and make the header three rows
+    tall: shorten the brand or action copy, or move the primary action into
+    the page body. If every navigation label must be
+    visible without scrolling, shorten the navigation or move secondary links
+    into the page body.</p>
   <pre><code>&lt;nav aria-label="breadcrumb"&gt;
   &lt;ol&gt;
     &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;

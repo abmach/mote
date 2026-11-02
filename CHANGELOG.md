@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.4] - 2026-11-02
+
+### Changed (documentation — round-20 findings)
+
+- Added a narrow-screen adaptation to the result-row recipe so its label, meter, and figure columns can retain their relationship on phones.
+- Clarified that the narrow-header recipe requires the brand and primary action to fit together on the first row.
+- Clarified when `.mote-nav` is redundant in a direct site header and necessary in a wrapped `.mote-header`.
+- Explained the different paint targets of the current-row tint and the page-owned status-row recipe.
+- Made the scroll-table height cap's off-screen rows more discoverable.
+- Documented the tradeoffs between sideways scrolling, a sticky row-label column, and the existing phone-record transform for narrow matrices.
+
+### Evaluation
+
+- Twentieth round: ten independent builders created ten new page types against v0.13.3. All ten would use mote again, and no confirmed library failures were reported. The six documentation improvements in this release address the recipe and discoverability friction surfaced by the round.
+
 ## [0.13.3] - 2026-11-01
 
 ### Changed (documentation — round-19 findings)
@@ -1032,7 +1047,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.3...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.4...HEAD
+[0.13.4]: https://gitlab.com/abmach/mote/compare/v0.13.3...v0.13.4
 [0.13.3]: https://gitlab.com/abmach/mote/compare/v0.13.2...v0.13.3
 [0.13.2]: https://gitlab.com/abmach/mote/compare/v0.13.1...v0.13.2
 [0.13.1]: https://gitlab.com/abmach/mote/compare/v0.13.0...v0.13.1

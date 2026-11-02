@@ -387,7 +387,10 @@
   <p>Poll results, skill bars, quota meters — label, bar, figure rows that
     align across different label lengths. A small grid does what a flex row
     can't. Native <code>&#60;progress&#62;</code> keeps its intrinsic width, so
-    this recipe sets the bars to <code>width: 100%</code> of the meter column:</p>
+    this recipe sets the bars to <code>width: 100%</code> of the meter column.
+    The desktop tracks reserve enough room for readable labels and meters. On a
+    narrow screen, lower those minimums to zero while keeping the same
+    label–meter–figure relationship:</p>
   <pre><code>&lt;style&gt;
   .results {
     display: grid;
@@ -396,6 +399,12 @@
   }
   .results progress {
     width: 100%;
+    min-width: 0;
+  }
+  @media (width &lt; 40rem) {
+    .results {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+    }
   }
 &lt;/style&gt;
 

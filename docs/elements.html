@@ -174,8 +174,10 @@
     regions: the page may scroll vertically, the wrapper owns horizontal overflow,
     and the wrapper also scrolls vertically when its content exceeds the cap. A
     tall table can therefore scroll inside the wrapper before the page reaches
-    it. The content is not cropped; move the pointer or keyboard focus over the
-    wrapper and use its scrollbar or arrow keys. On paper, the wrapper releases
+    it. Later rows may begin below the wrapper's visible area, so a long table
+    can look truncated until the reader scrolls the panel itself. The
+    content is not cropped; move the pointer or keyboard focus over the wrapper
+    and use its scrollbar or arrow keys. On paper, the wrapper releases
     the screen height cap and clipping so the complete table is present in the
     output; a very wide table may still exceed narrow paper, and mote does not
     shrink an arbitrary matrix. When the wrapper sits inside a grid or flex
@@ -226,9 +228,15 @@
   &lt;table&gt;…&lt;/table&gt;
 &lt;/div&gt;
 </code></pre>
-  <p>The wrapper keeps the page still while the table moves. On paper, mote's
-    components file removes the wrapper's artificial clipping and height cap; the
-    complete table is present, but a wide matrix may still exceed the paper width.</p>
+  <p>The wrapper keeps the page still while the table moves. Sideways scrolling
+    is the default narrow-screen treatment for a retained matrix. A sticky
+    row-label column is an optional page-owned enhancement, but use it only
+    when the label column leaves enough room for the comparison values on the
+    target phone; a wide label column can consume most of the viewport and
+    make the remaining values harder to read. For independent records, use the
+    record-transform recipe below instead. On paper, mote's components file
+    removes the wrapper's artificial clipping and height cap; the complete
+    table is present, but a wide matrix may still exceed the paper width.</p>
   <p>When one table must become readable records on a phone, transform that
     same table instead of adding a second, hidden card copy. Every data cell
     in the transformed branch must have a non-empty <code>data-label</code>. The
@@ -408,8 +416,12 @@
   <p>Mark the current row with <code>aria-current</code> — the same vocabulary
     as nav pills. The tint reads over zebra (the regression fixture asserts
     it on both parities):</p>
-  <pre><code>&lt;tr aria-current="true"&gt;…&lt;/tr&gt;
-</code></pre>
+  <pre><code>&lt;tr aria-current="true"&gt;…&lt;/tr&gt;</code></pre>
+  <p>The current-row tint is applied to the <code>tr</code> by mote. The
+    status-row recipe below is page-owned and paints the row's direct cells
+    instead. Both render correctly, but a computed-style inspection will see a
+    tinted row with transparent direct cells for <code>aria-current</code>, and
+    directly tinted cells for a status row.</p>
   <p>Status classes remain token carriers: a status on a table row sets the
     row's tokens but paints nothing by itself. The page owns the visual row
     policy. The full inheritance and gating contract is documented under
