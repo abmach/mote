@@ -370,12 +370,13 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
   }
 }
 &lt;/style&gt;</code></pre>
-  <p>The brand and primary action remain on the first row; the navigation gets
-    the second row and keeps its own horizontal scroll behavior. This assumes
-    the brand and primary action fit together at the narrow width. If they do
-    not, the action may wrap below the brand and make the header three rows
-    tall: shorten the brand or action copy, or move the primary action into
-    the page body. If every navigation label must be
+  <p>The brand and primary action share the first flex row; the navigation gets
+    the second row and keeps its own horizontal scroll behavior. Their boxes
+    may have different heights, so sharing the row does not imply matching top
+    edges. This assumes the brand and primary action fit together at the narrow
+    width. If they do not, the action may wrap below the brand and make the
+    header three rows tall: shorten the brand or action copy, or move the
+    primary action into the page body. If every navigation label must be
     visible without scrolling, shorten the navigation or move secondary links
     into the page body.</p>
   <pre><code>&lt;nav aria-label="breadcrumb"&gt;

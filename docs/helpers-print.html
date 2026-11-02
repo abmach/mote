@@ -167,6 +167,15 @@
   <p>mote prints on a light paper palette in either theme. Use the print helpers
     when the screen and the page need different content, then add page CSS for
     the document-specific parts such as orientation and page breaks.</p>
+  <p>A page that offers printing can use a native button and the browser's
+    print dialog. The button remains keyboard-operable and exposes the action's
+    name to assistive technology; <code>window.print()</code> does not require
+    a mote-specific JavaScript helper:</p>
+  <pre><code>&lt;button type="button" onclick="window.print()"&gt;Print this policy&lt;/button&gt;</code></pre>
+  <p>Add <code>.mote-no-print</code> to the button when the screen-only action
+    should disappear from paper. This action only starts the browser's print
+    flow; the disclosure workflow below is separate and is needed when closed
+    content must appear in the printed output.</p>
   <div class="mote-note mote-info">
     <p><strong>Paper checklist</strong></p>
     <ul>

@@ -184,6 +184,21 @@ bakery order board, wildlife rescue log.
 log, chamber composer catalogue, studio session rundown, bicycle workshop
 booking, literary festival programme, historic-building inspection report,
 course registration dashboard, food-truck dispatch board.
+**Used (round 19):** insurance renewal comparison sheet, residential-care home
+visitor guide, railway lost-property office notice board, open-source dependency
+upgrade advisory, live school-bus route tracker, conference exhibitor floor
+map, currency exchange rate board, funeral-home obituary notice, amateur-radio
+contest submission log, municipal air-quality advisory.
+**Used (round 20):** seed-bank accession catalogue, observatory observing-run
+log, agricultural soil nutrient test report, museum collections portal landing
+page, commercial roof inspection handoff, museum object conservation treatment
+record, community orchestra audition-information page, municipal drinking-water
+sampling bulletin, open-source project maintainer handover document, coastal
+volunteer monitoring-station bulletin.
+**Used (round 21):** laboratory equipment booking, restaurant supplier order,
+preschool enrollment waitlist, nonprofit annual report, newspaper corrections
+policy, apprenticeship vacancy board, publishing proof approval, dairy herd
+breeding record, hot-air balloon flight brief, escape-room puzzle briefing.
 
 **Candidates (unexercised):** none currently listed.
 

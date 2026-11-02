@@ -229,12 +229,17 @@
 &lt;/div&gt;
 </code></pre>
   <p>The wrapper keeps the page still while the table moves. Sideways scrolling
-    is the default narrow-screen treatment for a retained matrix. A sticky
-    row-label column is an optional page-owned enhancement, but use it only
-    when the label column leaves enough room for the comparison values on the
-    target phone; a wide label column can consume most of the viewport and
-    make the remaining values harder to read. For independent records, use the
-    record-transform recipe below instead. On paper, mote's components file
+    is the default narrow-screen treatment for a retained matrix. The browser's
+    scrollbar is the only built-in cue, and it may be hidden on touch devices,
+    so add short page copy beside the table when off-screen columns matter —
+    for example, “Scroll sideways for dates and pay.” A sticky row-label column
+    is an optional page-owned enhancement that keeps each row's identity
+    visible while comparing values. Use it only when the label column leaves
+    enough room for the comparison values on the target phone; a wide label
+    column can consume most of the viewport and make the remaining values
+    harder to read. If neither the scroll cue nor the sticky label leaves a
+    usable comparison area, reconsider the matrix or use the record-transform
+    recipe below for independent records. On paper, mote's components file
     removes the wrapper's artificial clipping and height cap; the complete
     table is present, but a wide matrix may still exceed the paper width.</p>
   <p>When one table must become readable records on a phone, transform that

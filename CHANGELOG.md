@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.5] - 2026-11-02
+
+### Changed (documentation — round-21 findings)
+
+- Extended the result-row recipe to native `<meter>` elements and clarified that narrow grid cells should hold concise labels, with supporting copy outside the `.results` grid.
+- Strengthened narrow comparison-table guidance with an explicit sideways-scroll cue and a clearer sticky-row-label tradeoff.
+- Clarified that the narrow-header recipe keeps the brand and primary action on the same flex row without implying matching top edges.
+- Documented a native, keyboard-operable print button and distinguished starting the print flow from the disclosure-print workflow.
+
+### Evaluation
+
+- Twenty-first round: ten independent builders created ten new page types against v0.13.4. All ten would use mote again, and no confirmed library failures were reported. The four documentation improvements in this section address the recipe and guidance friction surfaced by the round.
+
 ## [0.13.4] - 2026-11-02
 
 ### Changed (documentation — round-20 findings)
@@ -1047,7 +1060,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.4...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.5...HEAD
+[0.13.5]: https://gitlab.com/abmach/mote/compare/v0.13.4...v0.13.5
 [0.13.4]: https://gitlab.com/abmach/mote/compare/v0.13.3...v0.13.4
 [0.13.3]: https://gitlab.com/abmach/mote/compare/v0.13.2...v0.13.3
 [0.13.2]: https://gitlab.com/abmach/mote/compare/v0.13.1...v0.13.2
