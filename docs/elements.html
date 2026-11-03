@@ -237,7 +237,11 @@
     visible while comparing values. Use it only when the label column leaves
     enough room for the comparison values on the target phone; a wide label
     column can consume most of the viewport and make the remaining values
-    harder to read. If neither the scroll cue nor the sticky label leaves a
+    harder to read. Measure the pinned column against the value columns at
+    the narrowest supported width: it must leave enough visible width to
+    compare the values. Prefer short identifiers or omit the sticky column
+    when that cannot be met. Orientation or a larger text setting can make
+    the tradeoff worse. If neither the scroll cue nor the sticky label leaves a
     usable comparison area, reconsider the matrix or use the record-transform
     recipe below for independent records. On paper, mote's components file
     removes the wrapper's artificial clipping and height cap; the complete

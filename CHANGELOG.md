@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.6] - 2026-11-03
+
+### Changed (documentation — round-22 findings)
+
+- Made the narrow-header recipe easier to discover, clarified that the brand and primary action must fit together at the narrowest supported width, and documented the practical alternatives when they do not.
+- Strengthened narrow comparison-table guidance for sticky row labels: measure the pinned column against the comparison values at the narrowest supported width and prefer short identifiers when it cannot fit.
+- Added orientation and intended page count to the paper checklist, and clarified the print behavior and cascade of `.mote-no-print`.
+- Clarified that `.mote-doc` is intended for document-style side-rail layouts rather than dashboards, operational boards, or wide data views.
+
 ## [0.13.5] - 2026-11-02
 
 ### Changed (documentation — round-21 findings)
@@ -1060,7 +1069,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.5...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.6...HEAD
+[0.13.6]: https://gitlab.com/abmach/mote/compare/v0.13.5...v0.13.6
 [0.13.5]: https://gitlab.com/abmach/mote/compare/v0.13.4...v0.13.5
 [0.13.4]: https://gitlab.com/abmach/mote/compare/v0.13.3...v0.13.4
 [0.13.3]: https://gitlab.com/abmach/mote/compare/v0.13.2...v0.13.3

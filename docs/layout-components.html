@@ -239,6 +239,13 @@
     becomes a sticky left rail, an <code>aside</code> a right rail, and <code>main</code>
     takes the middle. Everything collapses to a single column under 50rem, keeping
     the landmarks in source order. No classes on the landmarks themselves:</p>
+  <p>Use this shell for reading documents, reference pages, and other layouts
+    whose navigation and contextual notes belong in side rails. Do not add
+    <code>.mote-doc</code> merely because a page has a header, nav, or aside:
+    dashboards, operational boards, and wide data views usually need the
+    main content to use the full width, and the rail grid can make it too
+    narrow. Without a meaningful left or right rail, use the ordinary page
+    layout instead.</p>
   <p>On <code>&#60;body&#62;</code> the shell includes page gutters, a pinned footer and
     content tracks that absorb wide content (<code>minmax(0, 1fr)</code>). A wide
     table scrolls inside <code>main</code>, never the page; when a table needs a
@@ -337,6 +344,14 @@ document.fonts?.ready.then(sync);  // pill widths change when webfonts load
     the own-row layout gives the navigation space, while the snippet keeps the
     scroll-edge fades current. The one-row fallback suits short navigation;
     its cut pill is the overflow signal when JavaScript is not used.</p>
+  <p><strong>Narrow-header recipe:</strong> use the complete rule below when a
+    phone header needs the brand and primary action on the first row and the
+    navigation on the second. It is a page-owned recipe, not a mote default.
+    The brand and action must fit the same row: their rendered widths plus the
+    gap must fit the target row, so test at the narrowest supported width.
+    If the combined copy still wraps, shorten the visible text (and keep any
+    fuller wording in an accessible name), give the pair a deliberate two-column
+    grid, or move the primary action into the page body.</p>
   <p><strong>This rule is page CSS — copy it into your own stylesheet.</strong>
     mote does not ship it. It gives the navigation its own line in the header;
     the default bar already contains a long nav, by scrolling its pill row

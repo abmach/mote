@@ -182,7 +182,8 @@
       <li>Keep the light paper palette; repeat brand accent overrides for print.</li>
       <li>Use <code>.mote-no-print</code> for navigation, filters, and interactive-only controls.</li>
       <li>Use <code>.mote-print-only</code> for paper-only contact details and instructions.</li>
-      <li>Check table completeness, orientation, and browser-dependent repeated headings.</li>
+      <li>Decide the intended orientation and page count before inspecting the PDF; a compact operational sheet may need portrait or landscape rules rather than the screen layout by default.</li>
+      <li>Check table completeness and browser-dependent repeated headings.</li>
       <li>Keep table rows, metadata blocks, totals, figures, and disclosure panels together where appropriate with <code>break-inside</code>.</li>
       <li>Keep a heading with the content it introduces; avoid headings stranded at the bottom of a page with <code>break-after: avoid</code>.</li>
       <li>Decide whether forms print; prefer a paper-only summary over split controls, and keep the summary together.</li>
@@ -198,7 +199,12 @@
     prove a visual defect.</p>
   <h3 id="screen-only-and-paper-only-content">Screen-only and paper-only content</h3>
   <p><code>.mote-no-print</code> removes screen chrome from paper.
-    <code>.mote-print-only</code> stays hidden on screen and appears on paper:</p>
+    <code>.mote-print-only</code> stays hidden on screen and appears on paper.
+    <code>.mote-no-print</code> uses <code>display: none !important</code> in
+    print media, so ordinary page layout rules cannot restore a screen-only
+    element. If custom print CSS deliberately overrides the helper with its own
+    <code>!important</code> declaration, remove that conflict and inspect the
+    generated PDF:</p>
   <pre><code>&lt;nav class="mote-no-print"&gt;Site navigation&lt;/nav&gt;
 &lt;div class="mote-print-only"&gt;Printed at the visitor’s request&lt;/div&gt;
 </code></pre>
