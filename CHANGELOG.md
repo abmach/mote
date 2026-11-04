@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.7] - 2026-11-04
+
+### Fixed
+
+- Kept closed native dialogs out of printed output, even when page styles override their hidden display state, while preserving open dialog popovers on paper.
+
 ## [0.13.6] - 2026-11-03
 
 ### Changed (documentation — round-22 findings)
@@ -1069,7 +1075,8 @@ Components:
 - Opt-in helpers: `.mote-container`, `.mote-muted`, `.mote-note` surfaces.
 - Element gallery demo page (`demo.html`).
 
-[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.6...HEAD
+[Unreleased]: https://gitlab.com/abmach/mote/compare/v0.13.7...HEAD
+[0.13.7]: https://gitlab.com/abmach/mote/compare/v0.13.6...v0.13.7
 [0.13.6]: https://gitlab.com/abmach/mote/compare/v0.13.5...v0.13.6
 [0.13.5]: https://gitlab.com/abmach/mote/compare/v0.13.4...v0.13.5
 [0.13.4]: https://gitlab.com/abmach/mote/compare/v0.13.3...v0.13.4

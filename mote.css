@@ -1,6 +1,6 @@
 /*!
  * mote.css — a mote of styling for plain HTML.
- * v0.13.6 · MIT
+ * v0.13.7 · MIT
  * https://gitlab.com/abmach/mote · mirror: https://github.com/abmach/mote
  *
  * The smallest thing that can carry style:
@@ -939,6 +939,8 @@ progress, meter {
   a { color: #000; }
   details { border: none; }
   dialog { box-shadow: none; }
+  dialog:not([open]) { display: none !important; }
+  dialog[popover]:popover-open { display: block !important; }
 
   /* Opt-in print helpers */
   .mote-no-print { display: none !important; }

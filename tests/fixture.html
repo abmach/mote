@@ -17,6 +17,12 @@
       #t-card-badge, #t-card-media {
         display: none;
       }
+
+      /* Simulate a page/reset rule leaking a closed dialog into paper.
+         mote's print guard must override this normal author declaration. */
+      #t-dialog-closed {
+        display: block;
+      }
     }
   </style>
 </head>
@@ -223,6 +229,8 @@
     <!-- Print helpers, avatar, band pad -->
     <div id="t-printonly" class="mote-print-only">print only</div>
     <div id="t-noprint" class="mote-no-print">no print</div>
+    <dialog id="t-dialog-closed">closed dialog</dialog>
+    <dialog id="t-dialog-popover" popover>open popover dialog</dialog>
     <img id="t-avatar" class="mote-avatar" alt=""
       src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="--mote-avatar: 3rem">
     <section id="t-band-strip" class="mote-band" style="--mote-band-pad: 1rem">Strip</section>
@@ -296,6 +304,17 @@
         eq(gcs($('t-printonly')).display, 'block', 'display'));
       t('.mote-no-print hides on paper', () =>
         eq(gcs($('t-noprint')).display, 'none', 'display'));
+      t('closed dialogs stay out of print', () =>
+        eq(gcs($('t-dialog-closed')).display, 'none', 'display'));
+      t('open popover dialogs stay in print', () => {
+        const dialog = $('t-dialog-popover');
+        if (typeof dialog.showPopover !== 'function' ||
+          !CSS.supports('selector(dialog:popover-open)')) return ok();
+        dialog.showPopover();
+        const display = gcs(dialog).display;
+        dialog.hidePopover();
+        return neq(display, 'none', 'display');
+      });
       t('scrollable tables expand for print', () => {
         const s = gcs($('t-scroll'));
         return eq(s.maxHeight, 'none', 'max-height') &&
